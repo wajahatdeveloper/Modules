@@ -26,12 +26,16 @@ https://github.com/wajahatdeveloper/Modules.git
 "com.utility.assetusagedetector":"https://github.com/wajahatdeveloper/Modules.git?path=/Assets/EditorModules/com.utility.assetusagedetector" </br>
 "com.utility.package2folder":"https://github.com/wajahatdeveloper/Modules.git?path=/Assets/EditorModules/com.utility.package2folder" </br>
 
+"com.features.spawner":"https://github.com/wajahatdeveloper/Modules.git?path=/Assets/Features/com.features.spawner" </br>
+"com.features.achievementsystem":"https://github.com/wajahatdeveloper/Modules.git?path=/Assets/Features/com.features.achievementsystem" </br>
+
 "":"https://github.com/wajahatdeveloper/Modules.git?path=/Assets/" </br>
 
 # Direct Downloads
 Dotween - Demigiant
 Rainbow Assets
 Odin - Sirenix
+AssetSetup - Basic Asset Settings for Console Pro and Editor Layout
 
 ## Essentials
 https://openupm.com/packages/se.hertzole.cecil-attributes/
