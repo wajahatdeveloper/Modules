@@ -1,0 +1,7 @@
+{
+  "name": "com.eventsystem",
+  "version": "1.0.0",
+  "displayName": "Event System",
+  "description": "Mono Behaviour Integrated Event System with Odin Support and Components",
+  "unity": "2020.3"
+}

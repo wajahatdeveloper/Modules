@@ -1,0 +1,7 @@
+{
+  "name": "com.extension",
+  "version": "1.0.0",
+  "displayName": "Language and Type Extensions",
+  "description": "Language and Type Extensions for C# and Unity",
+  "unity": "2020.3"
+}

@@ -1,0 +1,7 @@
+{
+  "name": "com.rmvcc",
+  "version": "1.0.0",
+  "displayName": "Root Model View Controller Component System",
+  "description": "Root Model View Controller Component System as Scene Level Architecture",
+  "unity": "2020.3"
+}

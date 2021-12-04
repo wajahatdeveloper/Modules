@@ -1,0 +1,7 @@
+{
+  "name": "com.statemachine",
+  "version": "1.0.0",
+  "displayName": "State Machine",
+  "description": "Robust Class Based State Management",
+  "unity": "2020.3"
+}

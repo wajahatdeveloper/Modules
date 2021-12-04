@@ -1,5 +1,23 @@
 # Modules
 
+https://github.com/wajahatdeveloper/Modules.git
+
+"com.components.general":"https://github.com/wajahatdeveloper/Modules.git?path=/Assets/com.components.general"
+"com.datastructures":"https://github.com/wajahatdeveloper/Modules.git?path=/Assets/com.datastructures"
+"com.eventsystem":"https://github.com/wajahatdeveloper/Modules.git?path=/Assets/com.eventsystem"
+"com.extensions":"https://github.com/wajahatdeveloper/Modules.git?path=/Assets/com.extensions"
+"com.rmvcc":"https://github.com/wajahatdeveloper/Modules.git?path=/Assets/com.rmvcc"
+"com.statemachine":"https://github.com/wajahatdeveloper/Modules.git?path=/Assets/com.statemachine"
+"com.components.editor":"https://github.com/wajahatdeveloper/Modules.git?path=/Assets/EditorModules/com.components.editor"
+"com.utility.consoleprodebug":"https://github.com/wajahatdeveloper/Modules.git?path=/Assets/EditorModules/com.utility.consoleprodebug"
+"com.utility.enhancedheirarchy":"https://github.com/wajahatdeveloper/Modules.git?path=/Assets/EditorModules/com.utility.enhancedheirarchy"
+"com.utility.fastgizmos":"https://github.com/wajahatdeveloper/Modules.git?path=/Assets/EditorModules/com.utility.fastgizmos"
+"com.utility.playerprefeditor":"https://github.com/wajahatdeveloper/Modules.git?path=/Assets/EditorModules/com.utility.playerprefeditor"
+"com.utility.sceneswitcher":"https://github.com/wajahatdeveloper/Modules.git?path=/Assets/EditorModules/com.utility.sceneswitcher"
+"com.utility.selectionutility":"https://github.com/wajahatdeveloper/Modules.git?path=/Assets/EditorModules/com.utility.selectionutility"
+
+"":"https://github.com/wajahatdeveloper/Modules.git?path=/Assets/"
+
 ## Essentials
 https://openupm.com/packages/se.hertzole.cecil-attributes/
 https://assetstore.unity.com/packages/tools/utilities/asset-usage-detector-112837

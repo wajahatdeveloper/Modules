@@ -1,0 +1,7 @@
+{
+  "name": "com.components.editor",
+  "version": "1.0.0",
+  "displayName": "General Editor Components",
+  "description": "Editor Dialogs and Components",
+  "unity": "2020.3"
+}

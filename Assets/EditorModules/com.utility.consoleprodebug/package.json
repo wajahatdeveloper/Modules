@@ -1,0 +1,7 @@
+{
+  "name": "com.utility.consoleprodebug",
+  "version": "1.0.0",
+  "displayName": "Console Pro Debug",
+  "description": "Console Window with Log channels",
+  "unity": "2020.3"
+}

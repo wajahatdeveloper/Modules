@@ -1,0 +1,7 @@
+{
+  "name": "com.utility.playerprefeditor",
+  "version": "1.0.0",
+  "displayName": "Player Pref Editor",
+  "description": "A lightweight tool which facilitates Viewing and Editing Player Prefs in Editor",
+  "unity": "2020.3"
+}
