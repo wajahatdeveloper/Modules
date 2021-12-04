@@ -1,0 +1,7 @@
+{
+  "name": "com.utility.sceneswitcher",
+  "version": "1.0.0",
+  "displayName": "Scene Switcher",
+  "description": "A lightweight tool which facilitates easy scene switching.",
+  "unity": "2020.3"
+}
