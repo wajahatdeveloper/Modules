@@ -1,7 +1,7 @@
 {
-  "name": "com.utility.playerprefeditor",
+  "name": "com.utility.enhancedheirarchy",
   "version": "1.0.0",
-  "displayName": "Player Pref Editor",
-  "description": "A lightweight tool which facilitates Viewing and Editing Player Prefs in Editor",
+  "displayName": "Enhanced Heirarchy",
+  "description": "Enhanced Heirarhy for Editor",
   "unity": "2020.3"
 }

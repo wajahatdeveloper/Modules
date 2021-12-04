@@ -1,0 +1,7 @@
+{
+  "name": "com.utility.package2folder",
+  "version": "1.0.0",
+  "displayName": "Package To Folder",
+  "description": "Import Packages to a Specific Folder",
+  "unity": "2020.3"
+}
