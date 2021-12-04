@@ -1,0 +1,12 @@
+{
+  "name": "com.components.general",
+  "version": "1.0.0",
+  "displayName": "General Components",
+  "description": "Assorted List of Generally Used Components",
+  "unity": "2020.3",
+  "dependencies" : 
+  {
+    "com.components.general":"https://github.com/wajahatdeveloper/Modules.git?path=/Assets/com.components.general",
+    "com.lean.pool":"https://github.com/wajahatdeveloper/Modules.git?path=/Assets/com.lean.pool"
+  }
+}

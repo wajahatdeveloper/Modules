@@ -3,10 +3,12 @@
 https://github.com/wajahatdeveloper/Modules.git
 
 "com.components.general":"https://github.com/wajahatdeveloper/Modules.git?path=/Assets/com.components.general" </br>
+"com.components.managers":"https://github.com/wajahatdeveloper/Modules.git?path=/Assets/com.components.managers" </br>
 "com.components.ui":"https://github.com/wajahatdeveloper/Modules.git?path=/Assets/com.components.ui" </br>
 "com.build.reporter":"https://github.com/wajahatdeveloper/Modules.git?path=/Assets/com.build.reporter" </br>
 "com.lean.pool":"https://github.com/wajahatdeveloper/Modules.git?path=/Assets/com.lean.pool" </br>
 "com.runtime.lunarconsole":"https://github.com/wajahatdeveloper/Modules.git?path=/Assets/com.runtime.lunarconsole" </br>
+"com.runtime.inspector":"https://github.com/wajahatdeveloper/Modules.git?path=/Assets/com.runtime.inspector" </br>
 "com.datastructures":"https://github.com/wajahatdeveloper/Modules.git?path=/Assets/com.datastructures" </br>
 "com.eventsystem":"https://github.com/wajahatdeveloper/Modules.git?path=/Assets/com.eventsystem" </br>
 "com.extensions":"https://github.com/wajahatdeveloper/Modules.git?path=/Assets/com.extensions" </br>
@@ -25,6 +27,11 @@ https://github.com/wajahatdeveloper/Modules.git
 "com.utility.package2folder":"https://github.com/wajahatdeveloper/Modules.git?path=/Assets/EditorModules/com.utility.package2folder" </br>
 
 "":"https://github.com/wajahatdeveloper/Modules.git?path=/Assets/" </br>
+
+# Direct Downloads
+Dotween - Demigiant
+Rainbow Assets
+Odin - Sirenix
 
 ## Essentials
 https://openupm.com/packages/se.hertzole.cecil-attributes/

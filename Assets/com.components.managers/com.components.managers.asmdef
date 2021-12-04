@@ -1,0 +1,17 @@
+{
+    "name": "com.components.managers",
+    "rootNamespace": "",
+    "references": [
+        "com.components.general",
+        "LeanPool"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
