@@ -1,0 +1,7 @@
+{
+  "name": "com.runtime.lunarconsole",
+  "version": "1.0.0",
+  "displayName": "Lunar Console",
+  "description": "Runtime Testing Console with Custom Functionality",
+  "unity": "2020.3"
+}
