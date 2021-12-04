@@ -19,47 +19,47 @@ https://github.com/wajahatdeveloper/Modules.git
 "":"https://github.com/wajahatdeveloper/Modules.git?path=/Assets/" </br>
 
 ## Essentials
-https://openupm.com/packages/se.hertzole.cecil-attributes/
-https://assetstore.unity.com/packages/tools/utilities/asset-usage-detector-112837
-https://assetstore.unity.com/packages/tools/utilities/package2folder-64829
+https://openupm.com/packages/se.hertzole.cecil-attributes/ </br>
+https://assetstore.unity.com/packages/tools/utilities/asset-usage-detector-112837 </br>
+https://assetstore.unity.com/packages/tools/utilities/package2folder-64829 </br>
 
 ## Visual Effects
-https://github.com/mob-sakai/ParticleEffectForUGUI
+https://github.com/mob-sakai/ParticleEffectForUGUI </br>
 
 ## User Interface
-https://openupm.com/packages/com.coffee.unmask/
-https://github.com/mob-sakai/SoftMaskForUGUI
-https://openupm.com/packages/com.coffee.atlas-image/
+https://openupm.com/packages/com.coffee.unmask/ </br>
+https://github.com/mob-sakai/SoftMaskForUGUI </br>
+https://openupm.com/packages/com.coffee.atlas-image/ </br>
 
 ### Layout Helpers
-https://assetstore.unity.com/packages/tools/utilities/universal-device-preview-82015
+https://assetstore.unity.com/packages/tools/utilities/universal-device-preview-82015 </br>
 
 ## Code Helpers
-https://openupm.com/packages/net.tnrd.layertagsgenerator/
+https://openupm.com/packages/net.tnrd.layertagsgenerator/ </br>
 
 ## Editor Helpers
-https://openupm.com/packages/com.mischief.markdownviewer/
-https://openupm.com/packages/com.brunomikoski.presetmanager/
-https://openupm.com/packages/com.harryrose.assetdependencygraph/
-https://openupm.com/packages/com.bgtools.playerprefseditor/
-https://assetstore.unity.com/packages/tools/utilities/editor-console-pro-11889
-https://github.com/sverdegd/FastGizmosUnity
+https://openupm.com/packages/com.mischief.markdownviewer/ </br>
+https://openupm.com/packages/com.brunomikoski.presetmanager/ </br>
+https://openupm.com/packages/com.harryrose.assetdependencygraph/ </br>
+https://openupm.com/packages/com.bgtools.playerprefseditor/ </br>
+https://assetstore.unity.com/packages/tools/utilities/editor-console-pro-11889 </br>
+https://github.com/sverdegd/FastGizmosUnity </br>
 
 ### Conventions
-https://openupm.com/packages/com.ninito.unityprojectlinter/
+https://openupm.com/packages/com.ninito.unityprojectlinter/ </br>
 
 ### Cleaner
-https://assetstore.unity.com/packages/tools/utilities/maintainer-32199
+https://assetstore.unity.com/packages/tools/utilities/maintainer-32199 </br>
 
 ## Code Generation
-https://github.com/Thundernerd/Unity3D-CodeGenerator
+https://github.com/Thundernerd/Unity3D-CodeGenerator </br>
 
 ## Services
-https://openupm.com/packages/com.firebase.realtime-database/
+https://openupm.com/packages/com.firebase.realtime-database/ </br>
 
 ## Deployment
-https://openupm.com/packages/com.google.play.assetdelivery/
+https://openupm.com/packages/com.google.play.assetdelivery/ </br>
 
 ## Time Savers
-https://openupm.com/packages/com.ls9512.ubind/
-https://assetstore.unity.com/packages/essentials/asset-packs/standard-assets-for-unity-2018-4-32351
+https://openupm.com/packages/com.ls9512.ubind/ </br>
+https://assetstore.unity.com/packages/essentials/asset-packs/standard-assets-for-unity-2018-4-32351 </br>
