@@ -44,6 +44,7 @@ https://openupm.com/packages/se.hertzole.cecil-attributes/
 https://github.com/mob-sakai/ParticleEffectForUGUI </br>
 
 ## User Interface
+https://bitbucket.org/UnityUIExtensions/unity-ui-extensions.git </br>
 https://openupm.com/packages/com.coffee.unmask/ </br>
 https://github.com/mob-sakai/SoftMaskForUGUI </br>
 https://openupm.com/packages/com.coffee.atlas-image/ </br>
