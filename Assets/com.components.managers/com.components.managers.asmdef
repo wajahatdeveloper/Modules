@@ -3,7 +3,8 @@
     "rootNamespace": "",
     "references": [
         "com.components.general",
-        "LeanPool"
+        "LeanPool",
+        "com.extensions"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

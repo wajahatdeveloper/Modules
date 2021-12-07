@@ -7,6 +7,7 @@
   "dependencies" : 
   {
     "com.components.general":"https://github.com/wajahatdeveloper/Modules.git?path=/Assets/com.components.general",
-    "com.lean.pool":"https://github.com/wajahatdeveloper/Modules.git?path=/Assets/com.lean.pool"
+    "com.lean.pool":"https://github.com/wajahatdeveloper/Modules.git?path=/Assets/com.lean.pool",
+    "com.extensions":"https://github.com/wajahatdeveloper/Modules.git?path=/Assets/com.extensions"
   }
 }
