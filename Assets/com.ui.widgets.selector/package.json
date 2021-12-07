@@ -1,0 +1,7 @@
+{
+  "name": "com.ui.widgets.selector",
+  "version": "1.0.0",
+  "displayName": "Selector Widget",
+  "description": "Simple General Purpose Selector Widget",
+  "unity": "2020.3"
+}
