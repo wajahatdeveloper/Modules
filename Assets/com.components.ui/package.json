@@ -6,7 +6,7 @@
   "unity": "2020.3",
   "dependencies": 
   {
-    "com.thirdparty.mybox" : "https://github.com/wajahatdeveloper/Modules.git?path=/Assets/com.thirdparty.mybox",
-    "com.datastructures":"https://github.com/wajahatdeveloper/Modules.git?path=/Assets/com.datastructures"
+    "com.thirdparty.mybox" : "https://github.com/wajahatdeveloper/Modules.git?path=/Assets/com.thirdparty.mybox#v1.0.0",
+    "com.datastructures":"https://github.com/wajahatdeveloper/Modules.git?path=/Assets/com.datastructures#v1.0.0"
   }
 }
