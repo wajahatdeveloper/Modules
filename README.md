@@ -15,6 +15,8 @@ https://github.com/wajahatdeveloper/Modules.git
 "com.rmvcc":"https://github.com/wajahatdeveloper/Modules.git?path=/Assets/com.rmvcc" </br>
 "com.statemachine":"https://github.com/wajahatdeveloper/Modules.git?path=/Assets/com.statemachine" </br>
 
+"com.ads.mediation":"https://github.com/wajahatdeveloper/Modules.git?path=/Assets/com.ads.mediation" </br>
+
 "com.thirdparty.mybox":"https://github.com/wajahatdeveloper/Modules.git?path=/Assets/EditorModules/com.thirdparty.mybox" </br>
 "com.components.editor":"https://github.com/wajahatdeveloper/Modules.git?path=/Assets/EditorModules/com.components.editor" </br>
 "com.utility.consoleprodebug":"https://github.com/wajahatdeveloper/Modules.git?path=/Assets/EditorModules/com.utility.consoleprodebug" </br>
