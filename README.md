@@ -2,9 +2,6 @@
 
 https://github.com/wajahatdeveloper/Modules.git
 
-# Must Have</br>
-https://github.com/mob-sakai/UpmGitExtension
-
 "com.components.general":"https://github.com/wajahatdeveloper/Modules.git?path=/Assets/com.components.general" </br>
 "com.components.managers":"https://github.com/wajahatdeveloper/Modules.git?path=/Assets/com.components.managers" </br>
 "com.components.ui":"https://github.com/wajahatdeveloper/Modules.git?path=/Assets/com.components.ui" </br>
