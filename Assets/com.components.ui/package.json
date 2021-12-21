@@ -3,10 +3,5 @@
   "version": "1.0.0",
   "displayName": "Common UI Components",
   "description": "UI Components for Ease of Use and Handling Various Situations",
-  "unity": "2020.3",
-  "dependencies": 
-  {
-    "com.thirdparty.mybox" : "https://github.com/wajahatdeveloper/Modules.git?path=/Assets/com.thirdparty.mybox#v1.0.0",
-    "com.datastructures":"https://github.com/wajahatdeveloper/Modules.git?path=/Assets/com.datastructures#v1.0.0"
-  }
+  "unity": "2020.3"
 }
