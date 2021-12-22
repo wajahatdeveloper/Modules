@@ -1,7 +1,0 @@
-{
-  "name": "com.build.reporter",
-  "version": "1.0.0",
-  "displayName": "Build Report Tool",
-  "description": "Tool for Reporting Build Size and Composition Info",
-  "unity": "2020.3"
-}

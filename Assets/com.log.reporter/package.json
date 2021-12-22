@@ -1,0 +1,7 @@
+{
+  "name": "com.log.reporter",
+  "version": "1.0.0",
+  "displayName": "Logs Report Tool",
+  "description": "Tool for Runtime Logs",
+  "unity": "2020.3"
+}
