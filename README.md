@@ -29,6 +29,7 @@ https://github.com/wajahatdeveloper/Modules.git
 "com.utility.assetusagedetector":"https://github.com/wajahatdeveloper/Modules.git?path=/Assets/EditorModules/com.utility.assetusagedetector" </br>
 "com.utility.package2folder":"https://github.com/wajahatdeveloper/Modules.git?path=/Assets/EditorModules/com.utility.package2folder" </br>
 "com.utility.persistentcomponents":"https://github.com/wajahatdeveloper/Modules.git?path=/Assets/EditorModules/com.utility.persistentcomponents" </br>
+"com.utility.snapbuttons":"https://github.com/wajahatdeveloper/Modules.git?path=/Assets/EditorModules/com.utility.snapbuttons" </br>
 
 "com.features.spawner":"https://github.com/wajahatdeveloper/Modules.git?path=/Assets/Features/com.features.spawner" </br>
 "com.features.achievementsystem":"https://github.com/wajahatdeveloper/Modules.git?path=/Assets/Features/com.features.achievementsystem" </br>
