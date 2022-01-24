@@ -4,7 +4,8 @@
     "references": [
         "com.components.general",
         "LeanPool",
-        "com.extensions"
+        "com.extensions",
+        "Unity.TextMeshPro"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
