@@ -19,6 +19,7 @@ https://github.com/wajahatdeveloper/Modules.git
 "com.ads.mediation":"https://github.com/wajahatdeveloper/Modules.git?path=/Assets/com.ads.mediation" </br>
 
 "com.thirdparty.mybox":"https://github.com/wajahatdeveloper/Modules.git?path=/Assets/EditorModules/com.thirdparty.mybox" </br>
+"com.thirdparty.odin":"https://github.com/wajahatdeveloper/Modules.git?path=/Assets/EditorModules/com.thirdparty.odin" </br>
 "com.components.editor":"https://github.com/wajahatdeveloper/Modules.git?path=/Assets/EditorModules/com.components.editor" </br>
 "com.utility.consoleprodebug":"https://github.com/wajahatdeveloper/Modules.git?path=/Assets/EditorModules/com.utility.consoleprodebug" </br>
 "com.utility.enhancedheirarchy":"https://github.com/wajahatdeveloper/Modules.git?path=/Assets/EditorModules/com.utility.enhancedheirarchy" </br>
@@ -30,6 +31,7 @@ https://github.com/wajahatdeveloper/Modules.git
 "com.utility.package2folder":"https://github.com/wajahatdeveloper/Modules.git?path=/Assets/EditorModules/com.utility.package2folder" </br>
 "com.utility.persistentcomponents":"https://github.com/wajahatdeveloper/Modules.git?path=/Assets/EditorModules/com.utility.persistentcomponents" </br>
 "com.utility.snapbuttons":"https://github.com/wajahatdeveloper/Modules.git?path=/Assets/EditorModules/com.utility.snapbuttons" </br>
+"com.editor.multiplayer.support":"https://github.com/wajahatdeveloper/Modules.git?path=/Assets/EditorModules/com.editor.multiplayer.support" </br>
 
 "com.features.spawner":"https://github.com/wajahatdeveloper/Modules.git?path=/Assets/Features/com.features.spawner" </br>
 "com.features.achievementsystem":"https://github.com/wajahatdeveloper/Modules.git?path=/Assets/Features/com.features.achievementsystem" </br>

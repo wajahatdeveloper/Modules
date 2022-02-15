@@ -1,0 +1,8 @@
+{
+"name": "com.thirdparty.odin",
+"version": "3.1.0",
+"displayName": "Odin",
+"description": "Odin Inspector and Serializer",
+
+"unity": "2018.3"
+}

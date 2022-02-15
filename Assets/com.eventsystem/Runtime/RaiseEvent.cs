@@ -9,11 +9,12 @@ using Sirenix.OdinInspector;
 
 public class RaiseEvent : MonoBehaviour
 {
-    #if ODIN_INSPECTOR
+    /*#if ODIN_INSPECTOR
 	private static IEnumerable<string> EventsIdentifiers = Enum.GetNames( typeof( Events.EventsIdentifier ) );
 
 	[ValueDropdown( "EventsIdentifiers", IsUniqueList = true, DisableListAddButtonBehaviour = true, NumberOfItemsBeforeEnablingSearch = 1 )]
-    #endif
+    #endif*/
+    
 	public string eventIdentifier;
 
     public bool autoHookButton = true;

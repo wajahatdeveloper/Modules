@@ -1,0 +1,7 @@
+{
+  "name": "com.editor.multiplayer.support",
+  "version": "1.0.0",
+  "displayName": "Multiplayer Support for Editor",
+  "description": "Multiplayer Support Solution for Editor",
+  "unity": "2020.3"
+}
