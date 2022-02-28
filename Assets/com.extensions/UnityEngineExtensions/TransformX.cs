@@ -11,7 +11,7 @@ public static class TransformX
 	/// <param name="t"></param>
 	/// <param name="name"></param>
 	/// <returns></returns>
-	static public Transform DeepSearch(this Transform t, string name)
+	public static Transform DeepSearch(this Transform t, string name)
 	{
 		Transform dt = t.Find(name);
 		if (dt != null)
@@ -26,6 +26,14 @@ public static class TransformX
 				return dt;
 		}
 		return null;
+	}
+
+	public static void DestroyAllChildren(this Transform t)
+	{
+		foreach (Transform child in t)
+		{
+			GameObject.Destroy(child.gameObject);
+		}
 	}
 
 	/// <summary>
