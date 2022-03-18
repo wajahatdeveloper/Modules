@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 
@@ -10,6 +11,7 @@ public class PopupMessage : SingletonBehaviour<PopupMessage>
     public UnityEvent onClose;
 
     private bool _isAuto;
+    private bool _allowCloseOnEnter;
 
     public void ShowAuto(string message)
     {
@@ -17,10 +19,21 @@ public class PopupMessage : SingletonBehaviour<PopupMessage>
         Show(message);
     }
 
-    public void Show(string message)
+    public void Show(string message, bool allowCloseOnEnter = true)
     {
+        _allowCloseOnEnter = allowCloseOnEnter;
         messageText.text = message;
         messagePanel.SetActive(true);
+    }
+
+    private void Update()
+    {
+        if (!_allowCloseOnEnter) { return; }
+
+        if (Input.GetKeyDown(KeyCode.Return))
+        {
+            Hide();
+        }
     }
 
     public void HideAuto()
