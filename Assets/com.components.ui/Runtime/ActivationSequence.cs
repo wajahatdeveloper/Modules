@@ -17,6 +17,7 @@ public class ActivationSequence : MonoBehaviour
     {
         if (!customSequence)
         {
+            sequence.Clear();
             foreach (Transform child in transform)
             {
                 sequence.Add(child.gameObject);

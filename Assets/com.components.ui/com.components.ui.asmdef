@@ -3,7 +3,8 @@
     "rootNamespace": "",
     "references": [
         "MyBox",
-        "com.datastructures"
+        "com.datastructures",
+        "Unity.TextMeshPro"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
