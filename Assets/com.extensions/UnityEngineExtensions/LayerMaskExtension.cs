@@ -82,4 +82,13 @@ public static class LayerMaskExtension
     {
         return ((mask.value & (1 << obj.layer)) > 0);
     }
+
+    /// <summary>
+    /// Determines if given mask includes given layer. Layer parameter must NOT be bit-shifted, bit-shifting is being done inside this method.
+    /// </summary>
+    public static bool MaskIncludes(this int mask, int layer)
+    {
+        int shifted = 1 << layer;
+        return (mask & shifted) == shifted;
+    }
 }
