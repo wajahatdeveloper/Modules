@@ -4,27 +4,7 @@ using System.Reflection;
  
 public class FunctionDemo : MonoBehaviour
 {
-    public string MethodToCall;
- 
-    void Start()
+    private void Update()
     {
-        typeof(FunctionDemo)
-            .GetMethod(MethodToCall, BindingFlags.Instance |BindingFlags.NonPublic | BindingFlags.Public)
-            .Invoke(this, new object[0]);
-    }
- 
-    void Update()
-    {
- 
-    }
- 
-    void Foo()
-    {
-        Debug.Log("Foo");
-    }
- 
-    void Bar()
-    {
-        Debug.Log("Bar");
     }
 }

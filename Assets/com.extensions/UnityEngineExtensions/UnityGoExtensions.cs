@@ -228,6 +228,21 @@ public static class UnityGoExtensions
     // SetCollisionRecursively
     #endregion
 
+    #region AddOrGetComponent
+
+    public static T AddOrGetComponent<T>(this GameObject go) where T : Component
+    {
+        var component = go.GetComponent<T>();
+        if (component == null)
+        {
+            component = go.AddComponent<T>();
+        }
+        return component;
+    }
+
+    // GetComponentsInChildrenWithTag
+    #endregion
+
     #region GetComponentsInChildrenWithTag
 
     /// <summary>
