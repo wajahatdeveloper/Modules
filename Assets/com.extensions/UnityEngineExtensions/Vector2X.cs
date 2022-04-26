@@ -32,4 +32,10 @@ public static class Vector2X
 		Vector2 rotated = Quaternion.Euler(new Vector3(0f, 0f, angle)) * (vector - pivot);
 		return rotated + pivot;
 	}
+
+	public static void Deconstruct(this Vector2 v2, out float x, out float y)
+	{
+		x = v2.x;
+		y = v2.y;
+	}
 }

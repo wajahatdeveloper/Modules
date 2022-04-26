@@ -527,4 +527,10 @@ public static class Vector3X
 		return Vector3.Lerp(from, to, value);
 	}
 
+	public static void Deconstruct(this Vector3 v3, out float x, out float y, out float z)
+	{
+		x = v3.x;
+		y = v3.y;
+		z = v3.z;
+	}
 }
