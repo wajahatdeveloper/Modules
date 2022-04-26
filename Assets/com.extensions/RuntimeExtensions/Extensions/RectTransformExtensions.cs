@@ -9,6 +9,76 @@ namespace DTT.Utils.Extensions
     /// </summary>
     public static class RectTransformExtensions
     {
+        public static void SetDefaultScale(this RectTransform trans)
+        {
+            trans.localScale = new Vector3(1, 1, 1);
+        }
+
+        public static void SetPivotAndAnchors(this RectTransform trans, Vector2 aVec)
+        {
+            trans.pivot = aVec;
+            trans.anchorMin = aVec;
+            trans.anchorMax = aVec;
+        }
+
+        public static Vector2 GetSize(this RectTransform trans)
+        {
+            return trans.rect.size;
+        }
+
+        public static float GetWidth(this RectTransform trans)
+        {
+            return trans.rect.width;
+        }
+
+        public static float GetHeight(this RectTransform trans)
+        {
+            return trans.rect.height;
+        }
+
+        public static void SetPositionOfPivot(this RectTransform trans, Vector2 newPos)
+        {
+            trans.localPosition = new Vector3(newPos.x, newPos.y, trans.localPosition.z);
+        }
+
+        public static void SetLeftBottomPosition(this RectTransform trans, Vector2 newPos)
+        {
+            trans.localPosition = new Vector3(newPos.x + (trans.pivot.x * trans.rect.width), newPos.y + (trans.pivot.y * trans.rect.height), trans.localPosition.z);
+        }
+
+        public static void SetLeftTopPosition(this RectTransform trans, Vector2 newPos)
+        {
+            trans.localPosition = new Vector3(newPos.x + (trans.pivot.x * trans.rect.width), newPos.y - ((1f - trans.pivot.y) * trans.rect.height), trans.localPosition.z);
+        }
+
+        public static void SetRightBottomPosition(this RectTransform trans, Vector2 newPos)
+        {
+            trans.localPosition = new Vector3(newPos.x - ((1f - trans.pivot.x) * trans.rect.width), newPos.y + (trans.pivot.y * trans.rect.height), trans.localPosition.z);
+        }
+
+        public static void SetRightTopPosition(this RectTransform trans, Vector2 newPos)
+        {
+            trans.localPosition = new Vector3(newPos.x - ((1f - trans.pivot.x) * trans.rect.width), newPos.y - ((1f - trans.pivot.y) * trans.rect.height), trans.localPosition.z);
+        }
+
+        public static void SetSize(this RectTransform trans, Vector2 newSize)
+        {
+            var oldSize = trans.rect.size;
+            var deltaSize = newSize - oldSize;
+            trans.offsetMin = trans.offsetMin - new Vector2(deltaSize.x * trans.pivot.x, deltaSize.y * trans.pivot.y);
+            trans.offsetMax = trans.offsetMax + new Vector2(deltaSize.x * (1f - trans.pivot.x), deltaSize.y * (1f - trans.pivot.y));
+        }
+
+        public static void SetWidth(this RectTransform trans, float newSize)
+        {
+            SetSize(trans, new Vector2(newSize, trans.rect.size.y));
+        }
+
+        public static void SetHeight(this RectTransform trans, float newSize)
+        {
+            SetSize(trans, new Vector2(trans.rect.size.x, newSize));
+        }
+
         /// <summary>
         /// Represents values for a rect anchor setting.
         /// </summary>
@@ -158,6 +228,41 @@ namespace DTT.Utils.Extensions
                 throw new ArgumentNullException(nameof(gameObject));
             
             return gameObject.transform as RectTransform;
+        }
+
+        /// <summary>
+		///   <para>Returns true if the <paramref name="other"/> RectTransform overlaps this one.</para>
+		/// </summary>
+		/// <param name="other">Other rectangle to test overlapping with.</param>
+		public static bool Overlaps(this RectTransform rect, RectTransform other) => rect.WorldRect().Overlaps(other.WorldRect());
+
+        /// <summary>
+        ///   <para>Returns true if the <paramref name="other"/> RectTransform overlaps this one. If <paramref name="allowInverse"/> is true, the widths and heights of the Rects are allowed to take negative values (ie, the min value is greater than the max), and the test will still work.</para>
+        /// </summary>
+        /// <param name="other">Other rectangle to test overlapping with.</param>
+        /// <param name="allowInverse">Does the test allow the widths and heights of the Rects to be negative?</param>
+        public static bool Overlaps(this RectTransform rect, RectTransform other, bool allowInverse) => rect.WorldRect().Overlaps(other.WorldRect(), allowInverse);
+
+        public static Rect WorldRect(this RectTransform rectTransform)
+        {
+            var sizeDelta = rectTransform.sizeDelta;
+            var rectTransformWidth = sizeDelta.x * rectTransform.lossyScale.x;
+            var rectTransformHeight = sizeDelta.y * rectTransform.lossyScale.y;
+
+            var position = rectTransform.position;
+            return new Rect(position.x - rectTransformWidth / 2f,
+                            position.y - rectTransformHeight / 2f,
+                            rectTransformWidth,
+                            rectTransformHeight);
+        }
+
+        public static Rect ToScreenSpace(this RectTransform transform) // TODO This might be a duplicate of RectTransformExtensions.WorldRect
+        {
+            Vector2 size = Vector2.Scale(transform.rect.size, transform.lossyScale);
+            Rect rect = new Rect(transform.position.x, Screen.height - transform.position.y, size.x, size.y);
+            rect.x -= (transform.pivot.x * size.x);
+            rect.y -= ((1.0f - transform.pivot.y) * size.y);
+            return rect;
         }
     }
 }

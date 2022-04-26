@@ -245,4 +245,9 @@ public static class GameObjectX
 			}
 		}
 	}
+
+	public static void ReverseActiveState(this GameObject go)
+	{
+		go.SetActive(!go.activeSelf);
+	}
 }

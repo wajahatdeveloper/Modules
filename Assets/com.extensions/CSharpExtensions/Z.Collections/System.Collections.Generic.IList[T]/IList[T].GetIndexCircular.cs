@@ -3,21 +3,23 @@ using System.Collections.Generic;
 
 public static partial class Extensions
 {
-    /// <summary>
-    /// Returns the circular next index, this means it will return 0 if you call it for last index of list.
-    /// </summary>
-    public static int GetNextIndexCircular(this IList list, int currentIndex)
+    public static T Next<T>(this IList<T> list, T item)
     {
-        var count = list.Count;
-        return count == 0 ? 0 : (currentIndex + 1) % count;
+        return list[NextPosition(list, item)];
     }
 
-    /// <summary>
-    /// Returns the circular previous index, this means it will return last index of list if you call it for 0
-    /// </summary>
-    public static int GetPreviousIndexCircular(this IList list, int currentIndex)
+    public static T Previous<T>(this IList<T> list, T item)
     {
-        var count = list.Count;
-        return count == 0 ? 0 : (currentIndex - 1) % count;
+        return list[PreviousPosition(list, item)];
+    }
+
+    public static int NextPosition<T>(this IList<T> list, T item)
+    {
+        return (list.IndexOf(item) + 1) == list.Count ? 0 : (list.IndexOf(item) + 1);
+    }
+
+    public static int PreviousPosition<T>(this IList<T> list, T item)
+    {
+        return (list.IndexOf(item) - 1) < 0 ? list.Count - 1 : (list.IndexOf(item) - 1);
     }
 }

@@ -1,6 +1,6 @@
 {
   "name": "com.extensions",
-  "version": "1.0.0",
+  "version": "1.5.0",
   "displayName": "Language and Type Extensions",
   "description": "Language and Type Extensions for C# and Unity",
   "unity": "2020.3"
