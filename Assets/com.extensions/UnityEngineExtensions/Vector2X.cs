@@ -26,4 +26,10 @@ public static class Vector2X
 		return new Vector2(v1.x + (v2.x - v1.x) * value,
 							v1.y + (v2.y - v1.y) * value);
 	}
+
+	public static Vector2 Rotate(this Vector2 vector, float angle, Vector2 pivot = default(Vector2))
+	{
+		Vector2 rotated = Quaternion.Euler(new Vector3(0f, 0f, angle)) * (vector - pivot);
+		return rotated + pivot;
+	}
 }
