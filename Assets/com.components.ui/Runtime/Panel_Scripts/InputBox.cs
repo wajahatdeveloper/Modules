@@ -10,7 +10,8 @@ public class InputBox : SingletonBehaviour<InputBox>
 
     public string enteredText = "";
 
-    public UnityEvent<string> onClose;
+    public UnityEvent onClose;
+    public UnityEvent<string> onSubmit;
 
     public void Show(string message)
     {
@@ -21,13 +22,15 @@ public class InputBox : SingletonBehaviour<InputBox>
     public void OnClick_Submit()
     {
         enteredText = inputField.text;
+        onSubmit?.Invoke(enteredText);
+        onSubmit?.RemoveAllListeners();
         Hide();
     }
 
     public void Hide()
     {
         inputPanel.SetActive(false);
-        onClose?.Invoke(enteredText);
+        onClose?.Invoke();
         onClose?.RemoveAllListeners();
     }
 }

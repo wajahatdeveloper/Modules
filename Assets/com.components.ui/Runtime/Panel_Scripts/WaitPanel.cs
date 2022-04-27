@@ -1,14 +1,16 @@
 ﻿using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.UI;
 
 public class WaitPanel : SingletonBehaviour<WaitPanel>
 {
     public GameObject waitPanel;
+    public Text waitingText;
     public UnityEvent onClose;
 
     private int _count = 0;
     
-    public void Show()
+    public void Show(string text="")
     {
         if (waitPanel == null)
         {
@@ -17,11 +19,12 @@ public class WaitPanel : SingletonBehaviour<WaitPanel>
         else
         {
             Debug.Log("Wait Panel Shown");
+            waitingText.text = text;
             waitPanel.SetActive(true);
         }
     }
     
-    public void ShowCounted()
+    public void ShowCounted(string text = "")
     {
         if (waitPanel == null)
         {
@@ -31,6 +34,7 @@ public class WaitPanel : SingletonBehaviour<WaitPanel>
         {
             _count++;
             Debug.Log("Wait Panel Shown : count = " + _count);
+            waitingText.text = text;
             waitPanel.SetActive(true);
         }
     }

@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class PopupMessage : SingletonBehaviour<PopupMessage>
 {
     public Text messageText;
+    public Text titleText;
     public GameObject messagePanel;
 
     public UnityEvent onClose;
@@ -13,16 +14,17 @@ public class PopupMessage : SingletonBehaviour<PopupMessage>
     private bool _isAuto;
     private bool _allowCloseOnEnter;
 
-    public void ShowAuto(string message)
+    public void ShowAuto(string message,string titleString="")
     {
         _isAuto = true;
-        Show(message);
+        Show(message,titleString);
     }
 
-    public void Show(string message, bool allowCloseOnEnter = true)
+    public void Show(string message, string titleString = "", bool allowCloseOnEnter = true)
     {
         _allowCloseOnEnter = allowCloseOnEnter;
         messageText.text = message;
+        titleText.text = titleString;
         messagePanel.SetActive(true);
     }
 

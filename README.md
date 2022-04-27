@@ -5,6 +5,10 @@ https://github.com/wajahatdeveloper/Modules.git
 "com.components.general":"https://github.com/wajahatdeveloper/Modules.git?path=/Assets/com.components.general" </br>
 "com.components.managers":"https://github.com/wajahatdeveloper/Modules.git?path=/Assets/com.components.managers" </br>
 "com.components.ui":"https://github.com/wajahatdeveloper/Modules.git?path=/Assets/com.components.ui" </br>
+"MyBox",
+"com.datastructures",
+"Unity.TextMeshPro"
+</br>
 "com.log.reporter":"https://github.com/wajahatdeveloper/Modules.git?path=/Assets/com.log.reporter" </br>
 "com.lean.pool":"https://github.com/wajahatdeveloper/Modules.git?path=/Assets/com.lean.pool" </br>
 "com.runtime.lunarconsole":"https://github.com/wajahatdeveloper/Modules.git?path=/Assets/com.runtime.lunarconsole" </br>

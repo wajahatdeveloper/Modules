@@ -50,6 +50,15 @@ public class UIHelper : EditorWindow
             }
             else if (GUILayout.Button(item.Key))
             {
+                if (Selection.activeTransform == null || Selection.activeTransform.GetComponent<Canvas>() == null)
+                {
+                    Selection.activeTransform = FindObjectOfType<Canvas>()?.transform;
+                }
+                if (Selection.activeTransform == null || Selection.activeTransform.GetComponent<Canvas>() == null)
+                {
+                    var newCanvas = Instantiate(items["Canvas"], Selection.activeTransform);
+                    Selection.activeTransform = newCanvas.transform;
+                }
                 var itemPrefab = item.Value;
                 var itemObject = Instantiate(itemPrefab, Selection.activeTransform);
                 itemObject.name = itemObject.name.Replace("(Clone)", "");
