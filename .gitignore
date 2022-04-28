@@ -20,6 +20,8 @@
 .idea
 [Aa]ssets/Plugins/Editor/JetBrains*
 
+"[Aa]ssets/Plugins/Infinity Code"
+
 # Visual Studio cache directory
 .vs/
 

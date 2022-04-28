@@ -36,6 +36,7 @@ https://github.com/wajahatdeveloper/Modules.git
 "com.utility.persistentcomponents":"https://github.com/wajahatdeveloper/Modules.git?path=/Assets/EditorModules/com.utility.persistentcomponents" </br>
 "com.utility.snapbuttons":"https://github.com/wajahatdeveloper/Modules.git?path=/Assets/EditorModules/com.utility.snapbuttons" </br>
 "com.editor.multiplayer.support":"https://github.com/wajahatdeveloper/Modules.git?path=/Assets/EditorModules/com.editor.multiplayer.support" </br>
+"com.editor.todo":"https://github.com/wajahatdeveloper/Modules.git?path=/Assets/EditorModules/com.editor.todo" </br>
 
 "com.features.spawner":"https://github.com/wajahatdeveloper/Modules.git?path=/Assets/Features/com.features.spawner" </br>
 "com.features.achievementsystem":"https://github.com/wajahatdeveloper/Modules.git?path=/Assets/Features/com.features.achievementsystem" </br>

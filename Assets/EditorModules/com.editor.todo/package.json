@@ -1,0 +1,7 @@
+{
+  "name": "com.editor.todo",
+  "version": "1.0.0",
+  "displayName": "Code TODO List",
+  "description": "Flexible Todo List in Unity Editor",
+  "unity": "2020.3"
+}
