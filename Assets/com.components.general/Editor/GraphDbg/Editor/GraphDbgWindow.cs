@@ -7,7 +7,7 @@ public class GraphDbgWindow : EditorWindow {
 	string graphName = "";
 
 	// Add menu named "My Window" to the Window menu
-	[MenuItem("Window/GraphDbg")]
+	[MenuItem("Hub/GraphDbg")]
 	static void Init()
 	{
 		// Get existing open window or if none, make a new one:
