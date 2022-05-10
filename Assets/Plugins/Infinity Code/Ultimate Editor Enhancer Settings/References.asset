@@ -16,5 +16,13 @@ MonoBehaviour:
   _favoriteWindows: []
   _quickAccessItems: []
   _sceneHistory:
+  - name: ShadersExamples
+    path: Assets/BitStrap/Examples/Shaders/ShadersExamples.unity
+  - name: MathExamples
+    path: Assets/BitStrap/Examples/Math/MathExamples.unity
+  - name: FunctionalExamples
+    path: Assets/BitStrap/Examples/Functional/FunctionalExamples.unity
+  - name: AnimationParameters
+    path: Assets/BitStrap/Examples/Animation/AnimationParameters/AnimationParameters.unity
   - name: SampleScene
     path: Assets/Scenes/SampleScene.unity
