@@ -9,6 +9,7 @@ https://github.com/wajahatdeveloper/Modules.git
 "com.datastructures",
 "Unity.TextMeshPro"
 </br>
+"com.multitagger":"https://github.com/wajahatdeveloper/Modules.git?path=/Assets/com.multitagger" </br>
 "com.log.reporter":"https://github.com/wajahatdeveloper/Modules.git?path=/Assets/com.log.reporter" </br>
 "com.lean.pool":"https://github.com/wajahatdeveloper/Modules.git?path=/Assets/com.lean.pool" </br>
 "com.runtime.lunarconsole":"https://github.com/wajahatdeveloper/Modules.git?path=/Assets/com.runtime.lunarconsole" </br>
