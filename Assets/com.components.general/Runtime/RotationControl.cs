@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class FixRotation : MonoBehaviour
+public class RotationControl : MonoBehaviour
 {
     public Vector3 offset;
     
