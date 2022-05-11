@@ -357,7 +357,7 @@ namespace EnhancedHierarchy {
                 return;
 
             using(ProfilerSample.Get()) {
-                rect.xMin += LabelSize;
+                rect.xMin += LabelSize + 15;
                 rect.xMin = Math.Min(rect.xMax - RightIconsWidth - LeftIconsWidth - CalcMiniLabelSize() - 5f - Preferences.RightMargin, rect.xMin);
 
                 for (var i = 0; i < Preferences.LeftIcons.Value.Count; i++)
