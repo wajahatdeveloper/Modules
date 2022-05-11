@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 
-public class Dialog : SingletonBehaviour<Dialog>
+public class Dialog : SingletonBehaviourUI<Dialog>
 {
     public GameObject panel;
     

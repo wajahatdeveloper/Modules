@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 
-public class PopupMessage : SingletonBehaviour<PopupMessage>
+public class PopupMessage : SingletonBehaviourUI<PopupMessage>
 {
     public Text messageText;
     public Text titleText;

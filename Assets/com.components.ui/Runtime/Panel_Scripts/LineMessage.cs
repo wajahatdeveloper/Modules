@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 
-public class LineMessage : SingletonBehaviour<LineMessage>
+public class LineMessage : SingletonBehaviourUI<LineMessage>
 {
     public GameObject messagePrefab;
 

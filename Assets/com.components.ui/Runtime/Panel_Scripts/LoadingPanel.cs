@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 
-public class LoadingPanel : SingletonBehaviour<LoadingPanel>
+public class LoadingPanel : SingletonBehaviourUI<LoadingPanel>
 {
     public GameObject loadingPanel;
     public Text infoText;

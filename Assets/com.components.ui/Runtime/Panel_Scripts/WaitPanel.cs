@@ -2,7 +2,7 @@
 using UnityEngine.Events;
 using UnityEngine.UI;
 
-public class WaitPanel : SingletonBehaviour<WaitPanel>
+public class WaitPanel : SingletonBehaviourUI<WaitPanel>
 {
     public GameObject waitPanel;
     public Text waitingText;

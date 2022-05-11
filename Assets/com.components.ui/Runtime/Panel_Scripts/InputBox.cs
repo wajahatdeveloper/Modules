@@ -2,7 +2,7 @@
 using UnityEngine.Events;
 using UnityEngine.UI;
 
-public class InputBox : SingletonBehaviour<InputBox>
+public class InputBox : SingletonBehaviourUI<InputBox>
 {
     public Text headingText;
     public InputField inputField;
