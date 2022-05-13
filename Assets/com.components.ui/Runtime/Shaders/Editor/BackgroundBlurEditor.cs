@@ -1,4 +1,5 @@
-﻿using UnityEditor;
+﻿#if UNITY_EDITOR
+using UnityEditor;
 
 public class BackgroundBlurEditor : MaterialEditor
 {
@@ -25,3 +26,5 @@ public class BackgroundBlurEditor : MaterialEditor
         ShaderProperty( property, property.displayName );
     }
 }
+
+#endif

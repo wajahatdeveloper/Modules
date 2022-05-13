@@ -3,7 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Sirenix.OdinInspector;
+#if UNITY_EDITOR
 using Sirenix.OdinInspector.Editor;
+#endif
 using UnityEngine;
 
 [HideMonoScript]
@@ -71,7 +73,8 @@ public class MultiTagger : MonoBehaviour
     {
         TaggerData ??= Resources.Load<MultiTaggerData>("MultiTaggerData");
     }
-    
+
+#if UNITY_EDITOR
     [ValueDropdown("@TaggerData.tags",IsUniqueList = true, FlattenTreeView = true,
         ExcludeExistingValuesInList = true, DrawDropdownForListElements = false)]
     [OnCollectionChanged(after: "After")]
@@ -112,6 +115,7 @@ public class MultiTagger : MonoBehaviour
                 throw new ArgumentOutOfRangeException();
         }
     }
+#endif
 
     private void Start()
     {
