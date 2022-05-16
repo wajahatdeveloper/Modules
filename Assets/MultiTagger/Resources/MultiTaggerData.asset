@@ -22,7 +22,25 @@ MonoBehaviour:
     PrefabModifications: []
     SerializationNodes:
     - Name: TagLinks
-      Entry: 6
+      Entry: 7
+      Data: 0|Unity.Cloud.Collaborate.Common.SerializableDictionary`2[[System.String,
+        mscorlib],[System.Collections.Generic.List`1[[MultiTagger, com.multitagger]],
+        mscorlib]], Unity.CollabProxy.Editor
+    - Name: comparer
+      Entry: 7
+      Data: 1|System.Collections.Generic.GenericEqualityComparer`1[[System.String,
+        mscorlib]], mscorlib
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 12
+      Data: 0
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
       Data: 
   tags:
   - Tag1
