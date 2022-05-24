@@ -1,6 +1,8 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 public static class AssortedExtensions
 {
@@ -140,6 +142,18 @@ public static class AssortedExtensions
 		}
 	}
 
+	/// <summary>
+	/// Disposes of the object, if it isn't null.
+	/// </summary>
+	/// <param name="disposable"></param>
+	public static void DisposeIfNotNull(this IDisposable argument)
+	{
+		if (argument != null)
+		{
+			argument.Dispose();
+		}
+	}
+	
 	public static bool HasMethod(this object target, string methodName)
 	{
 		return target.GetType().GetMethod(methodName) != null;
