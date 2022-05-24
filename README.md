@@ -10,6 +10,8 @@ https://github.com/wajahatdeveloper/Modules.git
 "Unity.TextMeshPro"
 </br>
 "com.multitagger":"https://github.com/wajahatdeveloper/Modules.git?path=/Assets/MultiTagger" </br>
+"Odin"
+</br>
 "com.log.reporter":"https://github.com/wajahatdeveloper/Modules.git?path=/Assets/com.log.reporter" </br>
 "com.lean.pool":"https://github.com/wajahatdeveloper/Modules.git?path=/Assets/com.lean.pool" </br>
 "com.runtime.lunarconsole":"https://github.com/wajahatdeveloper/Modules.git?path=/Assets/com.runtime.lunarconsole" </br>
@@ -24,7 +26,6 @@ https://github.com/wajahatdeveloper/Modules.git
 "com.ads.mediation":"https://github.com/wajahatdeveloper/Modules.git?path=/Assets/com.ads.mediation" </br>
 
 "com.thirdparty.mybox":"https://github.com/wajahatdeveloper/Modules.git?path=/Assets/EditorModules/com.thirdparty.mybox" </br>
-"com.thirdparty.odin":"https://github.com/wajahatdeveloper/Modules.git?path=/Assets/EditorModules/com.thirdparty.odin" </br>
 "com.components.editor":"https://github.com/wajahatdeveloper/Modules.git?path=/Assets/EditorModules/com.components.editor" </br>
 "com.utility.consoleprodebug":"https://github.com/wajahatdeveloper/Modules.git?path=/Assets/EditorModules/com.utility.consoleprodebug" </br>
 "com.utility.enhancedheirarchy":"https://github.com/wajahatdeveloper/Modules.git?path=/Assets/EditorModules/com.utility.enhancedheirarchy" </br>
