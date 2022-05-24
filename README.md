@@ -5,7 +5,7 @@ https://github.com/wajahatdeveloper/Modules.git
 "com.components.general":"https://github.com/wajahatdeveloper/Modules.git?path=/Assets/com.components.general" </br>
 "com.components.managers":"https://github.com/wajahatdeveloper/Modules.git?path=/Assets/com.components.managers" </br>
 "com.components.ui":"https://github.com/wajahatdeveloper/Modules.git?path=/Assets/com.components.ui" </br>
-"MyBox",
+"Extensions",
 "com.datastructures",
 "Unity.TextMeshPro"
 </br>
@@ -25,7 +25,6 @@ https://github.com/wajahatdeveloper/Modules.git
 
 "com.ads.mediation":"https://github.com/wajahatdeveloper/Modules.git?path=/Assets/com.ads.mediation" </br>
 
-"com.thirdparty.mybox":"https://github.com/wajahatdeveloper/Modules.git?path=/Assets/EditorModules/com.thirdparty.mybox" </br>
 "com.components.editor":"https://github.com/wajahatdeveloper/Modules.git?path=/Assets/EditorModules/com.components.editor" </br>
 "com.utility.consoleprodebug":"https://github.com/wajahatdeveloper/Modules.git?path=/Assets/EditorModules/com.utility.consoleprodebug" </br>
 "com.utility.enhancedheirarchy":"https://github.com/wajahatdeveloper/Modules.git?path=/Assets/EditorModules/com.utility.enhancedheirarchy" </br>
