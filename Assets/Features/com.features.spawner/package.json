@@ -3,10 +3,5 @@
   "version": "1.0.0",
   "displayName": "2D 3D and Point Spawn System",
   "description": "2D 3D and Point Spawn System",
-  "unity": "2020.3",
-  "dependencies": 
-  {
-    "com.lean.pool":"https://github.com/wajahatdeveloper/Modules.git?path=/Assets/com.lean.pool",
-    "com.extensions":"https://github.com/wajahatdeveloper/Modules.git?path=/Assets/com.extensions"
-  }
+  "unity": "2020.3"
 }
