@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using RobustFSM.Interfaces;
-using Assets.RobustFSM.Interfaces;
+using RobustFSM.Mono;
 using UnityEngine;
 
 namespace RobustFSM.Base
 {
     /// <summary>
-    /// This is a basse hybrid state. It belongs to a state machine.
+    /// This is a base hybrid state. It belongs to a state machine.
     /// It allows your class to act as both a state machine and a state
     /// Inherit from this class if you want to create a hybrid state
     /// and override the appropriate methods
@@ -145,7 +145,7 @@ namespace RobustFSM.Base
         /// Adds a state to this instance
         /// </summary>
         /// <typeparam name="T"></typeparam>
-        public void AddState<T>() where T : MonoBehaviour, IState, new()
+        public void AddState<T>() where T : IState, new()
         {
             //add the state
             _fsm.AddState<T>();

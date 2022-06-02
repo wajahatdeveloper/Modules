@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using RobustFSM.Interfaces;
 using UnityEngine;
 
-public class MonoState : MonoBehaviour , IState 
+namespace RobustFSM.Mono
 {
-            #region Propeties
+    public class MonoState : MonoBehaviour, IState
+    {
+        #region Propeties
 
         /// <summary>
         /// A reference to the name of this instance
@@ -57,14 +59,16 @@ public class MonoState : MonoBehaviour , IState
         {
             UnityEngine.Debug.Log(Machine.MachineName + ":Enter(" + StateName + ") State");
 #if Verbose
-            Console.WriteLine(Machine.MachineName + ":Enter(" + StateName + ") State");
+        Console.WriteLine(Machine.MachineName + ":Enter(" + StateName + ") State");
 #endif
         }
 
         /// <summary>
         /// Is called every frame update
         /// </summary>
-        public virtual void Execute() { }
+        public virtual void Execute()
+        {
+        }
 
         /// <summary>
         /// Is called every time this state is deactivated
@@ -73,7 +77,7 @@ public class MonoState : MonoBehaviour , IState
         {
             UnityEngine.Debug.Log(Machine.MachineName + ":Exit(" + StateName + ") State");
 #if Verbose
-            Console.WriteLine(Machine.MachineName + ":Exit(" + StateName + ") State");
+        Console.WriteLine(Machine.MachineName + ":Exit(" + StateName + ") State");
 #endif
         }
 
@@ -90,12 +94,17 @@ public class MonoState : MonoBehaviour , IState
         /// <summary>
         /// Is called on every manual execute in the state machine
         /// </summary>
-        public virtual void ManualExecute() { }
+        public virtual void ManualExecute()
+        {
+        }
 
         /// <summary>
         /// Is called on every physics execute in the state machine
         /// </summary>
-        public virtual void PhysicsExecute() { }
+        public virtual void PhysicsExecute()
+        {
+        }
 
         #endregion
+    }
 }

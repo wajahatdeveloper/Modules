@@ -8,12 +8,12 @@ using UnityEditor;
 #endif
 using UnityEngine;
 
-namespace Assets.RobustFSM.Mono
+namespace RobustFSM.Mono
 {
-    public class MonoFSM<TU> : SingletonBehaviour<TU>, IFSM where TU : MonoBehaviour
+    public class MonoSingletonFSM<TU> : SingletonBehaviour<TU>, IFSM where TU : MonoBehaviour
     {
         #region Variables
-
+        
         /// <summary>
         /// A reference to the fsm of this instance
         /// </summary>
@@ -75,6 +75,22 @@ namespace Assets.RobustFSM.Mono
                 _fsm.CurrentState = value;
             }
         }
+        
+        /// <summary>
+        /// A reference to the current state
+        /// </summary>
+        public MonoState CurrentMonoState
+        {
+            get
+            {
+                return (MonoState)_fsm.CurrentState;
+            }
+
+            set
+            {
+                _fsm.CurrentState = value;
+            }
+        }
 
         /// <summary>
         /// A reference to the inital state
@@ -123,6 +139,22 @@ namespace Assets.RobustFSM.Mono
                 _fsm.PreviousState = value;
             }
         }
+        
+        /// <summary>
+        /// A reference to the previous state
+        /// </summary>
+        public MonoState PreviousMonoState
+        {
+            get
+            {
+                return (MonoState)_fsm.PreviousState;
+            }
+
+            set
+            {
+                _fsm.PreviousState = value;
+            }
+        }
 
         /// <summary>
         /// A reference to the states contained by this instance
@@ -149,9 +181,11 @@ namespace Assets.RobustFSM.Mono
         /// Adds states to the machine with calls to AddState<>()
         ///     
         /// When all states have been added set the initial state with 
-        /// a call toSetInitialState<>()
+        /// a call to SetInitialState<>()
         /// </summary>
-        public virtual void AddStates() { }
+        public virtual void AddStates()
+        {
+        }
 
 
         /// <summary>
@@ -186,14 +220,35 @@ namespace Assets.RobustFSM.Mono
 
         #region Basic Methods
 
+        public void AddMonoState<T>(bool includeInactive = true) where T : MonoState, new()
+        {
+            //add the state
+            if (typeof(T) == typeof(MonoState) || typeof(T).IsSubclassOf(typeof(MonoState)))
+            {
+                if (!ContainsState<T>())
+                {
+                    //create new state 
+                    IState item = GetComponentInChildren<T>(includeInactive);
+                    item.SuperMachine = this;
+
+                    //add state to dictionary
+                    States.Add(typeof(T), item);
+                }
+            }
+            else
+            {
+                _fsm.AddState<T>();
+            }
+        }
+
         /// <summary>
         /// Adds a state to this instance
         /// </summary>
         /// <typeparam name="T"></typeparam>
-        public void AddState<T>() where T : MonoBehaviour, IState, new()
+        public void AddState<T>() where T : IState, new()
         {
             //add the state
-            if (typeof(T) == typeof(MonoBehaviour) || typeof(T).IsSubclassOf(typeof(MonoBehaviour)))
+            if (typeof(T) == typeof(MonoState) || typeof(T).IsSubclassOf(typeof(MonoState)))
             {
                 if (!ContainsState<T>())
                 {
@@ -217,7 +272,59 @@ namespace Assets.RobustFSM.Mono
         /// <typeparam name="T">state to change to</typeparam>
         public void ChangeState<T>() where T : IState
         {
-            _fsm.ChangeState<T>();
+           _fsm.ChangeState<T>();
+        }
+        
+        /// <summary>
+        /// Triggers a state change in this instance
+        /// </summary>
+        /// <typeparam name="T">state to change to</typeparam>
+        public void ChangeState_NextFrame<T>(bool disableStateObject = false) where T : MonoState
+        {
+            StartCoroutine(_ChangeStateOnNextFrame<T>(disableStateObject));
+        }
+
+        private IEnumerator _ChangeStateOnNextFrame<T>(bool disableStateObject) where T : MonoState
+        {
+            try
+            {
+                //cache the correct states
+                PreviousState = CurrentState;
+                NextState = States[typeof(T)];
+            }
+            catch (KeyNotFoundException e)
+            {
+                throw new Exception("\n" + GetType().Name + " could not be found in the state machine" + e.Message);
+            }
+            
+            yield return new WaitForEndOfFrame();
+            
+            try
+            {   
+                //exit the current state
+                CurrentState.Exit();
+
+                if (disableStateObject)
+                {
+                    PreviousMonoState.gameObject.SetActive(false);
+                }
+                
+                CurrentState = NextState;
+
+                if (CurrentState.GetType().IsSubclassOf(typeof(MonoState)))
+                {
+                    ((MonoState)CurrentState).gameObject.SetActive(true);
+                }
+                
+                NextState = null;
+
+                //enter the current state
+                CurrentState.Enter();
+            }
+            catch (KeyNotFoundException e)
+            {
+                throw new Exception("\n" + GetType().Name + " could not be found in the state machine" + e.Message);
+            }
         }
 
         /// <summary>
@@ -236,6 +343,16 @@ namespace Assets.RobustFSM.Mono
         /// <typeparam name="T">state type</typeparam>
         /// <returns><c>the state</c>, if state is available else <c>null</c></returns>
         public T GetCurrentState<T>() where T : IState
+        {
+            return _fsm.GetCurrentState<T>();
+        }
+        
+        /// <summary>
+        /// Retrieves the current executing state
+        /// </summary>
+        /// <typeparam name="T">state type</typeparam>
+        /// <returns><c>the state</c>, if state is available else <c>null</c></returns>
+        public T GetCurrentMonoState<T>() where T : MonoState
         {
             return _fsm.GetCurrentState<T>();
         }
@@ -318,6 +435,16 @@ namespace Assets.RobustFSM.Mono
             _fsm.SetCurrentState<T>();
         }
 
+        /// <summary>
+        /// Sets the initial state
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        public void SetInitialMonoState<T>() where T : MonoState
+        {
+            _fsm.SetInitialState<T>();
+            _fsm.GetInitialState<T>().gameObject.SetActive(true);
+        }
+        
         /// <summary>
         /// Sets the initial state
         /// </summary>
@@ -477,7 +604,7 @@ namespace Assets.RobustFSM.Mono
         /// Called everytime time just before the physics updates
         /// </summary>
         /// <param name="frameTime"></param>
-        protected void FixedUpdate()
+        protected virtual void FixedUpdate()
         {
             //run the physics execute
             OnPhysicsExecute();
@@ -486,7 +613,7 @@ namespace Assets.RobustFSM.Mono
         /// <summary>
         /// Called once every frame when the game is running.
         /// </summary>
-        protected void Update()
+        protected virtual void Update()
         {
             //run the execute
             OnExecute();

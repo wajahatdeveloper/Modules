@@ -3,12 +3,12 @@
 namespace RobustFSM.Interfaces
 {
     /// <summary>
-    /// Interface defination of a state
+    /// Interface definition of a state
     /// </summary>
     public interface IState
     {
         /// <summary>
-        /// A refernce to the name of this instance
+        /// A reference to the name of this instance
         /// </summary>
         string StateName { get; set; }
 
