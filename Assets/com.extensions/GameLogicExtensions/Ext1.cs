@@ -33,14 +33,6 @@ public static class Ext1
 		}
 
 		/// <summary>
-		/// Returns whether this source is empty.
-		/// </summary>
-		public static bool IsEmpty<T>(this ICollection<T> collection)
-		{
-			return collection.Count == 0;
-		}
-
-		/// <summary>
 		/// Add all elements of other to the given source.
 		/// </summary>
 		public static void AddRange<T>(this ICollection<T> collection, IEnumerable<T> other)
