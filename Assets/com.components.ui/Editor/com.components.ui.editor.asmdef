@@ -1,7 +1,9 @@
 {
     "name": "com.components.ui.editor",
     "rootNamespace": "",
-    "references": [],
+    "references": [
+        "GUID:fe03f3686d5b2ab4482e4b61426dc18f"
+    ],
     "includePlatforms": [
         "Editor"
     ],

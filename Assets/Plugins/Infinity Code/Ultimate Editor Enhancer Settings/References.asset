@@ -16,6 +16,10 @@ MonoBehaviour:
   _favoriteWindows: []
   _quickAccessItems: []
   _sceneHistory:
+  - name: SampleScene
+    path: Assets/Scenes/SampleScene.unity
+  - name: ButtonListenerBasicExtendedButtons
+    path: Assets/com.components.ui/ExtendedButtons/Demo/Scenes/ButtonListenerBasicExtendedButtons.unity
   - name: ShadersExamples
     path: Assets/BitStrap/Examples/Shaders/ShadersExamples.unity
   - name: MathExamples
@@ -24,5 +28,3 @@ MonoBehaviour:
     path: Assets/BitStrap/Examples/Functional/FunctionalExamples.unity
   - name: AnimationParameters
     path: Assets/BitStrap/Examples/Animation/AnimationParameters/AnimationParameters.unity
-  - name: SampleScene
-    path: Assets/Scenes/SampleScene.unity
