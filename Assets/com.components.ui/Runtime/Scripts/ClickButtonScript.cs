@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ClickButton : MonoBehaviour
+public class ClickButtonScript : MonoBehaviour
 {
 	public Button button;
 
