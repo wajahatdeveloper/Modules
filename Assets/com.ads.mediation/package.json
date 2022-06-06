@@ -1,7 +1,0 @@
-{
-  "name": "com.ads.mediation",
-  "version": "1.0.0",
-  "displayName": "Google Ads Mediation",
-  "description": "Google Ads Mediation with Google Ads, Unity Ads, Chartboost, Applovin and Facebook Ads Adapters.",
-  "unity": "2020.3"
-}
