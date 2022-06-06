@@ -5,8 +5,6 @@ using System;
 using UnityEditor;
 #endif
 
-namespace MyBox
-{
 	/// <summary>
 	/// This call is the type used by any other code to hold a reference to an object by GUID
 	/// If the target object is loaded, it will be returned, otherwise, NULL will be returned
@@ -101,4 +99,3 @@ namespace MyBox
 			removeDelegate = GuidRemoved;
 		}
 	}
-}

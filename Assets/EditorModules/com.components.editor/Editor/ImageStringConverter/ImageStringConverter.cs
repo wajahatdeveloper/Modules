@@ -4,7 +4,7 @@ using UnityEngine;
 	public static class ImageStringConverter
 	{
 		/// <summary>
-		/// Use "Tools/MyBox/String Image Converter" to get string image representation
+		/// Get string image representation
 		/// </summary>
 		public static Texture2D ImageFromString(string source, int width, int height)
 		{

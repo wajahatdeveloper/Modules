@@ -7,8 +7,6 @@ using UnityEditor.SceneManagement;
 using UnityEditor.Experimental.SceneManagement;
 #endif
 
-namespace MyBox
-{
 	/// <summary>
 	/// This component gives a GameObject a stable, non-replicatable Globally Unique IDentifier.
 	/// It can be used to reference a specific instance of an object no matter where it is.
@@ -194,4 +192,3 @@ namespace MyBox
 			GuidManager.Remove(guid);
 		}
 	}
-}

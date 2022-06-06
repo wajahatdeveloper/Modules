@@ -2,8 +2,6 @@
 using UnityEngine;
 using System;
 
-namespace MyBox
-{
 	/// <summary>
 	/// Class to handle registering and accessing objects by GUID
 	/// </summary>
@@ -137,4 +135,3 @@ namespace MyBox
 			return null;
 		}
 	}
-}

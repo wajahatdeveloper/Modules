@@ -2,8 +2,6 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace MyBox.Internal
-{
 	[CustomEditor(typeof(GuidComponent))]
 	public class GuidComponentDrawer : Editor
 	{
@@ -20,5 +18,4 @@ namespace MyBox.Internal
 			EditorGUILayout.LabelField("Guid:", guidComp.GetGuid().ToString());
 		}
 	}
-}
 #endif

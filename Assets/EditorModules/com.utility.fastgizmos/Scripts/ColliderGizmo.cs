@@ -7,8 +7,6 @@ using UnityEngine.AI;
 
 #endif
 
-namespace MyBox
-{
 	public class ColliderGizmo : MonoBehaviour
 	{
 #if UNITY_EDITOR
@@ -442,13 +440,10 @@ namespace MyBox
 
 #endif
 	}
-}
 
 
 #if UNITY_EDITOR
 
-	namespace MyBox.Internal
-	{
 		[CustomEditor(typeof(ColliderGizmo)), CanEditMultipleObjects]
 		public class ColliderGizmoEditor : Editor
 		{
@@ -576,6 +571,4 @@ namespace MyBox
 				       _target.gameObject.GetComponents<Collider2D>().Length;
 			}
 		}
-	}
-
 #endif

@@ -2,8 +2,6 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace MyBox.Internal
-{
 	/// <summary>
 	/// Using a property drawer to allow any class to have a field of type GuidRefernce and still get good UX
 	/// If you are writing your own inspector for a class that uses a GuidReference, drawing it with
@@ -137,5 +135,4 @@ namespace MyBox.Internal
 			}
 		}
 	}
-}
 #endif

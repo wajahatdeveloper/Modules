@@ -8,7 +8,7 @@ using UnityEngine;
 	[CustomEditor(typeof(AssetsPresetPreprocessBase))]
 	public class AssetsPresetPreprocessEditor : Editor
 	{
-		[MenuItem("Tools/MyBox/Postprocess Preset Tool", false, 50)]
+		[MenuItem("Hub/Editor/Postprocess Preset Tool", false, 50)]
 		private static void SelectBase()
 		{
 			var presetBase = ScriptableObjectX.LoadAssetsFromResources<AssetsPresetPreprocessBase>().FirstOrDefault();

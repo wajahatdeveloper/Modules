@@ -1,8 +1,6 @@
 using System.Collections;
 using UnityEngine;
 
-namespace MyBox
-{
 	public static class CoroutineX
 	{
 		private static CoroutineOwner CoroutineOwner
@@ -47,7 +45,6 @@ namespace MyBox
 			CoroutineOwner.StopAllCoroutines();
 		}
 	}
-}
 
 internal class CoroutineOwner : MonoBehaviour
 {
