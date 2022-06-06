@@ -21,9 +21,6 @@ https://github.com/wajahatdeveloper/Modules.git
 "com.extensions":"https://github.com/wajahatdeveloper/Modules.git?path=/Assets/com.extensions" </br>
 "com.rmvcc":"https://github.com/wajahatdeveloper/Modules.git?path=/Assets/com.rmvcc" </br>
 "com.statemachine":"https://github.com/wajahatdeveloper/Modules.git?path=/Assets/com.statemachine" </br>
-"com.ui.widgets.listview":"https://github.com/wajahatdeveloper/Modules.git?path=/Assets/com.ui.widgets.listview" </br>
-
-"com.ads.mediation":"https://github.com/wajahatdeveloper/Modules.git?path=/Assets/com.ads.mediation" </br>
 
 "com.components.editor":"https://github.com/wajahatdeveloper/Modules.git?path=/Assets/EditorModules/com.components.editor" </br>
 "com.utility.consoleprodebug":"https://github.com/wajahatdeveloper/Modules.git?path=/Assets/EditorModules/com.utility.consoleprodebug" </br>
