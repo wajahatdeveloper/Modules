@@ -2,9 +2,10 @@
 using UnityEditor;
 using System.Collections.Generic;
 
+#pragma warning disable 0618
+
 namespace BrokenVector.PersistentComponents
 {
-
     public partial class PersistentComponents
     {
         private static PersistentComponents instance;

@@ -16,6 +16,8 @@ MonoBehaviour:
   _favoriteWindows: []
   _quickAccessItems: []
   _sceneHistory:
+  - name: DemoScene
+    path: Assets/Plugins/QFSW/Quantum Console/Source/Demo Scene/DemoScene.unity
   - name: SampleScene
     path: Assets/Scenes/SampleScene.unity
   - name: ButtonListenerBasicExtendedButtons

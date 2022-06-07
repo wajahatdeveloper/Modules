@@ -9,6 +9,8 @@ using Object = UnityEngine.Object;
 using UnityEngine.SceneManagement;
 #endif
 
+#pragma warning disable 0618
+
 namespace Plugins.Isolationist.Editor
 {
 	[InitializeOnLoad]

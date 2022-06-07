@@ -3,7 +3,6 @@ using UnityEngine;
 
 namespace ExtendedButtons
 {
-
     [InitializeOnLoad]
     public class ListenerSingleton : MonoBehaviour
     {
