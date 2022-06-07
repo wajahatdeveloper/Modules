@@ -9,7 +9,7 @@ using UnityEditor.Callbacks;
 
 public class AutoRefs : Editor
 {
-	[MenuItem("Hub/Set AutoRefs")]
+	[MenuItem("Hub/Editor/Set AutoRefs")]
 	static void GetAutoRefs()
 	{
 		// Get all game objects.

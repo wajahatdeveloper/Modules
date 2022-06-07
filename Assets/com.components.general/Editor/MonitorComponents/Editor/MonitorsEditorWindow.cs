@@ -12,7 +12,7 @@ namespace MonitorComponents
 {
 	public class MonitorsEditorWindow : EditorWindow
 	{
-		[MenuItem ("Hub/Monitors _#%m")]
+		[MenuItem ("Hub/Monitors _#%m",priority = 4)]
 		static void Init() 
 		{
 			EditorWindow.GetWindow(typeof(MonitorsEditorWindow));

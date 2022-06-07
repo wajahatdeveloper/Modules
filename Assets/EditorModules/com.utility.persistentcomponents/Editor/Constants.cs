@@ -9,7 +9,7 @@ namespace BrokenVector.PersistentComponents
     {
         private const string TOOL_MENU_PATH = "Tools/";
         private const string BRAND_NAME = "BrokenVector";
-        private const string WINDOW_MENU_PATH = "Window/" + BRAND_NAME + "/";
+        private const string WINDOW_MENU_PATH = "Hub/"/* + BRAND_NAME + "/"*/;
         
         public const string ASSET_NAME = "Persistent Components";
         public const string SETTINGS_NAME = "Settings";
@@ -20,7 +20,7 @@ namespace BrokenVector.PersistentComponents
         public const string WINDOW_PATH_ALTERNATE = WINDOW_MENU_PATH + ASSET_NAME;
         public const string SETTINGS_WINDOW_PATH = TOOL_MENU_PATH + ASSET_NAME + "/" + SETTINGS_NAME;
 
-        public const int WINDOW_PRIORITY = 10;
+        public const int WINDOW_PRIORITY = 2;
         public const int SETTINGS_WINDOW_PRIORITY = 20;
 
         public const string WINDOW_NAME = " PCS";

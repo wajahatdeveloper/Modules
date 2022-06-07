@@ -23,7 +23,7 @@ namespace BrokenVector.PersistentComponents
             Instance = this;
         }
 
-        [MenuItem(Constants.WINDOW_PATH, false, Constants.WINDOW_PRIORITY), MenuItem(Constants.WINDOW_PATH_ALTERNATE)]
+        [MenuItem(Constants.WINDOW_PATH, false, Constants.WINDOW_PRIORITY)/*, MenuItem(Constants.WINDOW_PATH_ALTERNATE)*/]
         public static void ShowWindow()
         {
             Init();

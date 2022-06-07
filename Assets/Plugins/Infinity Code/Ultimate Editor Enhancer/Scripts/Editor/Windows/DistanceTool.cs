@@ -293,6 +293,7 @@ namespace InfinityCode.UltimateEditorEnhancer.Windows
         private float GetElementHeight(int index)
         {
             Target t = targets[index];
+            if (t == null) { return 0; }
             if (index == 0 && t.type == TargetType.point) return LINEHEIGHT;
             return LINEHEIGHT * 2 - 4;
         }

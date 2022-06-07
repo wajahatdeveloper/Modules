@@ -11,7 +11,7 @@ public class UIHelper : EditorWindow
     
     protected Vector2 scrollPosition;
 
-    [MenuItem("Hub/UI Helper")]
+    [MenuItem("Hub/UI Helper",priority = 2)]
     public static void Init()
     {
         UpdateList();

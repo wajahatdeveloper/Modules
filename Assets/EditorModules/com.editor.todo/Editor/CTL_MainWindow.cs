@@ -81,7 +81,7 @@ namespace CodeTodoList
 			sFilesObjects.Clear();
 		}
 
-		[MenuItem("Window/" + WINDOW_NAME)]
+		[MenuItem("Hub/" + WINDOW_NAME,priority = 2)]
 		public static void OpenWindow()
 		{
 			sInstance = (CTL_MainWindow)EditorWindow.GetWindow(typeof(CTL_MainWindow));
