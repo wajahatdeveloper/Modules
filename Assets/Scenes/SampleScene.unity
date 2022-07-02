@@ -929,6 +929,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1656297086}
   - component: {fileID: 1656297085}
+  - component: {fileID: 1656297087}
+  - component: {fileID: 1656297088}
   m_Layer: 5
   m_Name: Tester
   m_TagString: Untagged
@@ -943,7 +945,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1656297083}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7a8a5537f015951428daa25b541d1772, type: 3}
   m_Name: 
@@ -963,6 +965,56 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1656297087
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1656297083}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62880f27e95abf2418fd79e9d9d568b4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GuiOffset:
+    serializedVersion: 2
+    x: 250
+    y: 0
+    width: 300
+    height: 300
+  DontDestroy: 1
+  ServerTimestamp: 0
+  DetailedConnection: 0
+  Server: 0
+  AppVersion: 0
+  UserId: 0
+  Room: 0
+  RoomProps: 0
+  EventsIn: 0
+  LocalPlayer: 0
+  PlayerProps: 0
+  Others: 0
+  Buttons: 1
+  ExpectedUsers: 0
+--- !u!114 &1656297088
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1656297083}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b0c6bf57895497a4ab50e7ab3c63c644, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  onConnectionSuccessful:
+    m_PersistentCalls:
+      m_Calls: []
+  onConnectionFailed:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &1880155576
 GameObject:
   m_ObjectHideFlags: 0
