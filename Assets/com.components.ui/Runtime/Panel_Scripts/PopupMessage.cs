@@ -5,23 +5,61 @@ using UnityEngine.UI;
 
 public class PopupMessage : SingletonBehaviourUI<PopupMessage>
 {
+    public Image signImage;
     public Text messageText;
     public Text titleText;
     public GameObject messagePanel;
+
+    public Sprite infoSignSprite;
+    public Sprite warningSignSprite;
 
     public UnityEvent onClose;
 
     private bool _isAuto;
     private bool _allowCloseOnEnter;
 
-    public void ShowAuto(string message,string titleString="")
+    public enum PopupSign
+    {
+        NONE,
+        INFO,
+        WARNING
+    }
+    
+    public void ShowOnce(string message, string id, string titleString = "",PopupSign sign = PopupSign.NONE , bool allowCloseOnEnter = true)
+    {
+        if (PlayerPrefs.GetInt("showOnce_"+id,0) == 0)
+        {
+            Show(message,titleString,sign,allowCloseOnEnter);
+            PlayerPrefs.SetInt("showOnce_"+id,1);
+        }
+    }
+    
+    public void ShowAuto(string message,string titleString="",PopupSign sign = PopupSign.NONE)
     {
         _isAuto = true;
-        Show(message,titleString);
+        Show(message,titleString,sign,false);
     }
 
-    public void Show(string message, string titleString = "", bool allowCloseOnEnter = true)
+    public void Show(string message, string titleString = "",PopupSign sign = PopupSign.NONE , bool allowCloseOnEnter = true)
     {
+        switch (sign)
+        {
+            case PopupSign.NONE:
+                signImage.sprite = null;
+                signImage.gameObject.SetActive(false);
+                break;
+            case PopupSign.WARNING:
+                signImage.sprite = warningSignSprite;
+                signImage.gameObject.SetActive(true);
+                break;
+            case PopupSign.INFO:
+                signImage.sprite = infoSignSprite;
+                signImage.gameObject.SetActive(true);
+                break;
+            default:
+                throw new ArgumentOutOfRangeException(nameof(sign), sign, null);
+        }
+        
         _allowCloseOnEnter = allowCloseOnEnter;
         messageText.text = message;
         titleText.text = titleString;
