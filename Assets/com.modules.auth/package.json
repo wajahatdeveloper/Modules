@@ -1,0 +1,7 @@
+{
+  "name": "com.modules.auth",
+  "version": "1.0.0",
+  "displayName": "Authentication Module",
+  "description": "Sign In, and Sign Up Using REST API's",
+  "unity": "2020.3"
+}
