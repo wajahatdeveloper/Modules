@@ -1,0 +1,22 @@
+{
+    "name": "com.network.pun2",
+    "rootNamespace": "",
+    "references": [
+        "GUID:57c32fc907df0f54e8e6e8f0d2488336",
+        "GUID:831409e8f9d13b5479a3baef9822ad34",
+        "GUID:eb929d21ee20c544b8b55afed08dd3a6",
+        "GUID:fb3b74002612d9540be93773974f40c9",
+        "GUID:fe03f3686d5b2ab4482e4b61426dc18f"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [
+        "PUN_2_OR_NEWER"
+    ],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

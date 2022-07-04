@@ -1,0 +1,7 @@
+{
+  "name": "com.network.pun2",
+  "version": "1.0.0",
+  "displayName": "PUN2 Extensions",
+  "description": "Photon Unity Networking 2 Extensions and Components",
+  "unity": "2020.3"
+}
