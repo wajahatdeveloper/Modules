@@ -5,6 +5,18 @@ using UnityEngine;
 
 public static class GameObjectX
 {
+	// Helper function to access all components of a type on the game object.
+	public static void ForEachChildOfType<T>(this GameObject gameObject, Action<T> callback) {
+		foreach (T t in gameObject.GetComponentsInChildren<T>()) {
+			callback(t);
+		}
+	}
+
+	// Helper function to access all components of a type on root of the given the game object.
+	public static void ForEachRootChildOfType<T>(this GameObject gameObject, Action<T> callback) {
+		gameObject.transform.root.gameObject.ForEachChildOfType<T>(callback);
+	}
+	
 	/// <summary>
 	/// Sets the active state of this <paramref name="gameObject"/> and it's first level parent.
 	/// </summary>
