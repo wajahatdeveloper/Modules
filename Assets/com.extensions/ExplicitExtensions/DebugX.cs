@@ -14,7 +14,16 @@ public static class DebugX
         Debug.Log(inFilterName + " : " + inLog, inContext);
         #endif
     }
-    
+
+	public static void Log(string inLog, Color color, string inFilterName, GameObject inContext)
+	{
+#if CONSOLE_PRO
+        ConsoleProDebug.LogToFilter($"<color={color.ColorToHex()}{inLog}</color>",inFilterName,inContext);
+#else
+		Debug.Log($"<color={color.ColorToHex()}{inFilterName} : {inLog}</color>", inContext);
+#endif
+	}
+
 	#region Log Array
 
 	private static StringBuilder _stringBuilder;
@@ -50,11 +59,6 @@ public static class DebugX
 	}
 
 	#endregion
-
-	public static void LogColor(Color color)
-	{
-		Debug.Log("<color=#" + ColorUtility.ToHtmlStringRGB(color) + ">████████████</color> = " + color);
-	}
 
 	#region Debug Bounds 
 
@@ -118,7 +122,7 @@ public static class DebugX
 
 	#endregion
 
-
+	#region Debug Draw
 	public static void DrawString(string text, Vector3 worldPos, Color? colour = null)
 	{
 #if UNITY_EDITOR
@@ -137,7 +141,6 @@ public static class DebugX
 #endif
 	}
 
-
 	/// <summary>
 	/// Draw directional arrow
 	/// </summary>
@@ -155,7 +158,6 @@ public static class DebugX
 #endif
 	}
 
-
 	/// <summary>
 	/// Draw XYZ dimensional RGB cross
 	/// </summary>
@@ -168,4 +170,5 @@ public static class DebugX
 		Debug.DrawLine(position.OffsetZ(-halfSize), position.OffsetZ(halfSize), Color.blue, .2f);
 #endif
 	}
+	#endregion
 }
