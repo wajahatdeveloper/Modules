@@ -3,7 +3,9 @@ using UnityEngine;
 
 namespace ExtendedButtons
 {
+#if UNITY_EDITOR
     [InitializeOnLoad]
+#endif
     public class ListenerSingleton : MonoBehaviour
     {
         private static IButtonsListener _instance;
