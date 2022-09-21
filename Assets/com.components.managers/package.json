@@ -1,7 +1,7 @@
 {
-  "name": "com.components.general",
+  "name": "com.components.managers",
   "version": "1.0.0",
-  "displayName": "General Components",
-  "description": "Assorted List of Generally Used Components",
+  "displayName": "Manager Scripts",
+  "description": "Assorted Manager Components",
   "unity": "2020.3"
 }
