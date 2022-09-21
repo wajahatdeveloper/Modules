@@ -4,7 +4,7 @@ https://github.com/wajahatdeveloper/Modules.git
 
 "com.components.general":"https://github.com/wajahatdeveloper/Modules.git?path=/Assets/com.components.general" </br>
 "com.components.managers":"https://github.com/wajahatdeveloper/Modules.git?path=/Assets/com.components.managers" </br>
-"https://github.com/mob-sakai/UIEffect.git"</br>
+"com.lean.pool"</br>
 "com.components.ui":"https://github.com/wajahatdeveloper/Modules.git?path=/Assets/com.components.ui" </br>
 "Extensions",
 "com.datastructures",
@@ -40,6 +40,7 @@ https://github.com/wajahatdeveloper/Modules.git
 
 "com.features.spawner":"https://github.com/wajahatdeveloper/Modules.git?path=/Assets/Features/com.features.spawner" </br>
 "com.features.achievementsystem":"https://github.com/wajahatdeveloper/Modules.git?path=/Assets/Features/com.features.achievementsystem" </br>
+"https://github.com/mob-sakai/UIEffect.git"</br>
 
 "":"https://github.com/wajahatdeveloper/Modules.git?path=/Assets/" </br>
 
