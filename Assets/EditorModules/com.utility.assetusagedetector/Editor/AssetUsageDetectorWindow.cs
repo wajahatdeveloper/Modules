@@ -5,9 +5,12 @@ using UnityEditor;
 using System.Collections.Generic;
 using System.Reflection;
 using Object = UnityEngine.Object;
-#if UNITY_2018_3_OR_NEWER
+#if UNITY_2021_2_OR_NEWER
 using PrefabStage = UnityEditor.SceneManagement.PrefabStage;
 using PrefabStageUtility = UnityEditor.SceneManagement.PrefabStageUtility;
+#elif UNITY_2018_3_OR_NEWER
+using PrefabStage = UnityEditor.Experimental.SceneManagement.PrefabStage;
+using PrefabStageUtility = UnityEditor.Experimental.SceneManagement.PrefabStageUtility;
 #endif
 
 namespace AssetUsageDetectorNamespace
@@ -148,6 +151,14 @@ namespace AssetUsageDetectorNamespace
 					for( int i = objectsToSearch.Count - 1; i >= 0; i-- )
 						objectsToSearch[i].RefreshSubAssets();
 				} );
+			}
+			else if( currentPhase == Phase.Complete )
+			{
+				if( searchResult != null && searchResult.NumberOfGroups > 0 )
+				{
+					contextMenu.AddSeparator( "" );
+					contextMenu.AddItem( new GUIContent( "Collapse All" ), false, searchResult.CollapseAllSearchResultGroups );
+				}
 			}
 		}
 
@@ -351,15 +362,15 @@ namespace AssetUsageDetectorNamespace
 				wantsMouseMove = wantsMouseEnterLeaveWindow = true; // These values aren't preserved during domain reload on Unity 2020.3.0f1
 
 #if UNITY_2018_3_OR_NEWER
-			UnityEditor.SceneManagement.PrefabStage.prefabStageClosing -= ReplacePrefabStageObjectsWithAssets;
-			UnityEditor.SceneManagement.PrefabStage.prefabStageClosing += ReplacePrefabStageObjectsWithAssets;
+			PrefabStage.prefabStageClosing -= ReplacePrefabStageObjectsWithAssets;
+			PrefabStage.prefabStageClosing += ReplacePrefabStageObjectsWithAssets;
 #endif
 		}
 
 		private void OnDisable()
 		{
 #if UNITY_2018_3_OR_NEWER
-			UnityEditor.SceneManagement.PrefabStage.prefabStageClosing -= ReplacePrefabStageObjectsWithAssets;
+			PrefabStage.prefabStageClosing -= ReplacePrefabStageObjectsWithAssets;
 #endif
 			SearchResultTooltip.Hide();
 		}
@@ -458,7 +469,10 @@ namespace AssetUsageDetectorNamespace
 				GUILayout.Label( ". . . Search in progress or something went wrong (check console) . . ." );
 
 				if( GUILayout.Button( "RETURN", Utilities.GL_HEIGHT_30 ) )
+				{
 					ReturnToSetupPhase();
+					GUIUtility.ExitGUI();
+				}
 			}
 			else if( currentPhase == Phase.Setup )
 			{
@@ -573,7 +587,10 @@ namespace AssetUsageDetectorNamespace
 				GUI.enabled = true;
 
 				if( GUILayout.Button( "Reset Search", Utilities.GL_HEIGHT_30 ) )
+				{
 					ReturnToSetupPhase();
+					GUIUtility.ExitGUI();
+				}
 
 				if( searchResult == null )
 				{
@@ -650,7 +667,7 @@ namespace AssetUsageDetectorNamespace
 			SavePrefs();
 
 #if UNITY_2018_3_OR_NEWER
-			ReplacePrefabStageObjectsWithAssets( UnityEditor.SceneManagement.PrefabStageUtility.GetCurrentPrefabStage() );
+			ReplacePrefabStageObjectsWithAssets( PrefabStageUtility.GetCurrentPrefabStage() );
 #endif
 
 			// Start searching
@@ -689,7 +706,7 @@ namespace AssetUsageDetectorNamespace
 
 #if UNITY_2018_3_OR_NEWER
 		// Try replacing searched objects who are part of currently open prefab stage with their corresponding prefab assets
-		public void ReplacePrefabStageObjectsWithAssets( UnityEditor.SceneManagement.PrefabStage prefabStage )
+		public void ReplacePrefabStageObjectsWithAssets( PrefabStage prefabStage )
 		{
 			if( prefabStage == null || !prefabStage.stageHandle.IsValid() )
 				return;

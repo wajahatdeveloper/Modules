@@ -5,9 +5,12 @@ using System.Text;
 using UnityEditor;
 using UnityEditor.IMGUI.Controls;
 using UnityEngine;
-#if UNITY_2018_3_OR_NEWER
+#if UNITY_2021_2_OR_NEWER
 using PrefabStage = UnityEditor.SceneManagement.PrefabStage;
 using PrefabStageUtility = UnityEditor.SceneManagement.PrefabStageUtility;
+#elif UNITY_2018_3_OR_NEWER
+using PrefabStage = UnityEditor.Experimental.SceneManagement.PrefabStage;
+using PrefabStageUtility = UnityEditor.Experimental.SceneManagement.PrefabStageUtility;
 #endif
 
 namespace AssetUsageDetectorNamespace
@@ -772,7 +775,7 @@ namespace AssetUsageDetectorNamespace
 					{
 						// Try to open the prefab stage of this prefab
 						string assetPath = AssetDatabase.GetAssetPath( clickedPrefabRoot );
-						UnityEditor.SceneManagement.PrefabStage openPrefabStage = UnityEditor.SceneManagement.PrefabStageUtility.GetCurrentPrefabStage();
+						PrefabStage openPrefabStage = PrefabStageUtility.GetCurrentPrefabStage();
 #if UNITY_2020_1_OR_NEWER
 						if( openPrefabStage == null || !openPrefabStage.stageHandle.IsValid() || assetPath != openPrefabStage.assetPath )
 #else
