@@ -8,7 +8,16 @@ namespace InlineCoroutine
 {
     public static partial class CooperatorExtension
     {
-        public static Cooperator InlineCoroutine(this object monoBehaviour)
+		public static void ExecuteWhen(this MonoBehaviour monoBehaviour, Func<bool> predicate, float wait, Action action)
+		{
+			monoBehaviour.InlineCoroutine()
+				.YieldWaitUntil(predicate)
+				.YieldWaitForSecondsRealtime(wait)
+				.Action(action)
+				.Start(monoBehaviour);
+		}
+
+		public static Cooperator InlineCoroutine(this object monoBehaviour)
         {
             return new Cooperator(null);
         }

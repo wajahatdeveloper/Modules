@@ -1,3 +1,4 @@
+using InlineCoroutine;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,6 +7,16 @@ using Object = UnityEngine.Object;
 
 public static class AssortedExtensions
 {
+	public static float GetPercent(this float totalValue, float percent)
+	{
+		return (totalValue * (percent / 100f));
+	}
+
+	public static float GetPercent(this int totalValue, float percent)
+	{
+		return ((float)totalValue * (percent / 100f));
+	}
+
 	public static bool IsWorldPointInViewport(this Camera camera, Vector3 point)
 	{
 		var position = camera.WorldToViewportPoint(point);
