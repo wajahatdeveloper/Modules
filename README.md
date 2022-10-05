@@ -14,6 +14,11 @@ https://github.com/wajahatdeveloper/Modules.git
 "Odin"
 </br>
 "com.modules.auth":"https://github.com/wajahatdeveloper/Modules.git?path=/Assets/com.modules.auth" </br>
+"Extensions",
+"com.components.general",
+"com.components.ui",
+"Unity.TextMeshPro"
+</br>
 "com.log.reporter":"https://github.com/wajahatdeveloper/Modules.git?path=/Assets/com.log.reporter" </br>
 "com.lean.pool":"https://github.com/wajahatdeveloper/Modules.git?path=/Assets/com.lean.pool" </br>
 "com.runtime.lunarconsole":"https://github.com/wajahatdeveloper/Modules.git?path=/Assets/com.runtime.lunarconsole" </br>
