@@ -6,7 +6,6 @@ using UnityEditor;
 using UnityEditor.SceneManagement;
 using System.Linq;
 using System;
-using Sirenix.OdinInspector;
 using System.IO;
 
 namespace BayatGames.Utilities.Editor
