@@ -1,9 +1,11 @@
+using Mono.Cecil;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class UIHelper : EditorWindow
 {
@@ -11,7 +13,7 @@ public class UIHelper : EditorWindow
     
     protected Vector2 scrollPosition;
 
-    [MenuItem("Hub/UI Helper",priority = 2)]
+    [MenuItem("Hub/UI Helper", priority = 101)]
     public static void Init()
     {
         UpdateList();
@@ -67,11 +69,21 @@ public class UIHelper : EditorWindow
     {
         foreach (var item in items)
         {
+            string s = item.Key;
+            int i = s.IndexOf('(');
+            if (i >= 0)
+            {
+                s = s.Remove(i);
+            }
+            GUIStyle gUIStyle = new GUIStyle(GUI.skin.button);
+            gUIStyle.alignment = TextAnchor.MiddleLeft;
+            
+            Texture svicon = Resources.Load($"IconImages/{s}")as Texture;
             if (item.Key == "-" || item.Key == "--")
             {
                 EditorGUILayout.Separator();
             }
-            else if (GUILayout.Button(item.Key))
+            else if ((GUILayout.Button(new GUIContent(item.Key,svicon),gUIStyle)/*GUILayout.Button(item.Key)*/))
             {
                 if (Selection.activeTransform == null || Selection.activeTransform.GetComponent<Canvas>() == null)
                 {

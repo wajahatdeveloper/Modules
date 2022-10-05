@@ -15,4 +15,14 @@ MonoBehaviour:
   _bookmarks: []
   _favoriteWindows: []
   _quickAccessItems: []
-  _sceneHistory: []
+  _sceneHistory:
+  - name: PunBasics-Launcher
+    path: Assets/Photon/PhotonUnityNetworking/Demos/PunBasics-Tutorial/Scenes/PunBasics-Launcher.unity
+  - name: SampleScene
+    path: Assets/Scenes/SampleScene.unity
+  - name: DemoHub-Scene
+    path: Assets/Photon/PhotonUnityNetworking/Demos/DemoHub/DemoHub-Scene.unity
+  - name: PunCockpit-Scene
+    path: Assets/Photon/PhotonUnityNetworking/Demos/PunCockpit/PunCockpit-Scene.unity
+  - name: SlotCar-Scene
+    path: Assets/Photon/PhotonUnityNetworking/Demos/DemoSlotRacer/SlotCar-Scene.unity

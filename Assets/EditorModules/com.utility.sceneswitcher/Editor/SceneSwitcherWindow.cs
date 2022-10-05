@@ -5,6 +5,9 @@ using UnityEngine.SceneManagement;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using System.Linq;
+using System;
+using Sirenix.OdinInspector;
+using System.IO;
 
 namespace BayatGames.Utilities.Editor
 {
@@ -21,7 +24,25 @@ namespace BayatGames.Utilities.Editor
             BuildSettings
         }
 
-        protected Vector2 scrollPosition;
+        public class SceneListData
+		{
+            public string sceneName;
+            public string scenePath;
+
+            public SceneListData(string sceneName, string scenePath)
+            {
+                this.sceneName = sceneName;
+                this.scenePath = scenePath;
+            }
+        }
+
+		protected int selectedSceneToPlay = 0;
+		protected List<SceneListData> sceneListDatas = new List<SceneListData>(); 
+        protected GUIStyle commandButtonStyle;
+        protected GUIContent playButtonContent;
+		protected Vector2 scrollPosBuild;
+
+		protected Vector2 scrollPosition;
         protected ScenesSource scenesSource = ScenesSource.Assets;
         protected OpenSceneMode openSceneMode = OpenSceneMode.Single;
         protected int selectedTab = 0;
@@ -56,7 +77,25 @@ namespace BayatGames.Utilities.Editor
         {
             EditorGUILayout.BeginHorizontal(EditorStyles.toolbar);
             this.selectedTab = GUILayout.Toolbar(this.selectedTab, this.tabs, EditorStyles.toolbarButton);
-            EditorGUILayout.EndHorizontal();
+            commandButtonStyle = new GUIStyle(EditorStyles.toolbarButton)
+            {
+                fixedWidth = 64,
+				fontSize = 16,
+				alignment = TextAnchor.MiddleCenter,
+				imagePosition = ImagePosition.ImageAbove,
+				fontStyle = FontStyle.Bold
+			};
+            playButtonContent = EditorGUIUtility.IconContent("d_PlayButton@2x", "Play the scene set in settings.");
+			if (GUILayout.Button(playButtonContent, commandButtonStyle))
+            {
+                string scenePath = sceneListDatas.Where(x => x.sceneName == sceneListDatas[selectedSceneToPlay].sceneName).First().scenePath;
+				if (EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo())
+                {
+					EditorSceneManager.playModeStartScene = AssetDatabase.LoadAssetAtPath<SceneAsset>(scenePath);
+					EditorApplication.isPlaying = true;
+				}
+			}
+			EditorGUILayout.EndHorizontal();
             this.scrollPosition = EditorGUILayout.BeginScrollView(this.scrollPosition);
             EditorGUILayout.BeginVertical();
             switch (this.selectedTab)
@@ -70,16 +109,17 @@ namespace BayatGames.Utilities.Editor
             }
             EditorGUILayout.EndVertical();
             EditorGUILayout.EndScrollView();
-            GUILayout.Label("Made with ❤️ by Bayat Games", EditorStyles.centeredGreyMiniLabel);
         }
 
         protected virtual void SettingsTabGUI()
         {
             this.scenesSource = (ScenesSource)EditorGUILayout.EnumPopup("Scenes Source", this.scenesSource);
             this.openSceneMode = (OpenSceneMode)EditorGUILayout.EnumPopup("Open Scene Mode", this.openSceneMode);
-        }
+            string[] options = sceneListDatas.Select(x => x.sceneName).ToArray();
+			selectedSceneToPlay = EditorGUILayout.Popup("Select Scene to Play", selectedSceneToPlay, options);
+		}
 
-        protected virtual void ScenesTabGUI()
+		protected virtual void ScenesTabGUI()
         {
             List<EditorBuildSettingsScene> buildScenes = new List<EditorBuildSettingsScene>(EditorBuildSettings.scenes);
             string[] guids = null;
@@ -108,6 +148,9 @@ namespace BayatGames.Utilities.Editor
                 Scene scene = SceneManager.GetSceneByPath(path);
                 bool isOpen = scene.IsValid() && scene.isLoaded;
                 EditorGUI.BeginDisabledGroup(isOpen);
+
+                sceneListDatas.Add(new SceneListData(sceneAsset.name, path));
+
                 if (this.scenesSource == ScenesSource.Assets)
                 {
                     if (GUILayout.Button(sceneAsset.name))
