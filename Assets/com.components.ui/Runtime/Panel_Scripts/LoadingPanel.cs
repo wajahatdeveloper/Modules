@@ -9,6 +9,7 @@ public class LoadingPanel : SingletonBehaviourUI<LoadingPanel>
     public Text infoText;
     public GameObject loadingBar;
     public Image loadingBarImage;
+
     public float loadingPercentage { 
         get {
             return loadingBarImage.fillAmount*100.0f;
@@ -26,7 +27,6 @@ public class LoadingPanel : SingletonBehaviourUI<LoadingPanel>
         loadingPanel.SetActive(true);
     }
 
-    
     public void StartLoadingWithTime(float time)
     {
         StartCoroutine(TimerLoading(time));   

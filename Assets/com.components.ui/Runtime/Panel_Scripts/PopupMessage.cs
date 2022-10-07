@@ -12,8 +12,9 @@ public class PopupMessage : SingletonBehaviourUI<PopupMessage>
 
     public Sprite infoSignSprite;
     public Sprite warningSignSprite;
+    public Sprite errorSignSprite;
 
-    public UnityEvent onClose;
+	public UnityEvent onClose;
 
     private bool _isAuto;
     private bool _allowCloseOnEnter;
@@ -22,7 +23,8 @@ public class PopupMessage : SingletonBehaviourUI<PopupMessage>
     {
         NONE,
         INFO,
-        WARNING
+        WARNING,
+        ERROR,
     }
     
     public void ShowOnce(string message, string id, string titleString = "",PopupSign sign = PopupSign.NONE , bool allowCloseOnEnter = true)
@@ -56,7 +58,11 @@ public class PopupMessage : SingletonBehaviourUI<PopupMessage>
                 signImage.sprite = infoSignSprite;
                 signImage.gameObject.SetActive(true);
                 break;
-            default:
+			case PopupSign.ERROR:
+				signImage.sprite = errorSignSprite;
+				signImage.gameObject.SetActive(true);
+				break;
+			default:
                 throw new ArgumentOutOfRangeException(nameof(sign), sign, null);
         }
         

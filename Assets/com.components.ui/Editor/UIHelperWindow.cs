@@ -13,6 +13,8 @@ public class UIHelper : EditorWindow
     
     protected Vector2 scrollPosition;
 
+    private bool isInstantiatingPrefab = true;
+
     [MenuItem("Hub/UI Helper", priority = 101)]
     public static void Init()
     {
@@ -58,6 +60,7 @@ public class UIHelper : EditorWindow
 
     protected virtual void OnGUI()
     {
+        isInstantiatingPrefab = EditorGUILayout.Toggle("Use Prefabs", isInstantiatingPrefab);
         scrollPosition = EditorGUILayout.BeginScrollView(scrollPosition);
         EditorGUILayout.BeginVertical();
         DrawItemList();
@@ -91,11 +94,30 @@ public class UIHelper : EditorWindow
                 }
                 if (Selection.activeTransform == null || Selection.activeTransform.GetComponent<Canvas>() == null)
                 {
-                    var newCanvas = Instantiate(items["Canvas"], Selection.activeTransform);
-                    Selection.activeTransform = newCanvas.transform;
+                    if (item.Key != "Canvas")
+                    {
+                        GameObject newCanvas = null;
+                        if (isInstantiatingPrefab)
+                        {
+							newCanvas = PrefabUtility.InstantiatePrefab(items["Canvas"], Selection.activeTransform) as GameObject;
+                        }
+                        else
+                        {
+                            newCanvas = Instantiate(items["Canvas"], Selection.activeTransform);
+                        }
+                        Selection.activeTransform = newCanvas.transform;
+                    }
                 }
                 var itemPrefab = item.Value;
-                var itemObject = Instantiate(itemPrefab, Selection.activeTransform);
+                GameObject itemObject = null;
+				if (isInstantiatingPrefab)
+				{
+					itemObject = PrefabUtility.InstantiatePrefab(itemPrefab, Selection.activeTransform) as GameObject;
+				}
+				else
+				{
+					itemObject = Instantiate(itemPrefab, Selection.activeTransform);
+				}
                 itemObject.name = itemObject.name.Replace("(Clone)", "");
             }
         }
