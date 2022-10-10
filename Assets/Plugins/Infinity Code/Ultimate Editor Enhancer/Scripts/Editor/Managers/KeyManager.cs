@@ -2,6 +2,7 @@
 /*     https://infinity-code.com    */
 
 using System;
+using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
@@ -10,7 +11,7 @@ namespace InfinityCode.UltimateEditorEnhancer
     [InitializeOnLoad]
     public class KeyManager : BindingManager<KeyManager.KeyBinding>
     {
-        
+        private static Dictionary<KeyCode, bool> _isDown = new Dictionary<KeyCode, bool>();
 
         static KeyManager()
         {
@@ -31,8 +32,20 @@ namespace InfinityCode.UltimateEditorEnhancer
         {
             if (Event.current.type == EventType.KeyDown)
             {
+                _isDown[Event.current.keyCode] = true;
                 for (int i = bindings.Count - 1; i >= 0; i--) bindings[i].TryInvoke();
             }
+            else if (Event.current.type == EventType.KeyUp)
+            {
+                _isDown[Event.current.keyCode] = false;
+            }
+        }
+
+        public static bool isKeyDown(KeyCode key)
+        {
+            bool v;
+            if (_isDown.TryGetValue(key, out v)) return v;
+            return false;
         }
 
         public static void RemoveBinding(KeyBinding keyBinding)
@@ -73,8 +86,6 @@ namespace InfinityCode.UltimateEditorEnhancer
 
             public void TryInvoke()
             {
-                Event e = Event.current;
-                
                 if (OnValidate != null)
                 {
                     try
@@ -88,8 +99,12 @@ namespace InfinityCode.UltimateEditorEnhancer
                     catch
                     {
                     }
+
+                    return;
                 }
-                else if (e.keyCode == keyCode && e.shift == shift && e.control == control)
+
+                Event e = Event.current;
+                if (e.keyCode == keyCode && e.shift == shift && e.control == control)
                 {
                     try
                     {

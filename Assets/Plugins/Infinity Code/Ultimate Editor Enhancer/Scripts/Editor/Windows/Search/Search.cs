@@ -282,6 +282,22 @@ namespace InfinityCode.UltimateEditorEnhancer.Windows
                 windowRecords.Add(submenu.GetHashCode(), new WindowRecord(submenu, submenu.Substring(lastSlash + 1)));
             }
 
+            foreach (string submenu in Unsupported.GetSubmenus("Tools"))
+            {
+                int lastSlash = 6;
+
+                for (int i = submenu.Length - 1; i >= 7; i--)
+                {
+                    if (submenu[i] == '/')
+                    {
+                        lastSlash = i;
+                        break;
+                    }
+                }
+
+                windowRecords.Add(submenu.GetHashCode(), new WindowRecord(submenu, submenu.Substring(lastSlash + 1)));
+            }
+
             windowRecords.Add("Project Settings...".GetHashCode(), new WindowRecord("Edit/Project Settings...", "Project Settings"));
             windowRecords.Add("Preferences...".GetHashCode(), new WindowRecord("Edit/Preferences...", "Preferences"));
         }
@@ -418,19 +434,20 @@ namespace InfinityCode.UltimateEditorEnhancer.Windows
             {
                 if (resetSelection)
                 {
-                    GUI.FocusControl("UEESearchTextField");
-                    object recycledEditor = EditorGUIRef.GetRecycledEditor();
-                    if (setSelectionIndex == -1)
+                    TextEditor recycledEditor = EditorGUIRef.GetRecycledEditor() as TextEditor;
+                    if (recycledEditor != null)
                     {
-                        TextEditorRef.SetCursorIndex(recycledEditor, searchText.Length);
-                        TextEditorRef.SetSelectionIndex(recycledEditor, searchText.Length);
+                        if (setSelectionIndex == -1)
+                        {
+                            recycledEditor.MoveTextEnd();
+                        }
+                        else
+                        {
+                            recycledEditor.MoveTextStart();
+                            setSelectionIndex = -1;
+                        }
                     }
-                    else
-                    {
-                        TextEditorRef.SetCursorIndex(recycledEditor, setSelectionIndex);
-                        TextEditorRef.SetSelectionIndex(recycledEditor, setSelectionIndex);
-                        setSelectionIndex = -1;
-                    }
+                    
                     resetSelection = false;
                     Repaint();
                 }

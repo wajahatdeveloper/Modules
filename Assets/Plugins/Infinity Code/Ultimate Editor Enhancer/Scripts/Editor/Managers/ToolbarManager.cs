@@ -93,7 +93,6 @@ namespace InfinityCode.UltimateEditorEnhancer
             CreateArea(root, "ToolbarZoneLeftAlign", Justify.FlexEnd, DrawLeftToolbarItems);
             CreateArea(root, "ToolbarZoneRightAlign", Justify.FlexStart, DrawRightToolbarItems);
 #else
-
             VisualElement visualTree = Compatibility.GetVisualTree(currentToolbar);
             IMGUIContainer container = (IMGUIContainer)visualTree[0];
 

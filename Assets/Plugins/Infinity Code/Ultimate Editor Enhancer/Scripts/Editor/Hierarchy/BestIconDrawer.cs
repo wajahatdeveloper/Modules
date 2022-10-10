@@ -12,17 +12,25 @@ namespace InfinityCode.UltimateEditorEnhancer.HierarchyTools
     [InitializeOnLoad]
     public static class BestIconDrawer
     {
-        private static HashSet<int> hierarchyWindows;
-        private static Dictionary<int, CacheItem> bestIconCache;
+        private static Texture _prefabIcon;
         private static Texture _unityLogoTexture;
+        private static HashSet<int> hierarchyWindows;
         private static bool inited = false;
+
+        private static Texture prefabIcon
+        {
+            get
+            {
+                if (_prefabIcon == null) _prefabIcon = EditorIconContents.prefab.image;
+                return _prefabIcon;
+            }
+        }
 
         private static Texture unityLogoTexture
         {
             get
             {
-                if (_unityLogoTexture == null) _unityLogoTexture = EditorGUIUtility.IconContent("SceneAsset Icon").image;
-
+                if (_unityLogoTexture == null) _unityLogoTexture = EditorIconContents.sceneAsset.image;
                 return _unityLogoTexture;
             }
         }
@@ -30,14 +38,12 @@ namespace InfinityCode.UltimateEditorEnhancer.HierarchyTools
         static BestIconDrawer()
         {
             hierarchyWindows = new HashSet<int>();
-            bestIconCache = new Dictionary<int, CacheItem>();
             HierarchyItemDrawer.Register("BestIconDrawer", DrawItem);
         }
 
         private static void DrawItem(HierarchyItem item)
         {
             if (!Prefs.hierarchyOverrideMainIcon) return;
-
             if (!inited) Init();
 
             Event e = Event.current;
@@ -47,110 +53,76 @@ namespace InfinityCode.UltimateEditorEnhancer.HierarchyTools
                 EditorWindow lastHierarchyWindow = SceneHierarchyWindowRef.GetLastInteractedHierarchy();
                 int wid = lastHierarchyWindow.GetInstanceID();
                 if (!hierarchyWindows.Contains(wid)) InitWindow(lastHierarchyWindow, wid);
+                return;
             }
 
+            if (e.type != EventType.Repaint) return;
+
             Texture texture;
-            if (!GetTextureFromCache(item, out texture)) return;
-            if (texture == null && !InitTexture(item, out texture)) return;
+            if (!GetTexture(item, out texture)) return;
+            if (texture == null) return;
 
             const int iconSize = 16;
 
             Rect rect = item.rect;
-            Rect iconRect = new Rect(rect) { width = iconSize, height = iconSize };
+            Rect iconRect = new Rect(rect) {width = iconSize, height = iconSize};
             iconRect.y += (rect.height - iconSize) / 2;
             GUI.DrawTexture(iconRect, texture, ScaleMode.ScaleToFit);
         }
 
-        private static void GetGameObjectIcon(HierarchyItem item, out Texture texture, GameObject go)
+        private static Texture GetGameObjectIcon(HierarchyItem item, GameObject go)
         {
-            CacheItem cacheItem = new CacheItem();
-
-            if (PrefabUtility.IsPartOfAnyPrefab(go))
+            if (go.tag == "Collection")
             {
-                texture = EditorGUIUtility.IconContent("Prefab Icon").image;
-                cacheItem.isPrefab = true;
-                return;
+                return Icons.collection;
             }
 
-            if (go.tag == "Collection") texture = Icons.collection;
-            else
+            Texture texture = AssetPreview.GetMiniThumbnail(go);
+            string textureName = texture.name;
+
+            if (textureName == "d_Prefab Icon" || textureName == "Prefab Icon")
             {
-                texture = AssetPreview.GetMiniThumbnail(go);
+                return prefabIcon;
+            }
 
-                if (texture.name == "d_GameObject Icon" || texture.name == "GameObject Icon")
+            if (textureName != "d_GameObject Icon" && textureName != "GameObject Icon")
+            {
+                return texture;
+            }
+
+            Component[] components = go.GetComponents<Component>();
+            Component best;
+            if (components.Length > 1)
+            {
+                best = components[1];
+                if (components.Length > 2)
                 {
-                    Component[] components = go.GetComponents<Component>();
-                    cacheItem.countComponents = components.Length;
-
-                    if (components.Length > 1)
+                    if (best is CanvasRenderer)
                     {
-                        Component best = components[1];
-                        if (components.Length > 2)
+                        best = components[2];
+                        if (best is UnityEngine.UI.Image && components.Length > 3)
                         {
-                            if (best is CanvasRenderer)
-                            {
-                                best = components[2];
-                                if (best is UnityEngine.UI.Image && components.Length > 3)
-                                {
-                                    Component c = components[3];
-                                    texture = AssetPreview.GetMiniThumbnail(c);
-                                    if (texture.name != "cs Script Icon" && texture.name != "d_cs Script Icon") best = c;
-                                }
-                            }
+                            Component c = components[3];
+                            texture = AssetPreview.GetMiniThumbnail(c);
+                            textureName = texture.name;
+                            if (textureName != "cs Script Icon" && textureName != "d_cs Script Icon") best = c;
                         }
-
-                        texture = AssetPreview.GetMiniThumbnail(best);
-                    }
-                    else texture = null;
-
-                    if (texture == null)
-                    {
-                        texture = AssetPreview.GetMiniThumbnail(components[0]);
-                        if (texture == null) texture = EditorGUIUtility.IconContent("GameObject Icon").image;
                     }
                 }
             }
+            else best = components[0];
 
-            cacheItem.texture = texture;
+            texture = AssetPreview.GetMiniThumbnail(best);
 
-            bestIconCache[item.id] = cacheItem;
+            if (texture == null) return EditorIconContents.gameObject.image;
+            return texture;
         }
 
-        private static bool GetTextureFromCache(HierarchyItem item, out Texture texture)
-        {
-            CacheItem cacheItem;
-            texture = null;
-            if (!bestIconCache.TryGetValue(item.id, out cacheItem)) return true;
-
-            if (!cacheItem.isPrefab && Event.current.type == EventType.Layout)
-            {
-                GameObject go = item.gameObject;
-                if (go != null)
-                {
-                    Component[] components = go.GetComponents<Component>();
-                    if (components.Length == cacheItem.countComponents) texture = cacheItem.texture;
-                }
-                else if (item.target == null)
-                {
-                    texture = unityLogoTexture;
-                }
-                else return false;
-            }
-            else texture = cacheItem.texture;
-
-            return true;
-        }
-
-        private static bool InitTexture(HierarchyItem item, out Texture texture)
+        private static bool GetTexture(HierarchyItem item, out Texture texture)
         {
             texture = null;
-            if (item.gameObject != null) GetGameObjectIcon(item, out texture, item.gameObject);
-            else if (item.target == null)
-            {
-                CacheItem cacheItem = new CacheItem();
-                texture = cacheItem.texture = unityLogoTexture;
-                bestIconCache[item.id] = cacheItem;
-            }
+            if (item.gameObject != null) texture = GetGameObjectIcon(item, item.gameObject);
+            else if (item.target == null) texture = unityLogoTexture;
             else return false;
 
             return true;
@@ -182,35 +154,8 @@ namespace InfinityCode.UltimateEditorEnhancer.HierarchyTools
             if (!Prefs.hierarchyOverrideMainIcon) return;
             if (Event.current.type != EventType.Layout) return;
 
-            List<int> keysForRemove = new List<int>();
-            foreach (KeyValuePair<int, CacheItem> pair in bestIconCache)
-            {
-                if (!pair.Value.used)
-                {
-                    pair.Value.Dispose();
-                    keysForRemove.Add(pair.Key);
-                }
-            }
-
-            foreach (int key in keysForRemove) bestIconCache.Remove(key);
-
-            foreach (KeyValuePair<int, CacheItem> pair in bestIconCache) pair.Value.used = false;
-
             EditorWindow w = EditorUtility.InstanceIDToObject(wid) as EditorWindow;
             if (w != null) HierarchyHelper.SetDefaultIconsSize(w);
-        }
-
-        internal class CacheItem
-        {
-            public bool isPrefab;
-            public Texture texture;
-            public int countComponents;
-            public bool used;
-
-            public void Dispose()
-            {
-                texture = null;
-            }
         }
     }
 }

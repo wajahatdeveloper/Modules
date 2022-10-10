@@ -41,8 +41,13 @@ namespace InfinityCode.UltimateEditorEnhancer.Windows
             return true;
         }
 
-        private void DrawGridItems(IEnumerable<BookmarkItem> gridItems, ref BookmarkItem removeItem)
+        private void DrawGridItems(IEnumerable<BookmarkItem> gridItems, string label = null)
         {
+            if (!string.IsNullOrEmpty(label))
+            {
+                GUILayout.Label(label);
+            }
+
             int countItems = gridItems.Count();
 
             int countCols = Mathf.FloorToInt((position.width - 30) / (gridSize + gridMargin * 2));

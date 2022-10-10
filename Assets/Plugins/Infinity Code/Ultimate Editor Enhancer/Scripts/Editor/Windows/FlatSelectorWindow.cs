@@ -3,7 +3,6 @@
 
 using System;
 using System.Collections.Generic;
-using InfinityCode.UltimateEditorEnhancer.UnityTypes;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -26,6 +25,7 @@ namespace InfinityCode.UltimateEditorEnhancer.Windows
         private static FlatSelectorWindow instance;
         private List<int> items;
         private bool ignoreItemSelect;
+        private Texture selectedTexture;
 
         static FlatSelectorWindow()
         {
@@ -40,41 +40,7 @@ namespace InfinityCode.UltimateEditorEnhancer.Windows
             GUI.SetNextControlName(SEARCHFIELD_NAME);
             EditorGUI.BeginChangeCheck();
             filterText = GUILayoutUtils.ToolbarSearchField(filterText);
-            if (EditorGUI.EndChangeCheck())
-            {
-                items = new List<int>();
-                if (string.IsNullOrEmpty(filterText))
-                {
-                    for (int i = 0; i < contents.Length; i++) items.Add(i);
-                }
-                else
-                {
-                    string pattern = SearchableItem.GetPattern(filterText);
-
-                    for (int i = 0; i < contents.Length; i++)
-                    {
-                        if (SearchableItem.GetAccuracy(pattern, contents[i].text) > 0)
-                        {
-                            items.Add(i);
-                        }
-                    }
-                }
-
-                listView.itemsSource = items;
-#if UNITY_2021_2_OR_NEWER
-                listView.Rebuild();
-#else
-                listView.Refresh();
-#endif
-
-                ignoreItemSelect = true;
-                listView.selectedIndex = items.IndexOf(selected);
-                ignoreItemSelect = false;
-
-                Rect rect = position;
-                rect.height = Mathf.Min(Prefs.defaultWindowSize.y, items.Count * ITEM_HEIGHT + EXTRA_HEIGHT);
-                position = rect;
-            }
+            if (EditorGUI.EndChangeCheck()) UpdateFilteredItems();
 
             if (resetSelection && Event.current.type == EventType.Repaint)
             {
@@ -91,26 +57,44 @@ namespace InfinityCode.UltimateEditorEnhancer.Windows
             Func<VisualElement> makeItem = () =>
             {
                 VisualElement el = new VisualElement();
-                el.style.flexDirection = FlexDirection.Row;
+                el.AddToClassList("flatselector-item");
 
                 Image image = new Image();
-                image.style.width = image.style.height = 12;
-                image.style.marginTop = 1;
-                image.style.marginRight = 5;
+                image.AddToClassList("flatselector-item-image");
 
                 el.Add(image);
                 el.Add(new Label());
                 return el;
             };
 
+            if (selectedTexture == null) selectedTexture = EditorGUIUtility.IconContent("FilterSelectedOnly").image;
+
             Action<VisualElement, int> bindItem = (el, i) =>
             {
                 Image image = el[0] as Image;
-                image.image = selected == items[i] ? EditorGUIUtility.IconContent("FilterSelectedOnly").image : null;
 
+                int itemIndex = items[i];
+                image.image = selected == itemIndex ? selectedTexture : null;
+
+                GUIContent content = contents[itemIndex];
                 Label label = el[1] as Label;
-                label.text = contents[items[i]].text;
-                label.tooltip = contents[items[i]].tooltip;
+                label.text = content.text;
+                label.tooltip = content.tooltip;
+
+                if (string.IsNullOrEmpty(content.text))
+                {
+                    el.AddToClassList("flatselector-separator");
+                    el.style.height = 1;
+                    el.style.marginTop = 7;
+                    el.style.marginBottom = 8;
+                }
+                else
+                {
+                    el.RemoveFromClassList("flatselector-separator");
+                    el.style.height = 16;
+                    el.style.marginTop = 0;
+                    el.style.marginBottom = 0;
+                }
             };
 
             listView = new ListView(items, ITEM_HEIGHT, makeItem, bindItem);
@@ -120,24 +104,19 @@ namespace InfinityCode.UltimateEditorEnhancer.Windows
             listView.onSelectionChange += objects =>
             {
                 if (ignoreItemSelect) return;
+                Event e = Event.current;
+                if (e.type == EventType.KeyDown)
+                {
+                    if (e.keyCode != KeyCode.KeypadEnter && e.keyCode != KeyCode.Return && e.keyCode != KeyCode.Space) return;
+                }
                 if (OnSelect != null) OnSelect(items[listView.selectedIndex]);
                 Close();
             };
 
-            listView.style.flexGrow = 1.0f;
+            listView.AddToClassList("flatselector-listview");
 
-            rootVisualElement.style.paddingBottom = 2;
-            rootVisualElement.style.paddingLeft = 2;
-            rootVisualElement.style.paddingRight = 2;
-            rootVisualElement.style.paddingTop = 2;
-            rootVisualElement.style.borderBottomColor = Color.gray;
-            rootVisualElement.style.borderBottomWidth = 1;
-            rootVisualElement.style.borderLeftColor = Color.gray;
-            rootVisualElement.style.borderLeftWidth = 1;
-            rootVisualElement.style.borderRightColor = Color.gray;
-            rootVisualElement.style.borderRightWidth = 1;
-            rootVisualElement.style.borderTopColor = Color.gray;
-            rootVisualElement.style.borderTopWidth = 1;
+            rootVisualElement.styleSheets.Add(StyleSheets.flatSelector);
+            rootVisualElement.AddToClassList("flatselector");
 
             rootVisualElement.Add(new IMGUIContainer(DrawFilterTextField));
             rootVisualElement.Add(listView);
@@ -166,6 +145,7 @@ namespace InfinityCode.UltimateEditorEnhancer.Windows
                 else if (e.keyCode == KeyCode.DownArrow)
                 {
                     ignoreItemSelect = true;
+                    e.Use();
                     if (listView.selectedIndex == items.Count - 1) listView.selectedIndex = 0;
                     else listView.selectedIndex++;
                     ignoreItemSelect = false;
@@ -173,9 +153,11 @@ namespace InfinityCode.UltimateEditorEnhancer.Windows
                 else if (e.keyCode == KeyCode.UpArrow)
                 {
                     ignoreItemSelect = true;
+                    e.Use();
                     if (listView.selectedIndex == 0 || listView.selectedIndex == -1) listView.selectedIndex = items.Count - 1;
                     else listView.selectedIndex--;
                     ignoreItemSelect = false;
+                    
                 }
                 else if (e.keyCode == KeyCode.Return || e.keyCode == KeyCode.Space || e.keyCode == KeyCode.KeypadEnter)
                 {
@@ -213,6 +195,42 @@ namespace InfinityCode.UltimateEditorEnhancer.Windows
             wnd.Init();
 
             return wnd;
+        }
+
+        private void UpdateFilteredItems()
+        {
+            items = new List<int>();
+            if (string.IsNullOrEmpty(filterText))
+            {
+                for (int i = 0; i < contents.Length; i++) items.Add(i);
+            }
+            else
+            {
+                string pattern = SearchableItem.GetPattern(filterText);
+
+                for (int i = 0; i < contents.Length; i++)
+                {
+                    if (SearchableItem.GetAccuracy(pattern, contents[i].text) > 0)
+                    {
+                        items.Add(i);
+                    }
+                }
+            }
+
+            listView.itemsSource = items;
+#if UNITY_2021_2_OR_NEWER
+            listView.Rebuild();
+#else
+            listView.Refresh();
+#endif
+
+            ignoreItemSelect = true;
+            listView.selectedIndex = items.IndexOf(selected);
+            ignoreItemSelect = false;
+
+            Rect rect = position;
+            rect.height = Mathf.Min(Prefs.defaultWindowSize.y, items.Count * ITEM_HEIGHT + EXTRA_HEIGHT);
+            position = rect;
         }
     }
 }

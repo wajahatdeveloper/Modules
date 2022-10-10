@@ -174,7 +174,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
-  m_MinWidth: -1
+  m_MinWidth: 80
   m_MinHeight: 80
   m_PreferredWidth: -1
   m_PreferredHeight: -1
@@ -190,7 +190,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 142562}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b2d57a8db1881445aa4939332d57e2e9, type: 3}
+  m_Script: {fileID: 11500000, guid: 8253542baa4e466479a8e858faa1bb0c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   title: {fileID: 11420504}

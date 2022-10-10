@@ -1,11 +1,2 @@
-﻿/*           INFINITY CODE          */
-/*     https://infinity-code.com    */
-
-using UnityEngine;
-
-namespace InfinityCode.UltimateEditorEnhancer.Examples
-{
-    public class ViewStateReadme : MonoBehaviour
-    {
-    }
-}
+﻿/* Removed. The file exists to update correctly. */
+/* TODO: Remove this file in Ultimate Editor Enhancer v3.5 */

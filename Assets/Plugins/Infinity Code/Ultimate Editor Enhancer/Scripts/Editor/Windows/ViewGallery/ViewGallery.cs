@@ -8,19 +8,21 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using InfinityCode.UltimateEditorEnhancer.EditorMenus;
 using InfinityCode.UltimateEditorEnhancer.EditorMenus.Actions;
-using InfinityCode.UltimateEditorEnhancer.UnityTypes;
 using UnityEditor;
 using UnityEngine;
-using Object = UnityEngine.Object;
 
 namespace InfinityCode.UltimateEditorEnhancer.Windows
 {
     [InitializeOnLoad]
     public partial class ViewGallery : EditorWindow
     {
+        private const int VERTICAL_MARGIN = 50;
+        private const int MAX_FLAT_HEIGHT = 150;
+
         public delegate void DrawCamerasDelegate(ViewGallery gallery, float rowHeight, float maxLabelWidth, ref int offsetY, ref int row);
 
         public static Action<GenericMenuEx> OnPrepareViewStatesMenu;
+        public static bool closeOnSelect = false;
 
         private static GUIStyle selectedStyle;
         public static bool isDirty = true;
@@ -69,12 +71,21 @@ namespace InfinityCode.UltimateEditorEnhancer.Windows
         {
             Vector2 size = lastSize = position.size;
             size.x -= 20; // margin horizontal
-            size.y -= 120; // margin vertical + labels height
+            size.y -= VERTICAL_MARGIN; // margin vertical + labels height
 
             if (filteredItems == null)
             {
-                countCols = Mathf.Max(cameras.Length, views.Length);
-                countRows = cameras.Length > 0 ? 2 : 1;
+                if (size.y > MAX_FLAT_HEIGHT)
+                {
+                    size.y -= 70;
+                    countCols = Mathf.Max(cameras.Length, views.Length);
+                    countRows = cameras.Length > 0 ? 2 : 1;
+                }
+                else
+                {
+                    countCols = cameras.Length + views.Length - 1;
+                    countRows = 1;
+                }
             }
             else
             {
@@ -218,7 +229,11 @@ namespace InfinityCode.UltimateEditorEnhancer.Windows
                 Rect rect = new Rect(x, row * rowHeight + offsetY, itemWidth, itemHeight);
                 CameraStateItem cameraState = cameras[i];
 
-                if (cameraState.Draw(rect, maxLabelWidth)) cameraState.Set();
+                if (cameraState.Draw(rect, maxLabelWidth))
+                {
+                    cameraState.Set();
+                    TryCloseDelayed();
+                }
 
                 if (i != cameras.Length - 1 && col == countCols - 1) row++;
             }
@@ -243,9 +258,61 @@ namespace InfinityCode.UltimateEditorEnhancer.Windows
                 ViewItem item = filteredItems[i];
                 if (item == null) continue;
 
-                if (item.Draw(rect, maxLabelWidth)) item.Set();
+                if (item.Draw(rect, maxLabelWidth))
+                {
+                    item.Set();
+                    TryCloseDelayed();
+                }
 
                 if (i != filteredItems.Length - 1 && col == countCols - 1) row++;
+            }
+        }
+
+        private void DrawFlatItems()
+        {
+            int offsetY = 25;
+            int row = 0;
+            float rowHeight = itemHeight + 25;
+            float maxLabelWidth = lastSize.x / countCols - 10;
+            int index = 0;
+            int totalItems = cameras.Length + views.Length - 1;
+
+            for (int i = 0; i < cameras.Length; i++)
+            {
+                int col = index % countCols;
+
+                float x = col * itemWidth + (col + 1) * offsetX;
+                Rect rect = new Rect(x, row * rowHeight + offsetY, itemWidth, itemHeight);
+                ViewItem item = cameras[i];
+                if (item == null) continue;
+
+                if (item.Draw(rect, maxLabelWidth))
+                {
+                    item.Set();
+                    TryCloseDelayed();
+                }
+
+                if (index != totalItems - 1 && col == countCols - 1) row++;
+                index++;
+            }
+
+            for (int i = 1; i < views.Length; i++)
+            {
+                int col = index % countCols;
+
+                float x = col * itemWidth + (col + 1) * offsetX;
+                Rect rect = new Rect(x, row * rowHeight + offsetY, itemWidth, itemHeight);
+                ViewItem item = views[i];
+                if (item == null) continue;
+
+                if (item.Draw(rect, maxLabelWidth))
+                {
+                    item.Set();
+                    TryCloseDelayed();
+                }
+
+                if (index != totalItems - 1 && col == countCols - 1) row++;
+                index++;
             }
         }
 
@@ -315,7 +382,11 @@ namespace InfinityCode.UltimateEditorEnhancer.Windows
                 Rect rect = new Rect(x, row * rowHeight + offsetY, itemWidth, itemHeight);
                 ViewStateItem view = views[i];
                 if (view == null) continue;
-                if (view.Draw(rect, maxLabelWidth)) view.Set();
+                if (view.Draw(rect, maxLabelWidth))
+                {
+                    view.Set();
+                    TryCloseDelayed();
+                }
 
                 if (i != views.Length - 1 && col == countCols - 1) row++;
             }
@@ -382,6 +453,7 @@ namespace InfinityCode.UltimateEditorEnhancer.Windows
         private void OnDestroy()
         {
             isDirty = true;
+            closeOnSelect = false;
             DestroyTextures(); 
         }
 
@@ -411,7 +483,11 @@ namespace InfinityCode.UltimateEditorEnhancer.Windows
 
             DrawToolbar();
 
-            if (filteredItems == null) DrawAllItems();
+            if (filteredItems == null)
+            {
+                if (position.height > VERTICAL_MARGIN + MAX_FLAT_HEIGHT) DrawAllItems();
+                else DrawFlatItems();
+            }
             else DrawFilteredItems();
 
 
@@ -512,10 +588,12 @@ namespace InfinityCode.UltimateEditorEnhancer.Windows
 
         private void RenderItems()
         {
+            if (itemWidth <= 0 || itemHeight <= 0) return;
+
             RenderTexture renderTexture = new RenderTexture((int) itemWidth, (int) itemHeight, 16, RenderTextureFormat.ARGB32);
             RenderTexture.active = renderTexture;
-            RenderTexture lastAT;
-            CameraClearFlags clearFlags;
+            RenderTexture lastAT = null;
+            CameraClearFlags clearFlags = CameraClearFlags.Skybox;
 
             if (cameras != null)
             {
@@ -544,9 +622,10 @@ namespace InfinityCode.UltimateEditorEnhancer.Windows
                 {
                     CameraStateItem cameraState = cameras[i];
                     if (cameraState == null || cameraState.camera == null) continue;
+                    Camera camera = null;
                     try
                     {
-                        Camera camera = cameraState.camera;
+                        camera = cameraState.camera;
 
                         clearFlags = camera.clearFlags;
                         if (clearFlags == CameraClearFlags.Depth || clearFlags == CameraClearFlags.Nothing) camera.clearFlags = CameraClearFlags.Skybox;
@@ -558,14 +637,13 @@ namespace InfinityCode.UltimateEditorEnhancer.Windows
                         texture.ReadPixels(new Rect(0, 0, texture.width, texture.height), 0, 0);
                         texture.Apply();
                         cameraState.texture = texture;
-
-                        camera.targetTexture = lastAT;
-                        camera.clearFlags = clearFlags;
                     }
                     catch (Exception e)
                     {
                         Log.Add(e);
                     }
+                    camera.targetTexture = lastAT;
+                    camera.clearFlags = clearFlags;
                 }
 
                 for (int i = 0; i < views.Length; i++)
@@ -660,6 +738,11 @@ namespace InfinityCode.UltimateEditorEnhancer.Windows
             }
 
             GetWindow<SceneView>();
+        }
+
+        private void TryCloseDelayed()
+        {
+            if (closeOnSelect) EditorApplication.delayCall += Close;
         }
 
         private void UpdateFilteredItems()

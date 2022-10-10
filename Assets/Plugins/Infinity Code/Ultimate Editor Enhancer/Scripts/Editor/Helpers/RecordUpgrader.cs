@@ -2,7 +2,10 @@
 /*     https://infinity-code.com    */
 
 using System.Collections.Generic;
+using System.Reflection;
+using InfinityCode.UltimateEditorEnhancer.Attributes;
 using InfinityCode.UltimateEditorEnhancer.SceneTools;
+using InfinityCode.UltimateEditorEnhancer.SceneTools.QuickAccessActions;
 using InfinityCode.UltimateEditorEnhancer.UnityTypes;
 using UnityEditor;
 
@@ -11,15 +14,17 @@ namespace InfinityCode.UltimateEditorEnhancer
     [InitializeOnLoad]
     public static class RecordUpgrader
     {
-        private const int CurrentUpgradeID = 1;
+        private const int CurrentUpgradeID = 2;
         private const string BookmarkItemSeparator = "|";
 
         static RecordUpgrader()
         {
             int upgradeID = LocalSettings.upgradeID;
-            if (upgradeID < 1)
+            if (upgradeID < 1) InitDefaultQuickAccessItems();
+            if (upgradeID < 2)
             {
-                InitDefaultQuickAccessItems();
+                ReplaceSaveQuickAccessItem();
+                TryInsertOpenAction();
             }
 
             LocalSettings.upgradeID = CurrentUpgradeID;
@@ -30,12 +35,17 @@ namespace InfinityCode.UltimateEditorEnhancer
             List<QuickAccessItem> items = ReferenceManager.quickAccessItems;
             if (items.Count > 0) return;
 
-            QuickAccessItem save = new QuickAccessItem(QuickAccessItemType.menuItem)
+            QuickAccessItem open = new QuickAccessItem(QuickAccessItemType.action)
             {
-                settings = new[] { "File/Save" },
-                icon = QuickAccessItemIcon.texture,
-                iconSettings = Resources.iconsFolder + "Save.png",
-                tooltip = "Save",
+                settings = new[] { typeof(OpenAction).FullName },
+                tooltip = "Open Scene",
+                expanded = false
+            };
+
+            QuickAccessItem save = new QuickAccessItem(QuickAccessItemType.action)
+            {
+                settings = new[] { typeof(SaveAction).FullName },
+                tooltip = "Save Scenes",
                 expanded = false
             };
 
@@ -114,6 +124,7 @@ namespace InfinityCode.UltimateEditorEnhancer
                 expanded = false
             };
 
+            items.Add(open);
             items.Add(save);
             items.Add(hierarchy);
             items.Add(project);
@@ -124,6 +135,44 @@ namespace InfinityCode.UltimateEditorEnhancer
             items.Add(new QuickAccessItem(QuickAccessItemType.flexibleSpace));
             items.Add(quickAccessSettings);
             items.Add(info);
+
+            ReferenceManager.Save();
+        }
+
+        private static void ReplaceSaveQuickAccessItem()
+        {
+            List<QuickAccessItem> items = ReferenceManager.quickAccessItems;
+            if (items.Count == 0) return;
+
+            foreach (QuickAccessItem item in items)
+            {
+                if (item.type == QuickAccessItemType.menuItem && item.settings[0] == "File/Save")
+                {
+                    item.type = QuickAccessItemType.action;
+                    item.settings[0] = typeof(SaveAction).FullName;
+                    TitleAttribute titleAttribute = typeof(SaveAction).GetCustomAttribute<TitleAttribute>();
+                    item.tooltip = titleAttribute != null ? titleAttribute.displayName : "Save Scenes";
+                    item.icon = QuickAccessItemIcon.editorIconContent;
+                }
+            }
+        }
+
+        private static void TryInsertOpenAction()
+        {
+            List<QuickAccessItem> items = ReferenceManager.quickAccessItems;
+            if (items.Count < 1) return;
+
+            QuickAccessItem item = items[0];
+            if (item.type != QuickAccessItemType.action || item.settings[0] != typeof(SaveAction).FullName) return;
+
+            QuickAccessItem open = new QuickAccessItem(QuickAccessItemType.action)
+            {
+                settings = new[] { typeof(OpenAction).FullName },
+                tooltip = "Open Scene",
+                expanded = false
+            };
+
+            items.Insert(0, open);
         }
     }
 }

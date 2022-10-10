@@ -1,4 +1,3 @@
-using Mono.Cecil;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -7,7 +6,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UIHelper : EditorWindow
+public class UIWidgets : EditorWindow
 {
     protected static Dictionary<string, GameObject> items = new Dictionary<string, GameObject>();
     
@@ -15,14 +14,14 @@ public class UIHelper : EditorWindow
 
     private bool isInstantiatingPrefab = true;
 
-    [MenuItem("Hub/UI Helper", priority = 101)]
+    [MenuItem("Hub/UI Widgets", priority = 101)]
     public static void Init()
     {
         UpdateList();
 
         Resources.UnloadUnusedAssets();
         
-        var window = GetWindow<UIHelper>();
+        var window = GetWindow<UIWidgets>();
         window.minSize = new Vector2(250f, 200f);
         window.Show();
     }
@@ -88,29 +87,44 @@ public class UIHelper : EditorWindow
             }
             else if ((GUILayout.Button(new GUIContent(item.Key,svicon),gUIStyle)/*GUILayout.Button(item.Key)*/))
             {
-                if (Selection.activeTransform == null || Selection.activeTransform.GetComponent<Canvas>() == null)
+                if (Selection.activeTransform == null)
                 {
-                    Selection.activeTransform = FindObjectOfType<Canvas>()?.transform;
-                }
-                if (Selection.activeTransform == null || Selection.activeTransform.GetComponent<Canvas>() == null)
+					// Find and Try Assign Existing Canvas
+					Selection.activeTransform = FindObjectOfType<Canvas>()?.transform;
+
+					// Create and Assign New Canvas
+					if (Selection.activeTransform == null)
+					{
+						if (item.Key != "Canvas")
+						{
+							GameObject newCanvas;
+
+							if (isInstantiatingPrefab)
+							{
+								newCanvas = PrefabUtility.InstantiatePrefab(items["Canvas"], Selection.activeTransform) as GameObject;
+							}
+							else
+							{
+								newCanvas = Instantiate(items["Canvas"], Selection.activeTransform);
+							}
+
+							Selection.activeTransform = newCanvas.transform;
+						}
+					}
+				}
+                else
                 {
-                    if (item.Key != "Canvas")
+                    // If No UI Object is Selected
+                    if (Selection.activeTransform.GetComponent<RectTransform>() == null)
                     {
-                        GameObject newCanvas = null;
-                        if (isInstantiatingPrefab)
-                        {
-							newCanvas = PrefabUtility.InstantiatePrefab(items["Canvas"], Selection.activeTransform) as GameObject;
-                        }
-                        else
-                        {
-                            newCanvas = Instantiate(items["Canvas"], Selection.activeTransform);
-                        }
-                        Selection.activeTransform = newCanvas.transform;
+                        Selection.activeTransform = null;
                     }
-                }
-                var itemPrefab = item.Value;
-                GameObject itemObject = null;
-				if (isInstantiatingPrefab)
+				}
+
+				var itemPrefab = item.Value;
+                GameObject itemObject;
+
+                if (isInstantiatingPrefab)
 				{
 					itemObject = PrefabUtility.InstantiatePrefab(itemPrefab, Selection.activeTransform) as GameObject;
 				}
@@ -118,6 +132,7 @@ public class UIHelper : EditorWindow
 				{
 					itemObject = Instantiate(itemPrefab, Selection.activeTransform);
 				}
+
                 itemObject.name = itemObject.name.Replace("(Clone)", "");
             }
         }

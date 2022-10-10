@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using InfinityCode.UltimateEditorEnhancer.EditorMenus.Actions;
 using InfinityCode.UltimateEditorEnhancer.UnityTypes;
+using InfinityCode.UltimateEditorEnhancer.Windows;
 using UnityEditor;
 using UnityEditorInternal;
 using UnityEngine;
@@ -13,16 +14,18 @@ using Object = UnityEngine.Object;
 
 namespace InfinityCode.UltimateEditorEnhancer.InspectorTools
 {
-    [InitializeOnLoad]
-    public static class InspectorBar
+    public class InspectorBar: InspectorInjector
     {
+        private const string ELEMENT_NAME = "InspectorBar";
+
+        private static InspectorBar instance;
+
         public static Vector2 lastPosition = Vector2.zero;
         public static Func<Component, Component[]> OnInitRelatedComponents;
         public static Action<EditorWindow, List<Component>> OnDrawRelatedComponents;
 
-        private const string ELEMENT_NAME = "InspectorBar";
         private const int LINE_HEIGHT = 20;
-        private const int LAST_LINE_OFFSET = 50;
+        private const int LAST_LINE_OFFSET = 70;
 
         private static GUIContent _collapseContent;
         private static GUIContent _expandContent;
@@ -30,8 +33,6 @@ namespace InfinityCode.UltimateEditorEnhancer.InspectorTools
         private static Dictionary<int, ContentWrapper> contentCache;
         private static Dictionary<EditorWindow, VisualElementWrapper> visualElements;
         private static GUIContent openPrefabContent;
-        private static double initTime;
-        private static List<EditorWindow> failedWindows;
 
         //private static List<Component> relatedComponents;
 
@@ -78,7 +79,7 @@ namespace InfinityCode.UltimateEditorEnhancer.InspectorTools
             }
         }
 
-        static InspectorBar()
+        InspectorBar()
         {
             EditorApplication.delayCall += InitInspector;
             WindowManager.OnWindowFocused += OnWindowFocused;
@@ -130,11 +131,7 @@ namespace InfinityCode.UltimateEditorEnhancer.InspectorTools
                 AddComponent.ShowAddComponent(rect);
             }
 
-            GUIContent helpContent = TempContent.Get("?");
-            float helpContentWidth = style.CalcSize(helpContent).x;
-            rect = new Rect(wnd.position.width - helpContentWidth, lastPosition.y, helpContentWidth, LINE_HEIGHT);
-
-            if (GUI.Button(rect, helpContent, style)) Links.OpenDocumentation("inspector-bar");
+            DrawLateButtons(wnd, style);
 
             int rowCount = Mathf.RoundToInt(lastPosition.y / LINE_HEIGHT + 1);
             VisualElementWrapper visualElement = visualElements[wnd];
@@ -213,7 +210,7 @@ namespace InfinityCode.UltimateEditorEnhancer.InspectorTools
             GUIStyle style = isActive ? normalStyle : selectedContentStyle;
 
             float maxWidth = wnd.position.width;
-            Rect rect = GetRect(wrapper.width, maxWidth - (elementIndex == editorsList.childCount - 1 ? LAST_LINE_OFFSET : 0));
+            Rect rect = GetRect(wrapper.width, maxWidth - (elementIndex == editorsList.childCount - 2 ? LAST_LINE_OFFSET : 0));
 
             bool state = Debug.unityLogger.logEnabled;
             Debug.unityLogger.logEnabled = false;
@@ -224,12 +221,35 @@ namespace InfinityCode.UltimateEditorEnhancer.InspectorTools
             editorIndex++;
         }
 
+        private static void DrawLateButtons(EditorWindow wnd, GUIStyle style)
+        {
+            Rect rect;
+
+            GUIContent helpContent = TempContent.Get("?");
+            float helpContentWidth = style.CalcSize(helpContent).x;
+
+            if (Updater.hasNewVersion)
+            {
+                GUIContent updateContent = TempContent.Get(Icons.updateAvailable, "Update Available.\nClick to open the built-in update system.");
+                float updateContentWidth = style.CalcSize(updateContent).x;
+                rect = new Rect(wnd.position.width - updateContentWidth - helpContentWidth, lastPosition.y, updateContentWidth, LINE_HEIGHT);
+
+                if (GUI.Button(rect, updateContent, style)) Updater.OpenWindow();
+            }
+
+            rect = new Rect(wnd.position.width - helpContentWidth, lastPosition.y, helpContentWidth, LINE_HEIGHT);
+
+            if (GUI.Button(rect, helpContent, style)) Links.OpenDocumentation("inspector-bar");
+        }
+
         private static void DrawOpenPrefab(EditorWindow wnd, Editor[] editors)
         {
+            if (EditorApplication.isPlaying) return;
+
             Object target = editors[0].target;
             if (target == null) return;
 
-            string assetPath = null;
+            string assetPath;
             if (target.GetType() == PrefabImporterRef.type)
             {
                 assetPath = AssetDatabase.GetAssetPath(target);
@@ -272,22 +292,11 @@ namespace InfinityCode.UltimateEditorEnhancer.InspectorTools
             return rect;
         }
 
-        private static VisualElement GetMainContainer(EditorWindow wnd)
+        [InitializeOnLoadMethod]
+        private static void Init()
         {
-            return wnd != null ? GetVisualElement(wnd.rootVisualElement, "unity-inspector-main-container") : null;
-        }
-
-        private static VisualElement GetVisualElement(VisualElement element, string className)
-        {
-            for (int i = 0; i < element.childCount; i++)
-            {
-                VisualElement el = element[i];
-                if (el.ClassListContains(className)) return el;
-                el = GetVisualElement(el, className);
-                if (el != null) return el;
-            }
-
-            return null;
+            Updater.CheckNewVersionAvailable();
+            instance = new InspectorBar();
         }
 
         private static ContentWrapper InitContent(Editor editor, GUIStyle normalStyle)
@@ -321,35 +330,18 @@ namespace InfinityCode.UltimateEditorEnhancer.InspectorTools
             return wrapper;
         }
 
-        private static void InitInspector()
+        private static bool IsTransform(VisualElement el)
         {
-            Object[] windows = UnityEngine.Resources.FindObjectsOfTypeAll(InspectorWindowRef.type);
-            failedWindows = new List<EditorWindow>();
-            foreach (EditorWindow wnd in windows)
-            {
-                if (wnd == null) continue;
-                if (!InjectBar(wnd)) failedWindows.Add(wnd);
-            }
-
-            if (failedWindows.Count > 0)
-            {
-                initTime = EditorApplication.timeSinceStartup;
-                EditorApplication.update += TryReinit;
-            }
+            return el.name == "Transform" || el.name == "Rect Transform";
         }
 
-        private static bool InjectBar(EditorWindow wnd)
+        protected override bool OnInject(EditorWindow wnd, VisualElement mainContainer, VisualElement editorsList)
         {
-            if (!Prefs.inspectorBar) return false;
-
-            VisualElement mainContainer = GetMainContainer(wnd);
-            if (mainContainer == null) return false;
-            if (mainContainer.childCount < 2) return false;
-
             if (mainContainer[0].name == ELEMENT_NAME) mainContainer.RemoveAt(0);
 
-            VisualElement editorsList = GetVisualElement(mainContainer, "unity-inspector-editors-list");
-            if (editorsList.childCount < 2) return false;
+            if (!Prefs.inspectorBar) return true;
+
+            if (editorsList.childCount < 2) return false; 
             VisualElement elements = editorsList[0];
 
             Editor[] editors = EditorElementRef.GetEditors(elements);
@@ -365,33 +357,16 @@ namespace InfinityCode.UltimateEditorEnhancer.InspectorTools
             mainContainer.Insert(0, visualElement);
 
             visualElements[wnd] = new VisualElementWrapper(visualElement, 1);
-
             return true;
         }
 
-        private static bool IsTransform(VisualElement el)
-        {
-            return el.name == "Transform" || el.name == "Rect Transform";
-        }
-
-        private static void OnMaximizedChanged(EditorWindow w)
-        {
-            Object[] windows = UnityEngine.Resources.FindObjectsOfTypeAll(InspectorWindowRef.type);
-            foreach (EditorWindow wnd in windows)
-            {
-                if (wnd == null) continue;
-
-                InjectBar(wnd);
-            }
-        }
-
-        private static void OnSelectionChanged()
+        private void OnSelectionChanged()
         {
             contentCache.Clear();
             InitInspector();
         }
 
-        private static void OnWindowFocused(EditorWindow wnd)
+        private void OnWindowFocused(EditorWindow wnd)
         {
             if (wnd == null) return;
             if (wnd.GetType() != InspectorWindowRef.type) return;
@@ -507,26 +482,6 @@ namespace InfinityCode.UltimateEditorEnhancer.InspectorTools
                 }
                 ActiveEditorTracker tracker = InspectorWindowRef.GetTracker(wnd);
                 tracker.SetVisible(editorIndex, 1);
-            }
-        }
-
-        private static void TryReinit()
-        {
-            if (EditorApplication.timeSinceStartup - initTime <= 0.5) return;
-            EditorApplication.update -= TryReinit;
-            if (failedWindows != null)
-            {
-                TryReinit(failedWindows);
-                failedWindows = null;
-            }
-        }
-
-        private static void TryReinit(List<EditorWindow> windows)
-        {
-            foreach (EditorWindow wnd in windows)
-            {
-                if (wnd == null) continue;
-                InjectBar(wnd);
             }
         }
 

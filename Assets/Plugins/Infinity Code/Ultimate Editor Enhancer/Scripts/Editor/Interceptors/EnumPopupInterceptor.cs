@@ -3,7 +3,6 @@
 
 using System;
 using System.Reflection;
-using HarmonyLib;
 using InfinityCode.UltimateEditorEnhancer.UnityTypes;
 using InfinityCode.UltimateEditorEnhancer.Windows;
 using UnityEditor;
@@ -11,15 +10,21 @@ using UnityEngine;
 
 namespace InfinityCode.UltimateEditorEnhancer.Interceptors
 {
-    [InitializeOnLoad]
-    public static class EnumPopupInterceptor
+    public class EnumPopupInterceptor: StatedInterceptor<EnumPopupInterceptor>
     {
-        private static Harmony harmony;
-        private static MethodInfo prefixMethod;
-
-        static EnumPopupInterceptor()
+        protected override MethodInfo originalMethod
         {
-            if (Prefs.searchInEnumFields) Patch();
+            get { return EditorGUIRef.doPopupMethod; }
+        }
+
+        public override bool state
+        {
+            get { return Prefs.searchInEnumFields; }
+        }
+
+        protected override string prefixMethodName
+        {
+            get { return "DoPopupPrefix"; }
         }
 
         private static void DoPopupPrefix(
@@ -76,43 +81,6 @@ namespace InfinityCode.UltimateEditorEnhancer.Interceptors
             if (GUIUtility.keyboardControl != controlId) return false;
             bool flag = e.alt || e.shift || e.command || e.control;
             return e.type == EventType.KeyDown && (e.keyCode == KeyCode.Space || e.keyCode == KeyCode.Return || e.keyCode == KeyCode.KeypadEnter) && !flag;
-        }
-
-        private static void Patch()
-        {
-            if (harmony != null) return;
-
-            try
-            {
-                harmony = new Harmony("InfinityCode.UltimateEditorEnhancer.EnumPopupInterceptor");
-
-                Type[] parameters = {
-                    typeof(Rect),
-                    typeof(int),
-                    typeof(int),
-                    typeof(GUIContent[]),
-                    typeof(Func<int, bool>),
-                    typeof(GUIStyle)
-                };
-
-
-                prefixMethod = AccessTools.Method(typeof(EnumPopupInterceptor), "DoPopupPrefix", parameters);
-                harmony.Patch(EditorGUIRef.doPopupMethod, new HarmonyMethod(prefixMethod));
-            }
-            catch (Exception e)
-            {
-                Debug.LogException(e);
-            }
-        }
-
-        public static void Refresh()
-        {
-            if (Prefs.searchInEnumFields) Patch();
-            else
-            {
-                harmony.Unpatch(EditorGUIRef.doPopupMethod, prefixMethod);
-                harmony = null;
-            }
         }
     }
 }

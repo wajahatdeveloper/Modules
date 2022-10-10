@@ -28,15 +28,7 @@ namespace InfinityCode.UltimateEditorEnhancer.Tools
 
         static ToolbarWindows()
         {
-            windows = new Dictionary<int, WindowRecord>();
-            tempWindows = new List<EditorWindow>();
-            recent = new List<WindowRecord>();
-            removeKeys = new List<int>();
-
-            ToolbarManager.AddRightToolbar("ToolbarWindows", DrawToolbar);
-
-            EditorApplication.update -= CacheWindows;
-            EditorApplication.update += CacheWindows;
+            Reinit();
         }
 
         private static void CacheWindows()
@@ -64,6 +56,10 @@ namespace InfinityCode.UltimateEditorEnhancer.Tools
                         window.maximized = true;
                         return;
                     }
+
+                    lastWindowType = focusedWindowType;
+                    if (lastWindowType != null) lastFocusedWindowType = lastWindowType;
+
                     return;
                 }
                 tempWindows.Add(window);
@@ -110,11 +106,14 @@ namespace InfinityCode.UltimateEditorEnhancer.Tools
 
         private static void DrawToolbar()
         {
-            if (!Prefs.windowsToolbarIcon) return;
-
             if (buttonContent == null) buttonContent = new GUIContent(Icons.windows, "Windows");
 
-            if (!GUILayout.Button(buttonContent, Styles.dropdown, GUILayout.Width(40)))
+            GUIStyle style = new GUIStyle(Styles.dropdown)
+            {
+                margin = new RectOffset(0, 0, 0, 0)
+            };
+
+            if (!GUILayout.Button(buttonContent, style, GUILayout.Width(40)))
             {
                 return;
             }
@@ -208,6 +207,22 @@ namespace InfinityCode.UltimateEditorEnhancer.Tools
             }
 
             providers = providers.OrderBy(p => p.order).ToList();
+        }
+
+        public static void Reinit()
+        {
+            windows = new Dictionary<int, WindowRecord>();
+            tempWindows = new List<EditorWindow>();
+            recent = new List<WindowRecord>();
+            removeKeys = new List<int>();
+            EditorApplication.update -= CacheWindows;
+            ToolbarManager.RemoveRightToolbar("ToolbarWindows");
+
+            if (Prefs.windowsToolbarIcon)
+            {
+                ToolbarManager.AddRightToolbar("ToolbarWindows", DrawToolbar, 0);
+                EditorApplication.update += CacheWindows;
+            }
         }
 
         public static void RestoreRecentWindow(object userdata)

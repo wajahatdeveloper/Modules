@@ -1,46 +1,34 @@
 /*           INFINITY CODE          */
 /*     https://infinity-code.com    */
 
-using System;
-using System.Globalization;
 using System.Reflection;
-using HarmonyLib;
 using InfinityCode.UltimateEditorEnhancer.UnityTypes;
-using UnityEditor;
 using UnityEngine;
 
 namespace InfinityCode.UltimateEditorEnhancer.Interceptors
 {
-    [InitializeOnLoad]
-    public static class NumberFieldInterceptor
+    public class NumberFieldInterceptor: StatedInterceptor<NumberFieldInterceptor>
     {
         private static string recycledText;
-        private static Harmony harmony;
-        private static MethodInfo prefixMethod;
 
-        static NumberFieldInterceptor()
+        protected override MethodInfo originalMethod
         {
-            Type[] parameters2 = {
-                typeof(object),
-                typeof(Rect),
-                typeof(Rect),
-                typeof(int),
-#if !UNITY_2021_2_OR_NEWER
-                typeof(bool),
-                typeof(double).MakeByRefType(),
-                typeof(long).MakeByRefType(),
-#else
-                typeof(EditorGUIRef.NumberFieldValue).MakeByRefType(),
-#endif
-                typeof(string),
-                typeof(GUIStyle),
-                typeof(bool),
-                typeof(double)
-            };
+            get => EditorGUIRef.doNumberFieldMethod;
+        }
 
-            prefixMethod = AccessTools.Method(typeof(NumberFieldInterceptor), "DoNumberFieldPrefix", parameters2);
+        public override bool state
+        {
+            get => Prefs.changeNumberFieldValueByArrow;
+        }
 
-            if (Prefs.changeNumberFieldValueByArrow) Patch();
+        protected override string prefixMethodName
+        {
+            get => "DoNumberFieldPrefix";
+        }
+
+        protected override InitType initType
+        {
+            get => InitType.gui;
         }
 
         private static void DoNumberFieldPrefix(
@@ -63,7 +51,7 @@ namespace InfinityCode.UltimateEditorEnhancer.Interceptors
             Event e = Event.current;
             int v = 0;
 
-            if (Prefs.changeNumberFieldValueByArrow && e.type == EventType.KeyDown && GUIUtility.keyboardControl == id)
+            if (e.type == EventType.KeyDown && GUIUtility.keyboardControl == id)
             {
                 if (e.keyCode == KeyCode.UpArrow)
                 {
@@ -119,34 +107,13 @@ namespace InfinityCode.UltimateEditorEnhancer.Interceptors
                     }
 #endif
 
-                    TextEditorRef.SetText(editor, recycledText);
-                    TextEditorRef.SetCursorIndex(editor, 0);
-                    TextEditorRef.SetSelectionIndex(editor, recycledText.Length);
+                    TextEditor textEditor = editor as TextEditor;
+                    if (textEditor != null)
+                    {
+                        textEditor.text = recycledText;
+                        textEditor.SelectAll();
+                    }
                 }
-            }
-        }
-
-        private static void Patch()
-        {
-            if (harmony != null) return;
-
-            try
-            {
-                harmony = new Harmony("InfinityCode.UltimateEditorEnhancer.NumberFieldInterceptor");
-                harmony.Patch(EditorGUIRef.doNumberFieldMethod, new HarmonyMethod(prefixMethod));
-            }
-            catch
-            {
-            }
-        }
-
-        public static void Refresh()
-        {
-            if (Prefs.changeNumberFieldValueByArrow) Patch();
-            else
-            {
-                harmony.Unpatch(EditorGUIRef.doNumberFieldMethod, prefixMethod);
-                harmony = null;
             }
         }
     }

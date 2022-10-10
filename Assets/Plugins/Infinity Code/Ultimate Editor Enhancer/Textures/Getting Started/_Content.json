@@ -323,7 +323,7 @@
         "image": "Pivot Tool.png",
         "help": "pivot-tool",
         "added": 2.10,
-        "updated": 2.10
+        "updated": 3.02
       },
       {
         "title": "Rename by Shortcut",
@@ -353,11 +353,25 @@
     "slides":
     [
       {
+        "title": "Detect Bounds of Box Collider",
+        "image": "Detect Bounds of Box Collider.png",
+        "help": "detect-bounds-of-box-collider",
+        "added": 3.02,
+        "updated": 3.02
+      },
+      {
         "title": "Drag from Object Fields",
         "image": "Drag From Object Fields.png",
         "help": "drag-from-object-fields",
         "added": 2.08,
         "updated": 2.08
+      },
+      {
+        "title": "Empty Inspector",
+        "image": "Empty Inspector.png",
+        "help": "empty-inspector",
+        "added": 3.02,
+        "updated": 3.02
       },
       {
         "title": "Inspector Bar",
@@ -379,6 +393,27 @@
         "help": "object-field-selector",
         "added": 2.11,
         "updated": 2.11
+      },
+      {
+        "title": "Play Clips in Animator",
+        "image": "Play Clips In Animator.png",
+        "help": "play-clips-in-animator",
+        "added": 3.02,
+        "updated": 3.02
+      },
+      {
+        "title": "Saving Components at Runtime",
+        "image": "Saving Components at Runtime.png",
+        "help": "saving-components-at-runtime",
+        "added": 3.01,
+        "updated": 3.01
+      },
+      {
+        "title": "Transform in World Space",
+        "image": "Transform in World Space.png",
+        "help": "transform-in-world-space",
+        "added": 3.02,
+        "updated": 3.02
       }
     ]
   },

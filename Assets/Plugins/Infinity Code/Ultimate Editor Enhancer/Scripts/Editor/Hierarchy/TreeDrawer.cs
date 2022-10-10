@@ -1,7 +1,7 @@
 ﻿/*           INFINITY CODE          */
 /*     https://infinity-code.com    */
 
-using InfinityCode.UltimateEditorEnhancer.UnityTypes;
+using InfinityCode.UltimateEditorEnhancer.Windows;
 using UnityEditor;
 using UnityEngine;
 
@@ -64,22 +64,15 @@ namespace InfinityCode.UltimateEditorEnhancer.HierarchyTools
 
             Vector4 borderWidths = new Vector4(transform.childCount > 0 ? 8 : 0, 0, 0, 0);
 
-            Color color = Color.gray;
-
-            SceneReferences r = SceneReferences.Get(item.gameObject.scene, false);
-            if (r != null)
-            {
-                SceneReferences.HierarchyBackground background = r.GetBackground(parent.gameObject, true);
-                if (background != null) color = background.color;
-            }
+            Color color = GetColor(item, transform);
 
             if (parent.childCount == 1 || transform.GetSiblingIndex() == parent.childCount - 1)
             {
-                GUI.DrawTexture(rect, endIcon, ScaleMode.ScaleToFit, true, 0, color, borderWidths, Vector4.zero);
+                if (endIcon != null) GUI.DrawTexture(rect, endIcon, ScaleMode.ScaleToFit, true, 0, color, borderWidths, Vector4.zero);
             }
             else
             {
-                GUI.DrawTexture(rect, middleIcon, ScaleMode.ScaleToFit, true, 0, color, borderWidths, Vector4.zero);
+                if (middleIcon != null) GUI.DrawTexture(rect, middleIcon, ScaleMode.ScaleToFit, true, 0, color, borderWidths, Vector4.zero);
             }
 
             while (parent != null && parent.parent != null)
@@ -88,11 +81,99 @@ namespace InfinityCode.UltimateEditorEnhancer.HierarchyTools
 
                 if (parent.GetSiblingIndex() < parent.parent.childCount - 1)
                 {
-                    GUI.DrawTexture(rect, lineIcon, ScaleMode.ScaleToFit, true, 0, color, borderWidths, Vector4.zero);
+                    color = GetColor(item, parent);
+                    if (lineIcon != null) GUI.DrawTexture(rect, lineIcon, ScaleMode.ScaleToFit, true, 0, color, borderWidths, Vector4.zero);
                 }
 
                 parent = parent.parent;
             }
+        }
+
+        public static Color GetBackground(SceneReferences reference, GameObject target)
+        {
+            foreach (SceneReferences.HierarchyBackground b in reference.hierarchyBackgrounds)
+            {
+                if (b.gameObject == target) return b.color;
+            }
+
+            Transform t = target.transform.parent;
+            Texture texture = AssetPreview.GetMiniThumbnail(target);
+            string textureName = texture.name;
+            if (textureName.StartsWith("sv_icon_"))
+            {
+                return GetColorFromTexture(textureName);
+            }
+            
+            while (t != null)
+            {
+                GameObject go = t.gameObject;
+
+                foreach (SceneReferences.HierarchyBackground b in reference.hierarchyBackgrounds)
+                {
+                    if (b.gameObject == go) return b.color;
+                }
+
+                texture = AssetPreview.GetMiniThumbnail(go);
+                textureName = texture.name;
+                if (textureName.StartsWith("sv_icon_"))
+                {
+                    return GetColorFromTexture(textureName);
+                }
+
+                t = t.parent;
+            }
+
+            return Color.gray;
+        }
+
+        public static Color GetBackground(GameObject target)
+        {
+            Transform t = target.transform.parent;
+
+            while (t != null)
+            {
+                GameObject go = t.gameObject;
+
+                Texture texture = AssetPreview.GetMiniThumbnail(go);
+                string textureName = texture.name;
+                if (textureName.StartsWith("sv_icon_"))
+                {
+                    return GetColorFromTexture(textureName);
+                }
+
+                t = t.parent;
+            }
+
+            return Color.gray;
+        }
+
+        private static Color GetColorFromTexture(string textureName)
+        {
+            if (textureName[8] == 'n')
+            {
+                int index = textureName[12] - '0';
+                return GameObjectHierarchySettings.colors[index];
+            }
+
+            if (textureName[8] == 'd')
+            {
+                int index;
+                if (textureName.Length == 16) index = textureName[11] - '0';
+                else if (textureName.Length == 17) index = (textureName[11] - '0') * 10 + (textureName[12] - '0');
+                else return Color.gray;
+
+                return GameObjectHierarchySettings.colors[index % 8];
+            }
+
+            return Color.gray;
+        }
+
+        public static Color GetColor(HierarchyItem item, Transform parent)
+        {
+            SceneReferences r = SceneReferences.Get(item.gameObject.scene, false);
+
+            if (r == null) return GetBackground(parent.gameObject);
+            return GetBackground(r, parent.gameObject);
         }
     }
 }

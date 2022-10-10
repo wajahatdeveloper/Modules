@@ -4,7 +4,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using InfinityCode.UltimateEditorEnhancer.Behaviors;
-using InfinityCode.UltimateEditorEnhancer.UnityTypes;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
@@ -216,6 +215,7 @@ namespace InfinityCode.UltimateEditorEnhancer.Windows
                 if (e.keyCode == KeyCode.DownArrow) SelectNext();
                 else if (e.keyCode == KeyCode.UpArrow) SelectPrev();
                 else if (e.keyCode == KeyCode.KeypadEnter || e.keyCode == KeyCode.Return) return SelectCurrent();
+                else if (e.keyCode == KeyCode.Escape) return true;
             }
 
             return false;
@@ -261,27 +261,18 @@ namespace InfinityCode.UltimateEditorEnhancer.Windows
             {
                 if (e.button == 1) ProcessContextMenu(item);
             }
-
-            return false;
-        }
-
-        private bool SelectCurrent()
-        {
-            if (selectedItem == null) return false;
-            if (!selectedItem.exists) return false;
-            if (!CheckPlaymode()) return false;
-
-            if (SceneManagerHelper.AskForSave(SceneManager.GetActiveScene()))
+            else if (ev == ButtonEvent.drag)
             {
-                SelectionHistory.Clear();
-                EditorSceneManager.OpenScene(selectedItem.path);
-                return true;
+                DragAndDrop.PrepareStartDrag();
+                DragAndDrop.paths = new[] { item.path };
+                DragAndDrop.StartDrag("Drag " + item.name);
+                e.Use();
             }
 
             return false;
         }
 
-        private bool SelectCurrentAdditive()
+        private bool SelectCurrent()
         {
             if (selectedItem == null) return false;
             if (!selectedItem.exists) return false;

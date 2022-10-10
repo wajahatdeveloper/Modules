@@ -22,43 +22,6 @@ namespace InfinityCode.UltimateEditorEnhancer.Behaviors
             GameObjectUtils.OnPrepareGameObjectMenu += OnPrepareGameObjectMenu;
         }
 
-        private static void OnInvoke()
-        {
-            Show(Selection.gameObjects);
-        }
-
-        private static void OnPrepareGameObjectMenu(GenericMenuEx menu, GameObject[] targets)
-        {
-            bool match = false;
-
-            for (int i = 0; i < menu.count; i++)
-            {
-                GenericMenuItem item = menu[i];
-                if (item.content != null && item.content.text == "Group %g")
-                {
-                    menu.Insert(i, "Replace", () => Show(targets));
-                    match = true;
-                    break;
-                }
-            }
-
-            if (!match)
-            {
-                menu.Add("Replace", () => Show(targets));
-            }
-        }
-
-        private static bool OnValidate()
-        {
-            if (!Prefs.replace) return false;
-
-            Event e = Event.current;
-            if (Selection.gameObjects.Length == 0) return false;
-            if (e.keyCode != Prefs.replaceKeyCode) return false;
-            if (e.modifiers != Prefs.replaceModifiers) return false;
-            return true;
-        }
-
         private static void OnBrowserClose(CreateBrowser browser)
         {
             browser.OnClose -= OnBrowserClose;
@@ -99,7 +62,7 @@ namespace InfinityCode.UltimateEditorEnhancer.Behaviors
 
             Object.DestroyImmediate(asset);
 
-            Undo.CollapseUndoOperations(group);
+            Undo.CollapseUndoOperations(@group);
             Selection.objects = newSelection.ToArray();
         }
 
@@ -130,8 +93,45 @@ namespace InfinityCode.UltimateEditorEnhancer.Behaviors
                 nt.SetSiblingIndex(index);
             }
 
-            Undo.CollapseUndoOperations(group);
+            Undo.CollapseUndoOperations(@group);
             Selection.objects = newSelection.ToArray();
+        }
+
+        private static void OnInvoke()
+        {
+            Show(Selection.gameObjects);
+        }
+
+        private static void OnPrepareGameObjectMenu(GenericMenuEx menu, GameObject[] targets)
+        {
+            bool match = false;
+
+            for (int i = 0; i < menu.count; i++)
+            {
+                GenericMenuItem item = menu[i];
+                if (item.content != null && item.content.text == "Group %g")
+                {
+                    menu.Insert(i, "Replace", () => Show(targets));
+                    match = true;
+                    break;
+                }
+            }
+
+            if (!match)
+            {
+                menu.Add("Replace", () => Show(targets));
+            }
+        }
+
+        private static bool OnValidate()
+        {
+            if (!Prefs.replace) return false;
+
+            Event e = Event.current;
+            if (e.keyCode != Prefs.replaceKeyCode) return false;
+            if (e.modifiers != Prefs.replaceModifiers) return false;
+            if (Selection.gameObjects.Length == 0) return false;
+            return true;
         }
 
         public static void Show(GameObject[] targets)

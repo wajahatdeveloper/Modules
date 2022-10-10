@@ -19,16 +19,30 @@ namespace InfinityCode.UltimateEditorEnhancer.SceneTools
         public static EditorWindow activeWindow;
         public static int activeWindowIndex = -1;
         public static int invokeItemIndex;
-        public static int invokeItemVisibleIndex;
         public static Rect invokeItemRect;
+        public static int invokeItemVisibleIndex;
 
-        private static Texture2D background;
-        private static Rect rect;
-        private static GUIStyle contentStyle;
-        private static GUIStyle activeContentStyle;
-        private static bool _visible;
-        private static Action invokeItemAction;
+        private static GUIStyle _activeContentStyle;
         private static Texture2D _collapseLineTexture;
+        private static GUIStyle _contentStyle;
+        private static bool _visible;
+        private static Texture2D background;
+        private static Action invokeItemAction;
+        private static Rect rect;
+
+        public static GUIStyle activeContentStyle
+        {
+            get
+            {
+                if (_activeContentStyle == null)
+                {
+                    _activeContentStyle = new GUIStyle(contentStyle);
+                    _activeContentStyle.normal.background = _activeContentStyle.active.background;
+                }
+
+                return _activeContentStyle;
+            }
+        }
 
         public static bool collapsed
         {
@@ -41,12 +55,24 @@ namespace InfinityCode.UltimateEditorEnhancer.SceneTools
             }
         }
 
-        private static Texture2D collapseLineTexture
+        public static GUIStyle contentStyle
         {
             get
             {
-                if (_collapseLineTexture == null) _collapseLineTexture = Resources.CreateSinglePixelTexture(0.3f, 0.8f, 0.3f, 0.6f);
-                return _collapseLineTexture;
+                if (_contentStyle == null || _contentStyle.normal.background == null)
+                {
+                    _contentStyle = new GUIStyle(EditorStyles.toolbarButton)
+                    {
+                        fontSize = 8,
+                        fixedHeight = 32,
+                        normal = { background = Resources.CreateSinglePixelTexture(0, 0.1f), textColor = Color.white },
+                        hover = { background = Resources.CreateSinglePixelTexture(0, 0.2f) },
+                        active = { background = Resources.CreateSinglePixelTexture(0, 0.3f) },
+                        padding = new RectOffset()
+                    };
+                }
+
+                return _contentStyle;
             }
         }
 
@@ -67,6 +93,15 @@ namespace InfinityCode.UltimateEditorEnhancer.SceneTools
         public static float width
         {
             get { return 32; }
+        }
+
+        private static Texture2D collapseLineTexture
+        {
+            get
+            {
+                if (_collapseLineTexture == null) _collapseLineTexture = Resources.CreateSinglePixelTexture(0.3f, 0.8f, 0.3f, 0.6f);
+                return _collapseLineTexture;
+            }
         }
 
         static QuickAccess()
@@ -127,22 +162,6 @@ namespace InfinityCode.UltimateEditorEnhancer.SceneTools
 
         private static void DrawContent(SceneView sceneView)
         {
-            if (contentStyle == null || contentStyle.normal.background == null)
-            {
-                contentStyle = new GUIStyle(EditorStyles.toolbarButton)
-                {
-                    fontSize = 8,
-                    fixedHeight = 32,
-                    normal = {background = Resources.CreateSinglePixelTexture(0, 0.1f), textColor = Color.white},
-                    hover = {background = Resources.CreateSinglePixelTexture(0, 0.2f)},
-                    active = {background = Resources.CreateSinglePixelTexture(0, 0.3f)},
-                    padding = new RectOffset()
-                };
-
-                activeContentStyle = new GUIStyle(contentStyle);
-                activeContentStyle.normal.background = activeContentStyle.active.background;
-            }
-
             CheckActiveWindow();
 
             Event e = Event.current;
@@ -167,6 +186,13 @@ namespace InfinityCode.UltimateEditorEnhancer.SceneTools
                     GUILayout.Space(item.intSettings[0]);
                     continue;
                 }
+
+                if (item.type == QuickAccessItemType.action)
+                {
+                    item.DrawAction();
+                    continue;
+                }
+
                 if (item.content == null) continue;
                 if (!item.Visible(maximized)) continue;
                 visibleIndex++;
@@ -273,13 +299,22 @@ namespace InfinityCode.UltimateEditorEnhancer.SceneTools
                         }
                     }
 
+                    Handles.EndGUI();
+
                     return;
                 }
 
                 DrawBackground();
 
                 GUILayout.BeginArea(new Rect(0, minIntend, rect.width, rect.height - minIntend - maxIntend));
-                DrawContent(sceneView);
+                try
+                {
+                    DrawContent(sceneView);
+                }
+                catch (Exception exception)
+                {
+                    Debug.LogException(exception);
+                }
                 GUILayout.EndArea();
 
                 DrawCollapseArea(minIntend, maxIntend);

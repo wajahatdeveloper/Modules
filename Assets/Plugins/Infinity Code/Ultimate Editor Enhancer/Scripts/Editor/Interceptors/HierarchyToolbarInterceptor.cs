@@ -6,7 +6,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
-using HarmonyLib;
 using InfinityCode.UltimateEditorEnhancer.UnityTypes;
 using InfinityCode.UltimateEditorEnhancer.Windows;
 using UnityEditor;
@@ -15,33 +14,28 @@ using Object = UnityEngine.Object;
 
 namespace InfinityCode.UltimateEditorEnhancer.Interceptors
 {
-    [InitializeOnLoad]
-    public static class HierarchyToolbarInterceptor
+    public class HierarchyToolbarInterceptor: StatedInterceptor<HierarchyToolbarInterceptor>
     {
-        private static Harmony harmony;
         private static GUIContent filterByType;
-        private static MethodInfo postfix;
 
-        static HierarchyToolbarInterceptor()
+        protected override InitType initType
         {
-            try
-            {
-                postfix = typeof(HierarchyToolbarInterceptor).GetMethod("SearchFieldGUI", Reflection.StaticLookup);
-
-                if (Prefs.hierarchyTypeFilter) Patch();
-            }
-            catch
-            {
-                
-            }
+            get => InitType.gui;
         }
 
-        private static void Patch()
+        protected override MethodInfo originalMethod
         {
-            if (harmony != null) return;
+            get => SearchableEditorWindowRef.searchFieldGUIMethod;
+        }
 
-            harmony = new Harmony("InfinityCode.UltimateEditorEnhancer.HierarchyToolbarInterceptor");
-            harmony.Patch(SearchableEditorWindowRef.searchFieldGUIMethod, postfix: new HarmonyMethod(postfix));
+        public override bool state
+        {
+            get => Prefs.hierarchyTypeFilter;
+        }
+
+        protected override string postfixMethodName
+        {
+            get => "SearchFieldGUI";
         }
 
         private static void SearchFieldGUI(EditorWindow __instance)
@@ -82,16 +76,6 @@ namespace InfinityCode.UltimateEditorEnhancer.Interceptors
                     }
                     else SceneHierarchyWindowRef.SetSearchFilter(__instance, contents[i].text, mode);
                 };
-            }
-        }
-
-        public static void Refresh()
-        {
-            if (Prefs.hierarchyTypeFilter) Patch();
-            else
-            {
-                harmony.Unpatch(SearchableEditorWindowRef.searchFieldGUIMethod, postfix);
-                harmony = null;
             }
         }
     }

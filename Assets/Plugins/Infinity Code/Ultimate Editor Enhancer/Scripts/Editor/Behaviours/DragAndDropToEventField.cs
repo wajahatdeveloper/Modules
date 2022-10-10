@@ -60,8 +60,11 @@ namespace InfinityCode.UltimateEditorEnhancer.Behaviors
         private static void OnGUIAfter(Rect position, SerializedProperty property, GUIContent label)
         {
             Event e = Event.current;
-            if (e.type == EventType.DragUpdated) OnDragUpdated();
-            else if (e.type == EventType.DragPerform) OnDragPerformed(property);
+            if (position.Contains(e.mousePosition))
+            {
+                if (e.type == EventType.DragUpdated) OnDragUpdated();
+                else if (e.type == EventType.DragPerform) OnDragPerformed(property);
+            }
         }
     }
 }

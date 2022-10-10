@@ -15,7 +15,7 @@ namespace InfinityCode.UltimateEditorEnhancer.UnityTypes
         private static FieldInfo _lastControlIDField;
         private static MethodInfo _setIconForObjectMethod;
 
-        private static MethodInfo drawEditorHeaderItemsMethod
+        public static MethodInfo drawEditorHeaderItemsMethod
         {
             get
             {

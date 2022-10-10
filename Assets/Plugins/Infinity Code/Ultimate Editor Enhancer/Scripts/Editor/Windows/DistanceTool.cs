@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections.Generic;
+using InfinityCode.UltimateEditorEnhancer.UnityTypes;
 using UnityEditor;
 using UnityEditorInternal;
 using UnityEngine;
@@ -228,41 +229,54 @@ namespace InfinityCode.UltimateEditorEnhancer.Windows
             }
         }
 
-        private void DrawUseCursorSceneGUI()
+        private Vector3 GetCurrentPoint()
+        {
+            Event e = Event.current;
+
+            if (SceneView.lastActiveSceneView.in2DMode)
+            {
+                Vector3 p = SceneView.lastActiveSceneView.camera.ScreenToWorldPoint(new Vector3(e.mousePosition.x, Screen.height - e.mousePosition.y - 40));
+                p.z = 0;
+                return p;
+            }
+
+            if (SceneViewManager.lastGameObjectUnderCursor != null)
+            {
+                if (KeyManager.isKeyDown(KeyCode.V))
+                {
+                    Vector3 p;
+                    HandleUtilityRef.FindNearestVertex(e.mousePosition, out p);
+                    return p;
+                }
+                return SceneViewManager.lastWorldPosition;
+            }
+
+            return Vector3.zero;
+        }
+
+        private void DrawUseCursorSceneGUI(SceneView sceneView)
         {
             if (!lastPointUnderCursor) return;
 
             Event e = Event.current;
 
+            Vector3 point = GetCurrentPoint();
             if (hasPrev)
             {
-                if (SceneViewManager.lastGameObjectUnderCursor != null)
-                {
-                    Vector3 p = SceneViewManager.lastWorldPosition;
-                    DrawLine(prevPosition, p);
-                }
-                else if (SceneView.lastActiveSceneView.in2DMode)
-                {
-                    Vector3 p = SceneView.lastActiveSceneView.camera.ScreenToWorldPoint(new Vector3(e.mousePosition.x, Screen.height - e.mousePosition.y - 40));
-                    p.z = 0;
-                    DrawLine(prevPosition, p);
-                }
+                DrawLine(prevPosition, point);
+            }
+            
+            if (!SceneView.lastActiveSceneView.in2DMode && KeyManager.isKeyDown(KeyCode.V))
+            {
+                float handleSize = HandleUtility.GetHandleSize(point);
+                Handles.RectangleHandleCap(-1, point, sceneView.camera.transform.rotation, handleSize * 0.125f, Event.current.type);
             }
 
-            if (e.type == EventType.MouseDown)
+            if (e.type == EventType.MouseDown && e.modifiers == EventModifiers.None)
             {
                 if (e.button == 0)
                 {
-                    if (SceneView.lastActiveSceneView.in2DMode)
-                    {
-                        Vector3 point = SceneView.lastActiveSceneView.camera.ScreenToWorldPoint(new Vector3(e.mousePosition.x, Screen.height - e.mousePosition.y - 40));
-                        point.z = 0;
-                        AddPoint(point);
-                    }
-                    else if (SceneViewManager.lastGameObjectUnderCursor != null)
-                    {
-                        AddPoint(SceneViewManager.lastWorldPosition);
-                    }
+                    AddPoint(point);
                     SceneViewManager.BlockMouseUp();
                     e.Use();
                 }
@@ -293,7 +307,6 @@ namespace InfinityCode.UltimateEditorEnhancer.Windows
         private float GetElementHeight(int index)
         {
             Target t = targets[index];
-            if (t == null) { return 0; }
             if (index == 0 && t.type == TargetType.point) return LINEHEIGHT;
             return LINEHEIGHT * 2 - 4;
         }
@@ -446,7 +459,7 @@ namespace InfinityCode.UltimateEditorEnhancer.Windows
                 Handles.Label(p, (i + 1).ToString(), indexStyle);
             }
 
-            DrawUseCursorSceneGUI();
+            DrawUseCursorSceneGUI(sceneView);
 
             Handles.color = color;
         }

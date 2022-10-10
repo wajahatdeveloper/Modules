@@ -3,6 +3,7 @@
 
 using System;
 using System.Linq;
+using InfinityCode.UltimateEditorEnhancer.HierarchyTools;
 using InfinityCode.UltimateEditorEnhancer.UnityTypes;
 using UnityEditor;
 using UnityEngine;
@@ -12,22 +13,22 @@ namespace InfinityCode.UltimateEditorEnhancer.Windows
 {
     public class GameObjectHierarchySettings : AutoSizePopupWindow
     {
-        private static Color[] colors = new Color[]
-        {
+        public static Color[] colors = {
             Color.gray, Color.blue, Color.cyan, Color.green,
             Color.yellow, new Color32(0xFF, 0xAA, 0, 255), Color.red, new Color32(0xAA, 0x00, 0xFF, 255)
         };
+
         private static GUIStyle backgroundStyle = "sv_iconselector_back";
         private static GUIContent[] labelIcons;
         private static GUIContent noneButtonContent;
         private static GUIStyle noneButtonStyle = "sv_iconselector_button";
+        private static bool recursive = false;
+        private static Color selectedColor = Color.black;
         private static GUIStyle selectionLabelStyle = "sv_iconselector_labelselection";
         private static GUIStyle selectionStyle = "sv_iconselector_selection";
         private static GUIStyle seperatorStyle = "sv_iconselector_sep";
         private static GUIContent[] smallIcons;
-        private Object[] targets;
-        private Color selectedColor = Color.black;
-        private bool recursive = false;
+        private static Object[] targets;
 
         private void DrawBackgrounds()
         {
@@ -302,7 +303,11 @@ namespace InfinityCode.UltimateEditorEnhancer.Windows
         private void SetIcon(Texture2D icon)
         {
             Undo.RecordObjects(targets, "Set Icon On GameObject");
-            foreach (Object target in targets) EditorGUIUtilityRef.SetIconForObject(target, icon);
+            
+            foreach (Object target in targets)
+            {
+                EditorGUIUtilityRef.SetIconForObject(target, icon);
+            }
         }
 
         private void SetRecursive()
@@ -338,7 +343,7 @@ namespace InfinityCode.UltimateEditorEnhancer.Windows
             if (first == null) return null;
 
             GameObjectHierarchySettings wnd = CreateInstance<GameObjectHierarchySettings>();
-            wnd.targets = targets;
+            GameObjectHierarchySettings.targets = targets;
             wnd.minSize = new Vector2(10, 10);
             rect = GUIUtility.GUIToScreenRect(rect);
             rect.width = 140;
@@ -355,8 +360,8 @@ namespace InfinityCode.UltimateEditorEnhancer.Windows
                 SceneReferences.HierarchyBackground b = sceneReferences.GetBackground(first);
                 if (b != null)
                 {
-                    wnd.selectedColor = b.color;
-                    wnd.recursive = b.recursive;
+                    selectedColor = b.color;
+                    recursive = b.recursive;
                 }
             }
 

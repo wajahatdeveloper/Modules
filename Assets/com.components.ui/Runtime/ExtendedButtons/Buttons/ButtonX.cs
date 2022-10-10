@@ -11,6 +11,7 @@ public class ButtonX : MonoBehaviour , IPointerDownHandler, IPointerUpHandler, I
     public float clickCooldown = 0.1f;
     public bool cooldownRealtime = false;
     public bool debugLogEvents = false;
+    public bool closeParentOnClick = false;
     
     public UnityEvent onEnter;
     public UnityEvent onDown;
@@ -73,6 +74,11 @@ public class ButtonX : MonoBehaviour , IPointerDownHandler, IPointerUpHandler, I
         if (debugLogEvents)
         {
             Debug.Log($"{gameObject.name} : On Pointer Up");
+        }
+
+        if (closeParentOnClick)
+        {
+            transform.parent.gameObject.SetActive(false);
         }
         
         onUp?.Invoke();

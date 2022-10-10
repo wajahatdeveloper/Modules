@@ -1,10 +1,12 @@
 ﻿/*           INFINITY CODE          */
 /*     https://infinity-code.com    */
 
+using System.Collections;
 using System.Collections.Generic;
 using InfinityCode.UltimateEditorEnhancer.UnityTypes;
 using UnityEditor;
 using UnityEditor.SceneManagement;
+using UnityEditorInternal;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -12,39 +14,49 @@ namespace InfinityCode.UltimateEditorEnhancer.Windows
 {
     public partial class Bookmarks
     {
+        private static IList activeItems;
         private static GUIStyle audioClipButtonStyle;
         private static GUIContent closeContent;
+        private static Dictionary<SceneReferences, ReorderableList> sceneItemsList = new Dictionary<SceneReferences, ReorderableList>();
         private static GUIContent showContent;
         private static GUIStyle showContentStyle;
+        private static ReorderableList projectItemsList;
 
-        private bool DrawRow(BookmarkItem item)
+        private void DrawListElement(Rect rect, int index, bool isactive, bool isfocused)
         {
-            bool returnVal = true;
+            BookmarkItem item = activeItems[index] as BookmarkItem;
+            DrawRow(item, rect);
+        }
 
-            bool selected = item.target != null && Selection.activeObject == item.target;
-            EditorGUILayout.BeginHorizontal(selected ? Styles.selectedRow : Styles.transparentRow);
+        private void DrawRow(BookmarkItem item, Rect rect)
+        {
+            DrawRowFirstButton(item, ref rect);
+            DrawRowSecondButton(item, ref rect);
 
-            DrawRowFirstButton(item);
-            DrawRowSecondButton(item);
-
-            ButtonEvent event1 = DrawRowPreview(item);
+            ButtonEvent event1 = DrawRowPreview(item, ref rect);
             string tooltip = "Click - Select Object";
             if (item.target is DefaultAsset) tooltip += "\nDouble Click - Open Folder";
-            ButtonEvent event2 = GUILayoutUtils.Button(TempContent.Get(item.title, tooltip), EditorStyles.label, GUILayout.Height(20), GUILayout.MaxWidth(instance.position.width - 100));
+
+            Rect r = new Rect(rect);
+            r.width -= 20;
+            ButtonEvent event2 = GUILayoutUtils.Button(r, TempContent.Get(item.title, tooltip), EditorStyles.label);
 
             ProcessRowEvents(item, event1, event2);
 
-            if (folderItems == null && GUILayout.Button(closeContent, Styles.transparentButton, GUILayout.ExpandWidth(false), GUILayout.Height(12))) returnVal = false;
+            r = new Rect(rect);
+            r.xMin = r.xMax - 20;
+            r.y += 2;
 
-            EditorGUILayout.EndHorizontal();
-
-            return returnVal;
+            if (folderItems == null && GUI.Button(r, closeContent, Styles.transparentButton)) removeItem = item;
         }
 
-        private void DrawRowFirstButton(BookmarkItem item)
+        private void DrawRowFirstButton(BookmarkItem item, ref Rect rect)
         {
             showContent.tooltip = GetShowTooltip(item);
-            if (!GUILayout.Button(showContent, showContentStyle, GUILayout.ExpandWidth(false), GUILayout.Height(12))) return;
+            Rect r = new Rect(rect) {width = 20};
+            r.y += 2;
+            rect.xMin += 20;
+            if (!GUI.Button(r, showContent, showContentStyle)) return;
 
             if (item.target is Component) ComponentWindow.Show(item.target as Component);
             else if (item.target is SceneAsset)
@@ -71,41 +83,63 @@ namespace InfinityCode.UltimateEditorEnhancer.Windows
             else EditorUtility.OpenWithDefaultApp(AssetDatabase.GetAssetPath(item.target));
         }
 
-        private ButtonEvent DrawRowPreview(BookmarkItem item)
+        private ButtonEvent DrawRowPreview(BookmarkItem item, ref Rect rect)
         {
             if (item.preview == null || !item.previewLoaded) InitPreview(item);
 
-            ButtonEvent event1 = GUILayoutUtils.Button(item.preview, GUIStyle.none, GUILayout.Height(20), GUILayout.Width(20));
+            Rect r = new Rect(rect) {width = 20};
+            rect.xMin += 20;
+            ButtonEvent event1 = GUILayoutUtils.Button(r, TempContent.Get(item.preview), GUIStyle.none);
             return event1;
         }
 
-        private void DrawRowSecondButton(BookmarkItem item)
+        private void DrawRowSecondButton(BookmarkItem item, ref Rect rect)
         {
+            Rect r = new Rect(rect)
+            {
+                width = 20
+            };
+            r.yMin += 2;
+
             if (item.isProjectItem)
             {
-                if (item.target is AudioClip) PlayStopAudioClipButton(item);
-                else GUILayout.Space(20);
+                if (item.target is AudioClip) PlayStopAudioClipButton(item, r);
             }
             else if (item.gameObject != null)
             {
                 bool hidden = SceneVisibilityStateRef.IsGameObjectHidden(item.gameObject);
-                if (GUILayout.Button(hidden ? hiddenContent : visibleContent, Styles.transparentButton, GUILayout.ExpandWidth(false)))
+                if (GUI.Button(r, hidden ? hiddenContent : visibleContent, Styles.transparentButton))
                 {
                     SceneVisibilityManagerRef.ToggleVisibility(SceneVisibilityManagerRef.GetInstance(), item.gameObject, true);
                 }
             }
-            else
-            {
-                GUILayout.Space(20);
-            }
+
+            rect.xMin += 20;
         }
 
-        private void DrawTreeItems(IEnumerable<BookmarkItem> treeItems, ref BookmarkItem removeItem)
+        private void DrawTreeItems(IEnumerable<BookmarkItem> treeItems)
         {
             foreach (BookmarkItem item in treeItems)
             {
-                if (!DrawRow(item)) removeItem = item;
+                Rect rect = GUILayoutUtility.GetRect(position.width, position.width, 20, 20);
+                DrawRow(item, rect);
             }
+        }
+
+        private void DrawTreeItems(ref ReorderableList list, IList treeItems, string label = null)
+        {
+            if (list == null)
+            {
+                bool hasHeader = !string.IsNullOrEmpty(label);
+                list = new ReorderableList(treeItems, typeof(BookmarkItem), true, hasHeader, false, false);
+                list.onReorderCallback += OnReorder;
+                list.elementHeight = 20;
+                list.drawElementCallback += DrawListElement;
+                list.drawHeaderCallback += rect => GUI.Label(rect, label);
+            }
+
+            activeItems = treeItems;
+            list.DoLayoutList();
         }
 
         private string GetShowTooltip(BookmarkItem item)
@@ -129,7 +163,12 @@ namespace InfinityCode.UltimateEditorEnhancer.Windows
             return tooltip;
         }
 
-        private void PlayStopAudioClipButton(BookmarkItem item)
+        private void OnReorder(ReorderableList list)
+        {
+            Save();
+        }
+
+        private void PlayStopAudioClipButton(BookmarkItem item, Rect rect)
         {
             AudioClip audioClip = item.target as AudioClip;
             bool isPlayed = AudioUtilsRef.IsClipPlaying(audioClip);
@@ -141,7 +180,7 @@ namespace InfinityCode.UltimateEditorEnhancer.Windows
                 audioClipButtonStyle.margin.top = 3;
             }
 
-            if (GUILayout.Button(playContent, audioClipButtonStyle, GUILayout.Width(20)))
+            if (GUI.Button(rect, playContent, audioClipButtonStyle))
             {
                 if (isPlayed) AudioUtilsRef.StopClip(audioClip);
                 else AudioUtilsRef.PlayClip(audioClip);

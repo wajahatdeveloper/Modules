@@ -6,6 +6,7 @@ using System.IO;
 using System.Reflection;
 using InfinityCode.UltimateEditorEnhancer.Integration;
 using InfinityCode.UltimateEditorEnhancer.JSON;
+using InfinityCode.UltimateEditorEnhancer.SceneTools.QuickAccessActions;
 using InfinityCode.UltimateEditorEnhancer.UnityTypes;
 using InfinityCode.UltimateEditorEnhancer.Windows;
 using UnityEditor;
@@ -34,16 +35,21 @@ namespace InfinityCode.UltimateEditorEnhancer.SceneTools
         [NonSerialized]
         private GUIContent _content;
         private Type _methodType;
+
+        [NonSerialized]
+        private ScriptableObject _scriptableObject;
+
         [NonSerialized]
         private string _typeName;
+
+        [NonSerialized]
+        private QuickAccessAction actionObject;
+
         [NonSerialized]
         private bool contentMissed;
         private bool methodTypeMissed;
         [NonSerialized]
         private bool scriptableObjectMissed;
-
-        [NonSerialized]
-        private ScriptableObject _scriptableObject;
 
         public GUIContent content
         {
@@ -93,6 +99,11 @@ namespace InfinityCode.UltimateEditorEnhancer.SceneTools
                 }
                 return _content;
             }
+        }
+
+        public bool canHaveIcon
+        {
+            get { return isButton && type != QuickAccessItemType.action; }
         }
 
         public bool isButton
@@ -195,6 +206,28 @@ namespace InfinityCode.UltimateEditorEnhancer.SceneTools
         {
             this.type = type;
             if (type == QuickAccessItemType.window) settings = new string[2];
+        }
+
+        public void DrawAction()
+        {
+            if (type != QuickAccessItemType.action) return;
+
+            if (methodTypeMissed) return;
+            if (settings == null || settings.Length == 0 || string.IsNullOrEmpty(settings[0])) return;
+
+            if (actionObject == null)
+            {
+                Type t = Type.GetType(settings[0]);
+                if (t == null)
+                {
+                    methodTypeMissed = true;
+                    return;
+                }
+
+                actionObject = Activator.CreateInstance(t) as QuickAccessAction;
+            }
+
+            if (actionObject.Validate()) actionObject.Draw();
         }
 
         public void Invoke()
@@ -340,9 +373,9 @@ namespace InfinityCode.UltimateEditorEnhancer.SceneTools
                     nWnd.Show();
                     Rect wRect = wnd.position;
                     wRect.yMin -= PinAndClose.HEIGHT;
+                    nWnd.minSize = wnd.minSize;
+                    nWnd.maxSize = wnd.maxSize;
                     nWnd.position = wRect;
-                    nWnd.maxSize = wnd.minSize;
-                    nWnd.minSize = wnd.maxSize;
                     QuickAccess.CloseActiveWindow();
                 }, wnd.titleContent.text).closeOnLossFocus = false;
             }
@@ -355,12 +388,20 @@ namespace InfinityCode.UltimateEditorEnhancer.SceneTools
             {
                 Reflection.InvokeMethod(windowType, "SetOneColumn", wnd);
             }
+            else if (windowType == typeof(ViewGallery))
+            {
+                if (Prefs.quickAccessBarCloseViewGallery)
+                {
+                    ViewGallery.closeOnSelect = true;
+                }
+            }
         }
 
         public void ResetContent()
         {
             _content = null;
             contentMissed = false;
+            if (type == QuickAccessItemType.action && actionObject != null) actionObject.ResetContent();
         }
 
         private bool Validate()

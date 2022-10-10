@@ -12,6 +12,7 @@ namespace InfinityCode.UltimateEditorEnhancer.Windows
     {
         private const string ShowAtStartupPrefs = Prefs.Prefix + "ShowWelcomeScreen";
 
+        public static Func<bool> OpenAtStartupValidate;
         public static Action OnInitLate;
 
         private string copyright = "Infinity Code " + DateTime.Now.Year;
@@ -218,8 +219,9 @@ namespace InfinityCode.UltimateEditorEnhancer.Windows
 
         private static void OpenAtStartup()
         {
-            OpenWindow();
             EditorApplication.update -= OpenAtStartup;
+            if (OpenAtStartupValidate != null && !OpenAtStartupValidate()) return;
+            OpenWindow();
         }
 
         [MenuItem(WindowsHelper.MenuPath + "Welcome", false, 120)]

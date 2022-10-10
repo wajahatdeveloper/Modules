@@ -64,10 +64,7 @@ namespace InfinityCode.UltimateEditorEnhancer.HierarchyTools
                     else activeID = item.id;
                 }
                 else if (activeID != item.id) return;
-            }
 
-            if (Prefs.hierarchyIconsDisplayRule != HierarchyIconsDisplayRule.always)
-            {
                 if (item.gameObject != prevTarget)
                 {
                     prevTarget = item.gameObject;
@@ -77,6 +74,10 @@ namespace InfinityCode.UltimateEditorEnhancer.HierarchyTools
                 if (prevTarget == null) return;
 
                 Rect lastRect = new Rect(rect.xMax, rect.y, 0, rect.height);
+                if (prevItems.Any(i => i.content.tooltip == "Cinemachine Brain"))
+                {
+                    lastRect.x -= 20;
+                }
 
                 for (int i = prevItems.Count - 1; i >= 0; i--)
                 {
@@ -90,6 +91,11 @@ namespace InfinityCode.UltimateEditorEnhancer.HierarchyTools
                 Rect lastRect = new Rect(rect.xMax, rect.y, 0, rect.height);
 
                 List<Item> items = GetItemsFromCache(item.gameObject, rect);
+
+                if (items.Any(i => i.content.tooltip == "Cinemachine Brain"))
+                {
+                    lastRect.x -= 20;
+                }
 
                 for (int i = items.Count - 1; i >= 0; i--)
                 {
@@ -213,7 +219,7 @@ namespace InfinityCode.UltimateEditorEnhancer.HierarchyTools
                 item.OnDrag += () =>
                 {
                     DragAndDrop.PrepareStartDrag();
-                    DragAndDrop.objectReferences = new UnityEngine.Object[]{component};
+                    DragAndDrop.objectReferences = new UnityEngine.Object[] { component };
                     DragAndDrop.StartDrag("Drag Component");
                 };
                 item.OnRightClick += () => ComponentUtils.ShowContextMenu(component);
@@ -222,7 +228,7 @@ namespace InfinityCode.UltimateEditorEnhancer.HierarchyTools
 
             int moreItems = components.Length - Prefs.hierarchyIconsMaxItems;
 
-            item = new Item(new GUIContent(moreItems > 0? "+" + moreItems: "...", "More"));
+            item = new Item(new GUIContent(moreItems > 0 ? "+" + moreItems : "...", "More"));
             item.OnClick += () => ShowMore(components.Skip(Prefs.hierarchyIconsMaxItems), rect);
             items.Add(item);
         }

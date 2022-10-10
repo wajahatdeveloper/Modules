@@ -154,7 +154,7 @@ namespace InfinityCode.UltimateEditorEnhancer.Windows
 
         protected override void OnGUI()
         {
-            if (closeOnLossFocus && focusedWindow != this)
+            if (closeOnLossFocus && focusedWindow != this && focusedWindow != null)
             {
                 if (ValidateCloseOnLossFocus())
                 {
@@ -189,11 +189,6 @@ namespace InfinityCode.UltimateEditorEnhancer.Windows
                 }
             }
             EditorGUILayout.EndScrollView();
-        }
-
-        protected virtual bool ValidateCloseOnLossFocus()
-        {
-            return true;
         }
 
         private void ProcessLabelEvents(Rect labelRect)
@@ -244,6 +239,11 @@ namespace InfinityCode.UltimateEditorEnhancer.Windows
         {
             position = rect;
             if (OnPositionChanged != null) OnPositionChanged(rect);
+        }
+
+        protected virtual bool ValidateCloseOnLossFocus()
+        {
+            return true;
         }
     }
 }

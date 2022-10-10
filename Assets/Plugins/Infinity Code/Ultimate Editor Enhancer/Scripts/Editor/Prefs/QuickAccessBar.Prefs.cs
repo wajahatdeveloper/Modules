@@ -6,8 +6,10 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using InfinityCode.UltimateEditorEnhancer.Attributes;
 using InfinityCode.UltimateEditorEnhancer.JSON;
 using InfinityCode.UltimateEditorEnhancer.SceneTools;
+using InfinityCode.UltimateEditorEnhancer.SceneTools.QuickAccessActions;
 using InfinityCode.UltimateEditorEnhancer.UnityTypes;
 using InfinityCode.UltimateEditorEnhancer.Windows;
 using UnityEditor;
@@ -19,6 +21,7 @@ namespace InfinityCode.UltimateEditorEnhancer
     public partial class Prefs
     {
         public static bool quickAccessBar = true;
+        public static bool quickAccessBarCloseViewGallery = true;
         public static float quickAccessBarIndentMin = 0;
         public static float quickAccessBarIndentMax = 0;
 
@@ -106,6 +109,7 @@ namespace InfinityCode.UltimateEditorEnhancer
                 menu.Add("Add Menu Item", () => AddItem(QuickAccessItemType.menuItem));
                 menu.Add("Add Scriptable Object", () => AddItem(QuickAccessItemType.scriptableObject));
                 menu.Add("Add Settings", () => AddItem(QuickAccessItemType.settings));
+                menu.Add("Add Action", () => AddItem(QuickAccessItemType.action));
                 menu.Add("Add Space", () => AddItem(QuickAccessItemType.space));
                 menu.Add("Add Flexible Space", () => AddItem(QuickAccessItemType.flexibleSpace));
                 menu.Show();
@@ -120,6 +124,7 @@ namespace InfinityCode.UltimateEditorEnhancer
                     item.icon = QuickAccessItemIcon.texture;
                     item.iconSettings = Resources.iconsFolder + "ScriptableObject.png";
                 }
+
                 ReferenceManager.Save();
             }
 
@@ -144,7 +149,11 @@ namespace InfinityCode.UltimateEditorEnhancer
 
                 scrollPosition = EditorGUILayout.BeginScrollView(scrollPosition);
 
+                EditorGUI.BeginChangeCheck();
                 quickAccessBar = EditorGUILayout.ToggleLeft("Quick Access Bar", quickAccessBar, EditorStyles.label);
+                if (EditorGUI.EndChangeCheck()) SceneView.RepaintAll();
+
+                quickAccessBarCloseViewGallery = EditorGUILayout.ToggleLeft("Close View Gallery When Item Selected", quickAccessBarCloseViewGallery, EditorStyles.label);
 
                 EditorGUILayout.BeginHorizontal();
                 quickAccessBarIndentMin = EditorGUILayout.FloatField("Intend Min", quickAccessBarIndentMin);
@@ -178,6 +187,22 @@ namespace InfinityCode.UltimateEditorEnhancer
                 {
                     EditorGUILayout.HelpBox("Set the focus on the window you want to select.", MessageType.Info);
                 }
+            }
+
+            private static void DrawActionFields(QuickAccessItem item, ref Rect lineRect)
+            {
+                if (item.settings == null) item.settings = new string[1];
+                else if (item.settings.Length != 1) Array.Resize(ref item.settings, 1);
+
+                Rect r = new Rect(lineRect);
+                r.width -= SELECT_WIDTH + 2;
+
+                EditorGUI.LabelField(r, "Action", item.tooltip, EditorStyles.textField);
+
+                r = new Rect(lineRect);
+                r.xMin = r.xMax - SELECT_WIDTH;
+
+                if (GUI.Button(r, "Select")) SelectActionItem(item);
             }
 
             private void DrawHeader(Rect rect)
@@ -302,15 +327,18 @@ namespace InfinityCode.UltimateEditorEnhancer
 
                 if (item.isButton)
                 {
-                    EditorGUI.BeginChangeCheck();
-                    item.tooltip = EditorGUI.TextField(lineRect, "Tooltip", item.tooltip);
-                    if (EditorGUI.EndChangeCheck()) item.ResetContent();
-                    lineRect.y += LINE_HEIGHT;
-
                     item.visibleRules = (SceneViewVisibleRules)EditorGUI.EnumPopup(lineRect, "Visible", item.visibleRules);
                     lineRect.y += LINE_HEIGHT;
 
-                    DrawIcon(item, ref lineRect);
+                    if (item.canHaveIcon)
+                    {
+                        EditorGUI.BeginChangeCheck();
+                        item.tooltip = EditorGUI.TextField(lineRect, "Tooltip", item.tooltip);
+                        if (EditorGUI.EndChangeCheck()) item.ResetContent();
+                        lineRect.y += LINE_HEIGHT;
+
+                        DrawIcon(item, ref lineRect);
+                    }
                 }
 
                 if (EditorGUI.EndChangeCheck()) ReferenceManager.Save();
@@ -479,6 +507,7 @@ namespace InfinityCode.UltimateEditorEnhancer
                 if (item.type == QuickAccessItemType.window) DrawWindowFields(item, ref lineRect);
                 else if (item.type == QuickAccessItemType.staticMethod) DrawMethodFields(item, ref lineRect);
                 else if (item.type == QuickAccessItemType.menuItem) DrawMenuFields(item, ref lineRect);
+                else if (item.type == QuickAccessItemType.action) DrawActionFields(item, ref lineRect);
                 else if (item.type == QuickAccessItemType.space) DrawSpaceFields(item, ref lineRect);
                 else if (item.type == QuickAccessItemType.settings) DrawSettingsFields(item, ref lineRect);
                 else if (item.type == QuickAccessItemType.scriptableObject) DrawScriptableObjectFields(item, ref lineRect);
@@ -550,8 +579,14 @@ namespace InfinityCode.UltimateEditorEnhancer
             {
                 QuickAccessItem item = ReferenceManager.quickAccessItems[index];
                 int rows = 6;
+                bool addTextureRow = item.icon == QuickAccessItemIcon.texture && item.expanded;
                 if (item.type == QuickAccessItemType.flexibleSpace || !item.expanded) rows = 1;
                 else if (item.type == QuickAccessItemType.staticMethod) rows++;
+                else if (item.type == QuickAccessItemType.action)
+                {
+                    rows = 3;
+                    addTextureRow = false;
+                }
                 else if (item.type == QuickAccessItemType.space) rows = 2;
                 else if (item.type == QuickAccessItemType.window)
                 {
@@ -564,7 +599,7 @@ namespace InfinityCode.UltimateEditorEnhancer
                     }
                 }
 
-                if (item.icon == QuickAccessItemIcon.texture && item.expanded) rows++;
+                if (addTextureRow) rows++;
 
                 int height = rows * LINE_HEIGHT;
 
@@ -621,6 +656,26 @@ namespace InfinityCode.UltimateEditorEnhancer
             private void Reorder(ReorderableList list)
             {
                 ReferenceManager.Save();
+            }
+
+            private static void SelectActionItem(QuickAccessItem item)
+            {
+                TypeCache.TypeCollection types = TypeCache.GetTypesDerivedFrom<QuickAccessAction>();
+                GenericMenuEx menu = GenericMenuEx.Start();
+                foreach (Type type in types)
+                {
+                    Type t = type;
+                    TitleAttribute titleAttribute = t.GetCustomAttribute<TitleAttribute>();
+                    string label = titleAttribute != null ? titleAttribute.displayName : ObjectNames.NicifyVariableName(t.Name);
+                    menu.Add(label, () =>
+                    {
+                        item.tooltip = label;
+                        item.settings[0] = t.FullName;
+                        item.ResetContent();
+                        GUI.changed = true;
+                    });
+                }
+                menu.Show();
             }
 
             private static void SelectMenuItem(QuickAccessItem item)

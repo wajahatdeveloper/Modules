@@ -25,12 +25,16 @@ namespace InfinityCode.UltimateEditorEnhancer
         [SerializeField]
         private int _upgradeID = 0;
 
-        private static LocalSettings instance
+        [SerializeField]
+        private bool _askMaximizeGameView = true;
+
+        public static bool askMaximizeGameView 
         {
-            get
+            get { return _instance._askMaximizeGameView; }
+            set
             {
-                if (_instance == null) Load();
-                return _instance;
+                _instance._askMaximizeGameView = value;
+                Save();
             }
         }
 
@@ -52,6 +56,15 @@ namespace InfinityCode.UltimateEditorEnhancer
             {
                 instance._enhancedHierarchyShown = value;
                 Save();
+            }
+        }
+
+        private static LocalSettings instance
+        {
+            get
+            {
+                if (_instance == null) Load();
+                return _instance;
             }
         }
 

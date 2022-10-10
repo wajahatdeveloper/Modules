@@ -2,7 +2,6 @@
 /*     https://infinity-code.com    */
 
 using System.Collections.Generic;
-using System.Linq;
 using InfinityCode.UltimateEditorEnhancer.Windows;
 using UnityEditor;
 using UnityEngine;
@@ -18,9 +17,25 @@ namespace InfinityCode.UltimateEditorEnhancer.Behaviors
         private static GameObject[] _targets;
         private static InputDialog dialog;
         private static bool createCollection = false;
-        private static Align align = Align.centerPosition;
+        private static int align = 0;
         private static Transform parent;
         private const int DIALOG_HEIGHT = 105;
+
+        private static GUIContent[] singleAlign = 
+        {
+            new GUIContent("Original Position"), 
+            new GUIContent("Center Position"), 
+            new GUIContent("Zero Local Position")
+        };
+        private static int[] singleAlignValues = {2, 0, 1};
+        private static GUIContent[] multipleAlign =
+        {
+            new GUIContent("Center Position"), 
+            new GUIContent("Zero Local Position")
+        };
+        private static int[] multipleAlignValues = { 0, 1};
+        private static GUIContent[] alignContents;
+        private static int[] alignValues;
 
         static Group()
         {
@@ -96,13 +111,19 @@ namespace InfinityCode.UltimateEditorEnhancer.Behaviors
 
             _targets = targets;
 
+            alignContents = _targets.Length > 1 ? multipleAlign : singleAlign;
+            alignValues = _targets.Length > 1 ? multipleAlignValues : singleAlignValues;
+
             createCollection = false;
-            align = Align.centerPosition;
+            align = alignValues[0];
 
             parent = _targets[0].transform.parent;
             for (int i = 1; i < _targets.Length; i++) parent = FindParent(parent, _targets[i].transform.parent);
 
-            dialog = InputDialog.Show("Enter name of GameObject", defaultName, OnCreateGroup);
+            string name = defaultName;
+            if (targets.Length == 1) name = targets[0].name + " Container";
+
+            dialog = InputDialog.Show("Enter name of GameObject", name, OnCreateGroup); 
             dialog.OnClose += OnDialogClose;
             dialog.OnDrawExtra += OnDialogExtra;
             dialog.OnDrawLeftButtons += OnDrawLeftButtons;
@@ -134,7 +155,7 @@ namespace InfinityCode.UltimateEditorEnhancer.Behaviors
 
             if (parent != null) Undo.SetTransformParent(go.transform, parent, go.name);
 
-            if (align == Align.centerPosition)
+            if (align == 0)
             {
                 Bounds bounds = new Bounds();
 
@@ -157,9 +178,13 @@ namespace InfinityCode.UltimateEditorEnhancer.Behaviors
 
                 go.transform.position = bounds.center;
             }
-            else
+            else if (align == 1)
             {
                 go.transform.localPosition = Vector3.zero;
+            }
+            else if (align == 2)
+            {
+                go.transform.position = _targets[0].transform.position;
             }
 
             bool addRectTransform = true;
@@ -194,7 +219,8 @@ namespace InfinityCode.UltimateEditorEnhancer.Behaviors
                 
             }
 
-            align = (Align)EditorGUILayout.EnumPopup("Align", align);
+            align = EditorGUILayout.IntPopup(align, alignContents, alignValues);
+
             createCollection = EditorGUILayout.Toggle("Create Collection", createCollection);
         }
 
@@ -217,12 +243,6 @@ namespace InfinityCode.UltimateEditorEnhancer.Behaviors
         public static bool ValidateGroup()
         {
             return Selection.gameObjects.Length > 0;
-        }
-
-        public enum Align
-        {
-            centerPosition,
-            zeroLocalPosition,
         }
     }
 }

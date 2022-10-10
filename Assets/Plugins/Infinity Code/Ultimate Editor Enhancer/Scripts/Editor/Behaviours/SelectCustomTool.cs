@@ -47,9 +47,9 @@ namespace InfinityCode.UltimateEditorEnhancer.Behaviors
 
         private static bool OnValidateShortcut()
         {
-            if (EditorGUIRef.IsEditingTextField()) return false;
             Event e = Event.current;
-            return e.keyCode == Prefs.switchCustomToolKeyCode && e.modifiers == Prefs.switchCustomToolModifiers;
+            if (e.keyCode != Prefs.switchCustomToolKeyCode || e.modifiers != Prefs.switchCustomToolModifiers) return false;
+            return !EditorGUIRef.IsEditingTextField();
         }
 
         private static void Select()

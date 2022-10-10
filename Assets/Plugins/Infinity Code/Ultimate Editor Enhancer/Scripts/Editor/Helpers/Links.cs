@@ -16,6 +16,7 @@ namespace InfinityCode.UltimateEditorEnhancer
         public const string reviews = assetStore + "/reviews";
         public const string support = "mailto:support@infinity-code.com?subject=Ultimate%20Editor%20Enhancer";
         public const string youtube = "https://www.youtube.com/playlist?list=PL2QU1uhBMew_mR83EYhex5q3uZaMTwg1S";
+        private const string aid = "?aid=1100liByC";
 
         public static void Open(string url)
         {
@@ -24,7 +25,7 @@ namespace InfinityCode.UltimateEditorEnhancer
 
         public static void OpenAssetStore()
         {
-            OpenPro();
+            Open(assetStore + aid);
         }
 
         public static void OpenChangelog()
@@ -61,19 +62,9 @@ namespace InfinityCode.UltimateEditorEnhancer
             Application.OpenURL(url);
         }
 
-        public static void OpenPro()
-        {
-            Open(assetStore);
-        }
-
-        public static void OpenProReviews()
-        {
-            Open(reviews);
-        }
-
         public static void OpenReviews()
         {
-            OpenProReviews();
+            Open(reviews + aid);
         }
 
         public static void OpenSupport()

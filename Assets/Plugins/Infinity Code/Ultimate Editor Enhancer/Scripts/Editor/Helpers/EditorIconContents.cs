@@ -10,21 +10,29 @@ namespace InfinityCode.UltimateEditorEnhancer
     {
         private static GUIContent _animationFirstKey;
         private static GUIContent _animationPrevKey;
+        private static GUIContent _avatarPivot;
         private static GUIContent _consoleErrorIconSmall;
         private static GUIContent _editIconSmall;
         private static GUIContent _folderIcon;
         private static GUIContent _folderOpenedIcon;
+        private static GUIContent _gameObject;
         private static GUIContent _hierarchyWindow;
         private static GUIContent _inspectorWindow;
+        private static GUIContent _linked;
         private static GUIContent _pauseButtonOn;
         private static GUIContent _prefabIcon;
         private static GUIContent _playButtonOn;
         private static GUIContent _popup;
         private static GUIContent _project;
         private static GUIContent _rectTransformBlueprint;
+        private static GUIContent _saveActive;
+        private static GUIContent _saveFromPlay;
+        private static GUIContent _sceneAsset;
         private static GUIContent _sceneVisibilityHiddenHover;
         private static GUIContent _sceneVisibilityVisibleHover;
+        private static GUIContent _toolHandleGlobal;
         private static GUIContent _toolbarPlus;
+        private static GUIContent _unlinked;
         private static GUIContent _winBtnWinMax;
 
         public static GUIContent animationFirstKey
@@ -51,6 +59,18 @@ namespace InfinityCode.UltimateEditorEnhancer
             }
         }
 
+        public static GUIContent avatarPivot
+        {
+            get
+            {
+                if (_avatarPivot == null)
+                {
+                    _avatarPivot = EditorGUIUtility.IconContent("AvatarPivot");
+                }
+                return _avatarPivot;
+            }
+        }
+
         public static GUIContent consoleErrorIconSmall
         {
             get
@@ -60,6 +80,18 @@ namespace InfinityCode.UltimateEditorEnhancer
                     _consoleErrorIconSmall = EditorGUIUtility.IconContent("console.erroricon.sml");
                 }
                 return _consoleErrorIconSmall;
+            }
+        }
+
+        public static GUIContent editIcon
+        {
+            get
+            {
+                if (_editIconSmall == null)
+                {
+                    _editIconSmall = EditorGUIUtility.IconContent("editicon.sml");
+                }
+                return _editIconSmall;
             }
         }
 
@@ -87,15 +119,16 @@ namespace InfinityCode.UltimateEditorEnhancer
             }
         }
 
-        public static GUIContent editIcon
+        public static GUIContent gameObject
         {
             get
             {
-                if (_editIconSmall == null)
+                if (_gameObject == null)
                 {
-                    _editIconSmall = EditorGUIUtility.IconContent("editicon.sml");
+                    _gameObject = EditorGUIUtility.IconContent("GameObject Icon");
                 }
-                return _editIconSmall;
+                return _gameObject;
+                
             }
         }
 
@@ -120,6 +153,18 @@ namespace InfinityCode.UltimateEditorEnhancer
                     _inspectorWindow = EditorGUIUtility.IconContent("UnityEditor.InspectorWindow");
                 }
                 return _inspectorWindow;
+            }
+        }
+
+        public static GUIContent linked
+        {
+            get
+            {
+                if (_linked == null)
+                {
+                    _linked = EditorGUIUtility.IconContent("Linked");
+                }
+                return _linked;
             }
         }
 
@@ -195,6 +240,33 @@ namespace InfinityCode.UltimateEditorEnhancer
             }
         }
 
+        public static GUIContent saveActive
+        {
+            get
+            {
+                if (_saveActive == null) _saveActive = EditorGUIUtility.IconContent("SaveActive");
+                return _saveActive;
+            }
+        }
+
+        public static GUIContent saveFromPlay
+        {
+            get
+            {
+                if (_saveFromPlay == null) _saveFromPlay = EditorGUIUtility.IconContent("SaveFromPlay");
+                return _saveFromPlay;
+            }
+        }
+
+        public static GUIContent sceneAsset
+        {
+            get
+            {
+                if (_sceneAsset == null) _sceneAsset = EditorGUIUtility.IconContent("SceneAsset Icon");
+                return _sceneAsset;
+            }
+        }
+
         public static GUIContent sceneVisibilityHiddenHover
         {
             get
@@ -219,6 +291,17 @@ namespace InfinityCode.UltimateEditorEnhancer
             }
         }
 
+        public static GUIContent toolHandleGlobal {
+            get
+            {
+                if (_toolHandleGlobal == null)
+                {
+                    _toolHandleGlobal = EditorGUIUtility.IconContent("ToolHandleGlobal");
+                }
+                return _toolHandleGlobal;
+            }
+        }
+
         public static GUIContent toolbarPlus
         {
             get
@@ -228,6 +311,18 @@ namespace InfinityCode.UltimateEditorEnhancer
                     _toolbarPlus = EditorGUIUtility.IconContent("Toolbar Plus");
                 }
                 return _toolbarPlus;
+            }
+        }
+
+        public static GUIContent unlinked
+        {
+            get
+            {
+                if (_unlinked == null)
+                {
+                    _unlinked = EditorGUIUtility.IconContent("Unlinked");
+                }
+                return _unlinked;
             }
         }
 

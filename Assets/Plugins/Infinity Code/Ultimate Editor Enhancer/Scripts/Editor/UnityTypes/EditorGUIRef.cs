@@ -5,6 +5,7 @@ using System;
 using System.Reflection;
 using UnityEditor;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace InfinityCode.UltimateEditorEnhancer.UnityTypes
 {
@@ -16,8 +17,18 @@ namespace InfinityCode.UltimateEditorEnhancer.UnityTypes
         private static MethodInfo _doTextFieldMethod;
         private static MethodInfo _dragNumberValueMethod;
         private static MethodInfo _hasKeyboardFocusMethod;
+        private static MethodInfo _helpIconButtonMethod;
         private static MethodInfo _isEditingTextFieldMethod;
         private static FieldInfo _recycledEditorField;
+
+        private static FieldInfo activeEditorField
+        {
+            get
+            {
+                if (_activeEditorField == null) _activeEditorField = type.GetField("activeEditor", Reflection.StaticLookup);
+                return _activeEditorField;
+            }
+        }
 
         public static MethodInfo doNumberFieldMethod
         {
@@ -144,6 +155,23 @@ namespace InfinityCode.UltimateEditorEnhancer.UnityTypes
             }
         }
 
+        public static MethodInfo helpIconButtonMethod
+        {
+            get
+            {
+                if (_helpIconButtonMethod == null)
+                {
+                    Type[] parameters = {
+                        typeof(Rect),
+                        typeof(Object[])
+                    };
+                    _helpIconButtonMethod = type.GetMethod("HelpIconButton", Reflection.StaticLookup, null, parameters, null);
+                }
+
+                return _helpIconButtonMethod;
+            }
+        }
+
         private static MethodInfo isEditingTextFieldMethod
         {
             get
@@ -163,15 +191,6 @@ namespace InfinityCode.UltimateEditorEnhancer.UnityTypes
             {
                 if (_recycledEditorField == null) _recycledEditorField = type.GetField("s_RecycledEditor", Reflection.StaticLookup);
                 return _recycledEditorField;
-            }
-        }
-
-        private static FieldInfo activeEditorField
-        {
-            get
-            {
-                if (_activeEditorField == null) _activeEditorField = type.GetField("activeEditor", Reflection.StaticLookup);
-                return _activeEditorField;
             }
         }
 

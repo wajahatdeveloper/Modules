@@ -2,9 +2,7 @@
 /*     https://infinity-code.com    */
 
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 using InfinityCode.UltimateEditorEnhancer.Interceptors;
 using InfinityCode.UltimateEditorEnhancer.PropertyDrawers;
@@ -19,22 +17,28 @@ namespace InfinityCode.UltimateEditorEnhancer.InspectorTools
     [InitializeOnLoad]
     public static class NestedEditor
     {
+        private static readonly int NestedEditorHash = "NestedEditor".GetHashCode();
         public static bool disallowNestedEditors;
 
         private static Dictionary<int, bool> disallowCache;
 
         private static GUIContent content;
+        private static Rect? contentArea;
+        private static Object target;
 
         static NestedEditor()
         {
             disallowCache = new Dictionary<int, bool>();
+            ObjectFieldDrawer.OnGUIBefore += OnGUIBefore;
             ObjectFieldDrawer.OnGUIAfter += OnGUIAfter;
         }
 
-        private static void OnGUIAfter(Rect area, SerializedProperty property, GUIContent label)
+        private static void OnGUIBefore(Rect area, SerializedProperty property, GUIContent label)
         {
-            if (!Prefs.nestedEditors) return;
-            if (disallowNestedEditors) return;
+            contentArea = null;
+            target = null;
+
+            if (!Prefs.nestedEditors || disallowNestedEditors) return;
 
             Object obj = property.objectReferenceValue;
             if (obj == null) return;
@@ -58,12 +62,42 @@ namespace InfinityCode.UltimateEditorEnhancer.InspectorTools
                 else if (disallow) return;
             }
 
-            area.xMin += EditorGUI.indentLevel * 15 - 16;
+            if (Prefs.nestedEditorsSide == NestedEditorSide.left)
+            {
+                area.xMin += EditorGUI.indentLevel * 15 - 16;
+            }
+            else
+            {
+                area.xMin = area.xMax - 36;
+                area.y += 1;
+            }
+
             area.width = 16;
+
+            contentArea = area;
+            target = obj;
+
+            Event e = Event.current;
+            if (e.type == EventType.MouseDown && e.button == 0 && area.Contains(e.mousePosition))
+            {
+                if (target is Component) ComponentWindow.Show(target as Component, false).closeOnLossFocus = false;
+                else if (target is GameObject) PropertyEditorRef.OpenPropertyEditor(target);
+                else ObjectWindow.Show(new[] { target }, false).closeOnLossFocus = false;
+
+                e.Use();
+            }
+        }
+
+        private static void OnGUIAfter(Rect area, SerializedProperty property, GUIContent label)
+        {
+            if (!contentArea.HasValue) return;
+
+            area = contentArea.Value;
 
             Color color = GUI.color;
 
-            Vector2 mousePosition = Event.current.mousePosition;
+            Event e = Event.current;
+            Vector2 mousePosition = e.mousePosition;
             if (area.Contains(mousePosition))
             {
                 GUI.color = Color.gray;
@@ -76,12 +110,12 @@ namespace InfinityCode.UltimateEditorEnhancer.InspectorTools
 
             StaticStringBuilder.Clear();
             StaticStringBuilder.Append("Open ");
-            StaticStringBuilder.Append(obj.name);
+            StaticStringBuilder.Append(target.name);
 
-            if (obj is Component)
+            if (target is Component)
             {
                 StaticStringBuilder.Append(" (");
-                StaticStringBuilder.Append(ObjectNames.NicifyVariableName(obj.GetType().Name));
+                StaticStringBuilder.Append(ObjectNames.NicifyVariableName(target.GetType().Name));
                 StaticStringBuilder.Append(")");
             }
 
@@ -89,12 +123,8 @@ namespace InfinityCode.UltimateEditorEnhancer.InspectorTools
 
             content.tooltip = StaticStringBuilder.GetString(true);
 
-            if (GUI.Button(area, content, GUIStyle.none))
-            {
-                if (obj is Component) ComponentWindow.Show(obj as Component, false).closeOnLossFocus = false;
-                else if (obj is GameObject) PropertyEditorRef.OpenPropertyEditor(obj);
-                else ObjectWindow.Show(new []{obj}, false).closeOnLossFocus = false;
-            }
+            int controlId = GUIUtility.GetControlID(NestedEditorHash, FocusType.Passive, area);
+            if (e.type == EventType.Repaint) GUIStyle.none.Draw(area, content, controlId, false, area.Contains(e.mousePosition));
 
             GUI.color = color;
         }

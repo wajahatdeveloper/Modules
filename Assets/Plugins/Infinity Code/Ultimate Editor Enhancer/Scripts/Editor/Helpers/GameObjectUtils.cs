@@ -322,6 +322,46 @@ namespace InfinityCode.UltimateEditorEnhancer
             return GetTransformPath(go.transform);
         }
 
+        public static Bounds GetOriginalBounds(GameObject gameObject)
+        {
+            if (gameObject == null || gameObject.scene.name == null) return new Bounds();
+
+            Transform t = gameObject.transform;
+            Quaternion rotation = t.rotation;
+            Vector3 localScale = t.localScale;
+            Vector3 lossyScale = t.lossyScale;
+            t.rotation = Quaternion.identity;
+            if (Math.Abs(lossyScale.x) < float.Epsilon) lossyScale.x = 1;
+            if (Math.Abs(lossyScale.y) < float.Epsilon) lossyScale.y = 1;
+            if (Math.Abs(lossyScale.z) < float.Epsilon) lossyScale.z = 1;
+            t.localScale = new Vector3(localScale.x / lossyScale.x, localScale.y / lossyScale.y, localScale.z / lossyScale.z);
+
+            Bounds bounds = new Bounds();
+            bool isFirst = true;
+
+            Renderer[] rs = gameObject.GetComponentsInChildren<Renderer>();
+            if (rs != null && rs.Length != 0)
+            {
+                foreach (Renderer renderer in rs)
+                {
+                    if (isFirst)
+                    {
+                        bounds = renderer.bounds;
+                        isFirst = false;
+                    }
+                    else
+                    {
+                        bounds.Encapsulate(renderer.bounds);
+                    }
+                }
+            }
+
+            t.rotation = rotation;
+            t.localScale = localScale;
+
+            return bounds;
+        }
+
         public static void GetPsIconContent(GUIContent content, int maxLength = 4)
         {
             content.text = GetPsIconLabel(content.tooltip, maxLength);
@@ -438,6 +478,23 @@ namespace InfinityCode.UltimateEditorEnhancer
                 target.tag = tag;
                 EditorUtility.SetDirty(target);
             }
+        }
+
+        public static void SetLossyScale(Transform transform, Vector3 scale)
+        {
+            Transform t = transform;
+            while (t.parent != null)
+            {
+                t = t.parent;
+                Vector3 s = t.localScale;
+                if (Math.Abs(s.x * s.y * s.z) < float.Epsilon) break;
+
+                scale.x /= s.x;
+                scale.y /= s.y;
+                scale.z /= s.z;
+            }
+
+            transform.localScale = scale;
         }
 
         public static void ShowContextMenu(bool restoreContextMenu, params GameObject[] targets)

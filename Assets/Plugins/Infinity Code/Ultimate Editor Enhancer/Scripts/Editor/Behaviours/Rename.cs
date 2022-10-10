@@ -16,6 +16,7 @@ namespace InfinityCode.UltimateEditorEnhancer.Behaviors
     {
         public static GameObject[] gameObjects;
         private static int index;
+        private static InputDialog dialog;
 
         static Rename()
         {
@@ -24,10 +25,14 @@ namespace InfinityCode.UltimateEditorEnhancer.Behaviors
             binding.OnInvoke = OnInvoke;
         }
 
-        private static void DrawTokens(InputDialog dialog)
+        private static void DrawExtra(InputDialog dialog)
         {
+            index = int.MinValue;
+            EditorGUILayout.LabelField("Preview: " + ReplaceTokens(gameObjects[0], dialog.text));
+
             EditorGUILayout.LabelField("Tokens:");
             EditorGUILayout.LabelField("{C} - counter");
+            EditorGUILayout.LabelField("{C:N} - counter with initial number");
             EditorGUILayout.LabelField("{S} - sibling index");
             EditorGUILayout.LabelField("{START:LEN} - part of the original name");
         }
@@ -69,7 +74,7 @@ namespace InfinityCode.UltimateEditorEnhancer.Behaviors
 
             if (gameObjects.Length == 1)
             {
-                InputDialog dialog = InputDialog.Show("Enter a new GameObject name", gameObjects[0].name, OnRename);
+                dialog = InputDialog.Show("Enter a new GameObject name", gameObjects[0].name, OnRename);
                 dialog.OnClose += OnDialogClose;
             }
             else ShowMassRename();
@@ -80,6 +85,7 @@ namespace InfinityCode.UltimateEditorEnhancer.Behaviors
             if (gameObjects == null || gameObjects.Length == 0) return;
 
             name = name.Trim();
+            index = int.MinValue;
 
             Undo.RecordObjects(gameObjects, "Rename GameObjects");
 
@@ -122,13 +128,23 @@ namespace InfinityCode.UltimateEditorEnhancer.Behaviors
             return Regex.Replace(name, @"{[\w\d:-]+}", delegate (Match match)
             {
                 string v = match.Value.Trim('{', '}');
-                if (v == "C")
+                if (char.ToUpperInvariant(v[0]) == 'C')
                 {
+                    if (index == int.MinValue)
+                    {
+                        if (v.Length > 2 && v[1] == ':')
+                        {
+                            int n;
+                            if (int.TryParse(v.Substring(2), out n)) index = n;
+                        }
+
+                        if (index == int.MinValue) index = 1;
+                    }
                     int i = index++;
                     return i.ToString();
                 }
 
-                if (v == "S") return go.transform.GetSiblingIndex().ToString();
+                if (char.ToUpperInvariant(v[0]) == 'S') return go.transform.GetSiblingIndex().ToString();
 
                 string[] ss = v.Split(':');
                 if (ss.Length >= 2)
@@ -164,7 +180,7 @@ namespace InfinityCode.UltimateEditorEnhancer.Behaviors
             
             if (targets.Length == 1)
             {
-                InputDialog dialog = InputDialog.Show("Enter a new GameObject name", gameObjects[0].name, OnRename);
+                dialog = InputDialog.Show("Enter a new GameObject name", gameObjects[0].name, OnRename);
                 dialog.OnClose += OnDialogClose;
             }
             else ShowMassRename();
@@ -172,11 +188,11 @@ namespace InfinityCode.UltimateEditorEnhancer.Behaviors
 
         private static void ShowMassRename()
         {
-            InputDialog dialog = InputDialog.Show("Enter a new GameObjects name", gameObjects[0].name, OnRename);
+            dialog = InputDialog.Show("Enter a new GameObjects name", gameObjects[0].name, OnRename);
             dialog.OnClose += OnDialogClose;
-            dialog.OnDrawExtra += DrawTokens;
-            dialog.minSize = new Vector2(dialog.minSize.x, 130);
-            index = 1;
+            dialog.OnDrawExtra += DrawExtra;
+            dialog.minSize = new Vector2(dialog.minSize.x, 168);
+            index = int.MinValue;
         }
     }
 }

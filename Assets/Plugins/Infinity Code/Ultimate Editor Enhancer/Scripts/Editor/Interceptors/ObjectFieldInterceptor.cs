@@ -7,26 +7,20 @@
 
 using System;
 using System.Reflection;
-using HarmonyLib;
 using UnityEditor;
 using UnityEngine;
 
 namespace InfinityCode.UltimateEditorEnhancer.Interceptors
 {
-    [InitializeOnLoad]
-    public static class ObjectFieldInterceptor
+    public class ObjectFieldInterceptor: StatedInterceptor<ObjectFieldInterceptor>
     {
-        private static Harmony harmony;
-        private static MethodInfo originalMethod;
-        private static MethodInfo prefixMethod;
-
         public delegate void GUIDelegate(Rect position,
             Rect dropRect,
             int id,
             UnityEngine.Object obj,
             UnityEngine.Object objBeingEdited,
-            System.Type objType,
-            System.Type additionalType,
+            Type objType,
+            Type additionalType,
             SerializedProperty property,
             object validator,
             bool allowSceneObjects,
@@ -34,9 +28,62 @@ namespace InfinityCode.UltimateEditorEnhancer.Interceptors
 
         public static GUIDelegate OnGUIBefore;
 
-        static ObjectFieldInterceptor()
+        private MethodInfo _originalMethod;
+
+        protected override MethodInfo originalMethod
         {
-            if (Prefs.searchInEnumFields) Patch();
+            get
+            {
+                if (_originalMethod == null)
+                {
+                    Type validatorType = typeof(EditorGUI).GetNestedType(
+#if DECM2
+                        "ObjectFieldValidatorOptions"
+#else
+                        "ObjectFieldValidator"
+#endif
+                        , BindingFlags.Public | BindingFlags.NonPublic);
+
+                    Type[] parameters = {
+                        typeof(Rect),
+                        typeof(Rect),
+                        typeof(int),
+                        typeof(UnityEngine.Object),
+                        typeof(UnityEngine.Object),
+                        typeof(Type),
+#if DECM2
+                        typeof(Type),
+#endif
+                        typeof(SerializedProperty),
+                        validatorType,
+                        typeof(bool),
+                        typeof(GUIStyle)
+                    };
+
+                    MethodInfo[] methods = typeof(EditorGUI).GetMethods(Reflection.StaticLookup);
+                    foreach (MethodInfo info in methods)
+                    {
+                        if (info.Name != "DoObjectField") continue;
+                        ParameterInfo[] ps = info.GetParameters();
+                        if (ps.Length != parameters.Length) continue;
+
+                        _originalMethod = info;
+                        break;
+                    }
+                }
+
+                return _originalMethod;
+            }
+        }
+
+        protected override string prefixMethodName
+        {
+            get => "DoObjectFieldPrefix";
+        }
+
+        public override bool state
+        {
+            get => Prefs.objectFieldSelector;
         }
 
         private static void DoObjectFieldPrefix(
@@ -45,9 +92,9 @@ namespace InfinityCode.UltimateEditorEnhancer.Interceptors
             int id,
             UnityEngine.Object obj,
             UnityEngine.Object objBeingEdited,
-            System.Type objType,
+            Type objType,
 #if DECM2
-            System.Type additionalType,
+            Type additionalType,
 #endif
             SerializedProperty property,
             object validator,
@@ -57,66 +104,10 @@ namespace InfinityCode.UltimateEditorEnhancer.Interceptors
             if (OnGUIBefore != null)
             {
 #if !DECM2
-                System.Type additionalType = null;
+                Type additionalType = null;
 #endif
                 OnGUIBefore(position, dropRect, id, obj, objBeingEdited, objType, additionalType, property, validator, allowSceneObjects, style);
             }
-        }
-
-        private static void Patch()
-        {
-            try
-            {
-                harmony = new Harmony("InfinityCode.UltimateEditorEnhancer.ObjectFieldInterceptor");
-
-                Type validatorType = typeof(EditorGUI).GetNestedType(
-#if DECM2
-                    "ObjectFieldValidatorOptions"
-#else
-                    "ObjectFieldValidator"
-#endif
-                    , BindingFlags.Public | BindingFlags.NonPublic);
-
-                Type[] parameters = {
-                    typeof(Rect),
-                    typeof(Rect),
-                    typeof(int),
-                    typeof(UnityEngine.Object),
-                    typeof(UnityEngine.Object),
-                    typeof(Type),
-#if DECM2
-                    typeof(Type),
-#endif
-                    typeof(SerializedProperty),
-                    validatorType,
-                    typeof(bool),
-                    typeof(GUIStyle)
-                };
-
-                MethodInfo[] methods = typeof(EditorGUI).GetMethods(Reflection.StaticLookup);
-                foreach (MethodInfo info in methods)
-                {
-                    if (info.Name != "DoObjectField") continue;
-                    ParameterInfo[] ps = info.GetParameters();
-                    if (ps.Length != parameters.Length) continue;
-
-                    originalMethod = info;
-                    break;
-                }
-
-                prefixMethod = AccessTools.Method(typeof(ObjectFieldInterceptor), "DoObjectFieldPrefix", parameters);
-                harmony.Patch(originalMethod, new HarmonyMethod(prefixMethod));
-            }
-            catch
-            {
-                //Debug.LogException(e);
-            }
-        }
-
-        public static void Refresh()
-        {
-            if (Prefs.searchInEnumFields) Patch();
-            else harmony.Unpatch(originalMethod, prefixMethod);
         }
     }
 }

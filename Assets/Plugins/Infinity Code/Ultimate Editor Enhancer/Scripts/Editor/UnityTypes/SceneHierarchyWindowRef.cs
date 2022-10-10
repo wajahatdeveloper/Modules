@@ -138,7 +138,13 @@ namespace InfinityCode.UltimateEditorEnhancer.UnityTypes
         public static void SetSearchFilter(EditorWindow instance, string value, int mode = -1)
         {
             if (mode == -1) mode = GetSearchMode(instance);
-            setSearchFilterMethod.Invoke(instance, new object[] {value, mode, true, true});
+            try
+            {
+                setSearchFilterMethod.Invoke(instance, new object[] { value, mode, true, true });
+            }
+            catch
+            {
+            }
         }
     }
 }

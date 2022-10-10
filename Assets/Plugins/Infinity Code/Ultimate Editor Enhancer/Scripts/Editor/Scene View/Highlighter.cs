@@ -204,9 +204,10 @@ namespace InfinityCode.UltimateEditorEnhancer.SceneTools
         public static void RepaintAllHierarchies()
         {
             if (!Prefs.highlightHierarchyRow) return;
+            if (!(EditorWindow.mouseOverWindow is SceneView)) return;
+            if (Event.current == null) return;
 
-            Object[] windows = UnityEngine.Resources.FindObjectsOfTypeAll(SceneHierarchyWindowRef.type);
-            foreach (Object w in windows) (w as EditorWindow).Repaint();
+            EditorApplication.RepaintHierarchyWindow();
         }
 
 

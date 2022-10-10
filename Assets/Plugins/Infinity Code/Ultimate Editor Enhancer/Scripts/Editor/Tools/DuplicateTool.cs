@@ -279,7 +279,7 @@ namespace InfinityCode.UltimateEditorEnhancer.Tools
                         else
                         {
                             item = new GameObject("temp");
-                            item.hideFlags = HideFlags.HideAndDontSave;
+                            if (Prefs.hideDuplicateToolTemp) item.hideFlags = HideFlags.HideAndDontSave;
                             if (isRectTransform)
                             {
                                 item.transform.SetParent(SelectionBoundsManager.firstGameObject.transform.parent, false);

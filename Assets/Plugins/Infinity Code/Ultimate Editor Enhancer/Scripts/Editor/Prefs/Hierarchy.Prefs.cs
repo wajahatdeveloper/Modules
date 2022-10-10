@@ -21,7 +21,7 @@ namespace InfinityCode.UltimateEditorEnhancer
         public static HierarchyIconsDisplayRule hierarchyIconsDisplayRule = HierarchyIconsDisplayRule.onHoverWithModifiers;
         public static bool hierarchyOverrideMainIcon = true;
         public static bool hierarchySoloVisibility = true;
-        
+
         public static bool hierarchyTree = true;
 
 #if !UNITY_EDITOR_OSX
@@ -123,18 +123,20 @@ namespace InfinityCode.UltimateEditorEnhancer
                 hierarchyIconsMaxItems = EditorGUILayout.IntField("Max Items", hierarchyIconsMaxItems);
                 if (hierarchyIconsMaxItems < 1) hierarchyIconsMaxItems = 1;
 
+                hierarchyIconsDisplayRule = (HierarchyIconsDisplayRule)EditorGUILayout.EnumPopup("Display Rule", hierarchyIconsDisplayRule);
+
                 EditorGUI.indentLevel--;
             }
 
             private static void DrawRowBackground()
             {
                 hierarchyRowBackground = EditorGUILayout.ToggleLeft("Row Background", hierarchyRowBackground);
-                
+
                 EditorGUI.indentLevel++;
                 EditorGUI.BeginDisabledGroup(!hierarchyRowBackground);
 
                 EditorGUI.BeginChangeCheck();
-                hierarchyRowBackgroundStyle = (HierarchyRowBackgroundStyle) EditorGUILayout.EnumPopup("Style", hierarchyRowBackgroundStyle);
+                hierarchyRowBackgroundStyle = (HierarchyRowBackgroundStyle)EditorGUILayout.EnumPopup("Style", hierarchyRowBackgroundStyle);
                 if (EditorGUI.EndChangeCheck())
                 {
                     BackgroundDrawer.backgroundTexture = null;

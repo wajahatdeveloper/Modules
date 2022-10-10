@@ -11,7 +11,7 @@ namespace InfinityCode.UltimateEditorEnhancer
 {
     public static class WindowsHelper
     {
-        public const string MenuPath = "Tools/Ultimate Editor Enhancer/";
+        public const string MenuPath = "Tools/Infinity Code/Ultimate Editor Enhancer/";
 
         public static void ShowInspector()
         {

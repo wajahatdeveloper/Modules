@@ -25,6 +25,23 @@ namespace InfinityCode.UltimateEditorEnhancer.UnityTypes
             }
         }
 
+#if !UNITY_2020_3_OR_NEWER
+        private static MethodInfo _findNearestVertexMethod;
+
+        private static MethodInfo findNearestVertexMethod
+        {
+            get
+            {
+                if (_findNearestVertexMethod == null)
+                {
+                    _findNearestVertexMethod = Reflection.GetMethod(type, "FindNearestVertex", new[] { typeof(Vector2), typeof(Transform[]), typeof(Vector3).MakeByRefType() }, Reflection.StaticLookup);
+                }
+
+                return _findNearestVertexMethod;
+            }
+        }
+#endif
+
         public static Type type
         {
             get { return typeof(HandleUtility); }
@@ -42,6 +59,18 @@ namespace InfinityCode.UltimateEditorEnhancer.UnityTypes
             bool ret = (bool)intersectRayMeshMethod.Invoke(null, obj);
             hit = (RaycastHit) obj[3];
             return ret;
+        }
+
+        public static void FindNearestVertex(Vector2 screenPosition, out Vector3 position)
+        {
+#if UNITY_2020_3_OR_NEWER
+            HandleUtility.FindNearestVertex(screenPosition, out position);
+#else
+            object[] p = {screenPosition, null, null};
+            findNearestVertexMethod.Invoke(null, p);
+            position = (Vector3) p[2];
+#endif
+
         }
     }
 }

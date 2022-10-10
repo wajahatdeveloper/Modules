@@ -11,6 +11,7 @@ namespace InfinityCode.UltimateEditorEnhancer
         scriptableObject,
         space,
         flexibleSpace,
-        settings
+        settings,
+        action
     }
 }

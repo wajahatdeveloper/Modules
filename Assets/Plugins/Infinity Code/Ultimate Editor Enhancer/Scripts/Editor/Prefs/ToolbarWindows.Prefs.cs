@@ -2,7 +2,9 @@
 /*     https://infinity-code.com    */
 
 using System.Collections.Generic;
+using InfinityCode.UltimateEditorEnhancer.Tools;
 using UnityEditor;
+using UnityEngine;
 
 namespace InfinityCode.UltimateEditorEnhancer
 {
@@ -31,7 +33,13 @@ namespace InfinityCode.UltimateEditorEnhancer
 
             public override void Draw()
             {
+                EditorGUI.BeginChangeCheck();
                 windowsToolbarIcon = EditorGUILayout.ToggleLeft("Windows", windowsToolbarIcon);
+                if (EditorGUI.EndChangeCheck())
+                {
+                    ToolbarWindows.Reinit();
+                    GUI.changed = true;
+                }
 
                 EditorGUI.BeginDisabledGroup(!windowsToolbarIcon);
                 EditorGUI.indentLevel++;

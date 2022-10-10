@@ -13,9 +13,10 @@ namespace InfinityCode.UltimateEditorEnhancer.Windows
         public Action<InputDialog> OnDrawExtra;
         public Action<InputDialog> OnDrawLeftButtons;
 
+        public string text;
+
         private bool focusControl = true;
         private Action<string> okCallback;
-        private string text;
 
         private static void CloseActiveInstances()
         {
@@ -59,6 +60,12 @@ namespace InfinityCode.UltimateEditorEnhancer.Windows
                 {
                     InvokeOK();
                     e.Use();
+                    return;
+                }
+
+                if (e.keyCode == KeyCode.Escape)
+                {
+                    Close();
                     return;
                 }
             }
