@@ -48,7 +48,14 @@ public class UIWidgets : EditorWindow
         {
             items.Add(o.name, o);
         }
-    }
+
+		items.Add("---", null);
+		lst = Resources.LoadAll<GameObject>("UIWidgets_Elements");
+		foreach (GameObject o in lst)
+		{
+			items.Add(o.name, o);
+		}
+	}
 
     private void OnFocus()
     {
@@ -81,7 +88,7 @@ public class UIWidgets : EditorWindow
             gUIStyle.alignment = TextAnchor.MiddleLeft;
             
             Texture svicon = Resources.Load($"IconImages/{s}")as Texture;
-            if (item.Key == "-" || item.Key == "--")
+            if (item.Key.StartsWith("-"))
             {
                 EditorGUILayout.Separator();
             }

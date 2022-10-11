@@ -8,14 +8,7 @@ using UnityEngine.Assertions;
 
 public class Tester : MonoBehaviour
 {
-	public bool flag = false;
-
-	private void Update()
+	private void OnEnable()
 	{
-		if (flag)
-		{
-			Debug.Log("Flag Hoisted");
-			flag = false;
-		}
 	}
 }

@@ -176,5 +176,41 @@ MonoBehaviour:
     alignWindowToBar: 1
     windowMode: 0
   _sceneHistory:
+  - name: Login Example
+    path: Assets/Devion Games/Login System/Example/Scenes/Login Example.unity
   - name: SampleScene
     path: Assets/Scenes/SampleScene.unity
+  - name: demo_scene
+    path: Assets/com.components.general/Runtime/Timers/Demo/demo_scene.unity
+  - name: MainMenu
+    path: Assets/Scenes/MainMenu.unity
+  - name: TabsDemoScene
+    path: Assets/com.components.ui/Runtime/Tabs/TabsDemoScene.unity
+  - name: Demo scene
+    path: Assets/com.components.ui/Runtime/Tabs/Demo scene.unity
+  - name: VerticalCalendar
+    path: Assets/com.unity.uiextensions/Examples/UIVerticalScrollerDemo/Scenes/VerticalCalendar.unity
+  - name: UIParticleSystem
+    path: Assets/com.unity.uiextensions/Examples/UIParticleSystem/UIParticleSystem.unity
+  - name: UILineRendererListDemo
+    path: Assets/com.unity.uiextensions/Examples/UILineRenderer/UILineRendererListDemo.unity
+  - name: UILineRendererDemo
+    path: Assets/com.unity.uiextensions/Examples/UILineRenderer/UILineRendererDemo.unity
+  - name: LineDrawing
+    path: Assets/com.unity.uiextensions/Examples/UILineRenderer/LineDrawing.unity
+  - name: UIKnobExample
+    path: Assets/com.unity.uiextensions/Examples/UIKnobExample/UIKnobExample.unity
+  - name: UICircleProgress
+    path: Assets/com.unity.uiextensions/Examples/UICircleProgress/UICircleProgress.unity
+  - name: TextEffects
+    path: Assets/com.unity.uiextensions/Examples/TextEffects/TextEffects.unity
+  - name: Selection Box Test
+    path: Assets/com.unity.uiextensions/Examples/SelectionBox/Selection Box Test.unity
+  - name: ScrollrectConflictManagerDemo
+    path: Assets/com.unity.uiextensions/Examples/ScrollRectConflictManager/ScrollrectConflictManagerDemo.unity
+  - name: ReorderableList
+    path: Assets/com.unity.uiextensions/Examples/ReorderableList/ReorderableList.unity
+  - name: radial_slider
+    path: Assets/com.unity.uiextensions/Examples/RadialSlider/radial_slider.unity
+  - name: MainScene
+    path: Assets/com.unity.uiextensions/Examples/MenuExample/MainScene.unity

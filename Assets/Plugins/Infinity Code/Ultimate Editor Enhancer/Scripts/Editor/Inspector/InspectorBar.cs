@@ -228,14 +228,14 @@ namespace InfinityCode.UltimateEditorEnhancer.InspectorTools
             GUIContent helpContent = TempContent.Get("?");
             float helpContentWidth = style.CalcSize(helpContent).x;
 
-            if (Updater.hasNewVersion)
+          /*  if (Updater.hasNewVersion)
             {
                 GUIContent updateContent = TempContent.Get(Icons.updateAvailable, "Update Available.\nClick to open the built-in update system.");
                 float updateContentWidth = style.CalcSize(updateContent).x;
                 rect = new Rect(wnd.position.width - updateContentWidth - helpContentWidth, lastPosition.y, updateContentWidth, LINE_HEIGHT);
 
                 if (GUI.Button(rect, updateContent, style)) Updater.OpenWindow();
-            }
+            }*/
 
             rect = new Rect(wnd.position.width - helpContentWidth, lastPosition.y, helpContentWidth, LINE_HEIGHT);
 

@@ -17,6 +17,18 @@ public class Auth : MonoBehaviour
     public TMP_InputField signUpEmail;
     public TMP_InputField signUpPassword;
 
+    public void ShowLoginScreen()
+    {
+        loginPanel.SetActive(true);
+        signUpPanel.SetActive(false);
+	}
+
+    public void ShowSignUpScreen()
+    {
+		signUpPanel.SetActive(true);
+		loginPanel.SetActive(false);
+	}
+
     #region Login
     [System.Serializable]
     public class LoginRequest

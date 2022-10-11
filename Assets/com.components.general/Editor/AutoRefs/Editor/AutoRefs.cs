@@ -26,7 +26,10 @@ public class AutoRefs : Editor
 			MonoBehaviour[] acMonoBehaviours = cGameObject.GetComponents<MonoBehaviour>();
 
 			// Register the MonoBehaviours with the Undo system.
-			Undo.RecordObjects(acMonoBehaviours, "AutoRefs MonoBehaviours");
+			if (acMonoBehaviours != null)
+			{
+				Undo.RecordObjects(acMonoBehaviours, "AutoRefs MonoBehaviours");
+			}
 
 			for (int nMonoBehaviour = 0; nMonoBehaviour < acMonoBehaviours.Length; nMonoBehaviour++)
 			{
