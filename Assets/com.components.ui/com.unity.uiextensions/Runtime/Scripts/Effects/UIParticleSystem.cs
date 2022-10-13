@@ -226,11 +226,13 @@ namespace UnityEngine.UI.Extensions
 #if UNITY_2020 || UNITY_2019
                             if (textureSheetAnimation.rowMode == ParticleSystemAnimationRowMode.Random)
 #else
+#pragma warning disable CS0618 // Type or member is obsolete
                             if (textureSheetAnimation.useRandomRow)
 #endif
                             { // FIXME - is this handled internally by rowIndex?
                                 row = Mathf.Abs((int)particle.randomSeed % textureSheetAnimation.numTilesY);
                             }
+#pragma warning restore CS0618 // Type or member is obsolete
                             frame += row * textureSheetAnimation.numTilesX;
                             break;
 

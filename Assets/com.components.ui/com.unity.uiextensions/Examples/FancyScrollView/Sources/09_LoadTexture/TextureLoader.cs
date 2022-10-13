@@ -47,11 +47,13 @@ namespace UnityEngine.UI.Extensions.Examples.FancyScrollViewExample09
                 {
                     yield return request.SendWebRequest();
 
+#pragma warning disable CS0618 // Type or member is obsolete
                     if (request.isNetworkError)
                     {
                         Debug.LogErrorFormat("Error: {0}", request.error);
                         yield break;
                     }
+#pragma warning restore CS0618 // Type or member is obsolete
 
                     onSuccess((
                         url,
