@@ -3,6 +3,29 @@ using System.Collections.Generic;
 
 public static class IEnumerableExtensions
 {
+	#region UnityConvertAll
+
+	/// <summary>
+	/// ConvertAll LINQ extension, which runs on WP8 (WP8 doesn't support .ConvertAll())
+	/// </summary>
+	/// <typeparam name="InputType"></typeparam>
+	/// <typeparam name="OutputType"></typeparam>
+	/// <param name="inputList"></param>
+	/// <param name="converter"></param>
+	/// <returns></returns>
+	public static List<OutputType> UnityConvertAll<InputType, OutputType>(this List<InputType> inputList, Func<InputType, OutputType> converter)
+	{
+		int j = inputList.Count;
+		List<OutputType> output = new List<OutputType>(j);
+		for (int i = 0; i < j; i++)
+			output.Add(converter(inputList[i]));
+
+		return output;
+	}
+
+	// UnityConvertAll
+	#endregion
+
 	/// <summary>
 	/// Returns all elements of the specified sequence separated by the given separator.
 	/// </summary>
@@ -47,6 +70,7 @@ public static class IEnumerableExtensions
 			yield return element;
 		}
 	}
+
 	
 	/// <summary>
 	/// Returns a flattened sequence that contains the concatenation of all the nested sequences' elements.
@@ -71,6 +95,7 @@ public static class IEnumerableExtensions
 			}
 		}
 	}
+
 	
 	/// <summary>
 	/// Turns a finite sequence into a circular one, or equivalently,
@@ -117,6 +142,7 @@ public static class IEnumerableExtensions
 			index = (index + 1) % elementBuffer.Count;
 		}
 	}
+
 	
 	/// <summary>
     /// Splits the given sequence into chunks of the given size.

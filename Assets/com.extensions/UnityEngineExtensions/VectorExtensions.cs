@@ -1,10 +1,12 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Text;
 using UnityEngine;
 
 public static class VectorExtensions
 {
-    	#region Set X/Y/Z
+    #region Set X/Y/Z
 
 	// Set X
 
@@ -778,7 +780,80 @@ public static void Deconstruct(this Vector3 v3, out float x, out float y, out fl
 	z = v3.z;
 }
 
-public static Vector2 GetAnglesTo(this Vector3 referenceVector, Vector3 compareVector)
+	#region Add
+
+
+	/// <summary>
+	/// Adds two Vector3s
+	/// </summary>
+	/// <param name="v3">source vector3</param>
+	/// <param name="value">second vector3</param>
+	/// <remarks>
+	/// Suggested by: aaro4130
+	/// Link: http://forum.unity3d.com/members/aaro4130.22011/
+	/// </remarks>
+	public static Vector3 Add(this Vector3 v3, Vector3 value)
+	{
+		return v3 + value;
+	}
+
+	/// <summary>
+	/// Adds the values to a vector3
+	/// </summary>
+	/// <param name="v3">source vector3</param>
+	/// <param name="x"></param>
+	/// <param name="y"></param>
+	/// <param name="z"></param>
+	/// <remarks>
+	/// Suggested by: aaro4130
+	/// Link: http://forum.unity3d.com/members/aaro4130.22011/
+	/// </remarks>
+	public static Vector3 Add(this Vector3 v3, float x, float y, float z)
+	{
+		return v3 + new Vector3(x, y, z);
+	}
+
+	// Add
+	#endregion
+
+	#region Subtract
+
+	/// <summary>
+	/// Subtracts two Vector3s
+	/// </summary>
+	/// <param name="v3">source vector3</param>
+	/// <param name="value">second vector3</param>
+	/// <returns></returns>
+	/// <remarks>
+	/// Suggested by: aaro4130
+	/// Link: http://forum.unity3d.com/members/aaro4130.22011/
+	/// </remarks>
+	public static Vector3 Subtract(this Vector3 v3, Vector3 value)
+	{
+		return v3 - value;
+	}
+
+	/// <summary>
+	/// Subtracts the values from a vector 3
+	/// </summary>
+	/// <param name="v3">source vector3</param>
+	/// <param name="x"></param>
+	/// <param name="y"></param>
+	/// <param name="z"></param>
+	/// <returns></returns>
+	/// <remarks>
+	/// Suggested by: aaro4130
+	/// Link: http://forum.unity3d.com/members/aaro4130.22011/
+	/// </remarks>
+	public static Vector3 Subtract(this Vector3 v3, float x, float y, float z)
+	{
+		return v3 - new Vector3(x, y, z);
+	}
+
+	// Subtract
+	#endregion
+
+	public static Vector2 GetAnglesTo(this Vector3 referenceVector, Vector3 compareVector)
 	=> new Vector2(-Mathf.Asin(Vector3.Cross(compareVector, referenceVector).y) * Mathf.Rad2Deg,
 		-Mathf.Asin(Vector3.Cross(compareVector, referenceVector).x) * Mathf.Rad2Deg);
 
@@ -1066,4 +1141,105 @@ public static Vector3 RotateAround(this Vector3 point, Vector3 pivot, Quaternion
         v = vector;
         return v;
     }
+
+	#region ToV3String
+
+	/// <summary>
+	/// Converts a Vector3 to a string in X, Y, Z format
+	/// </summary>
+	/// <param name="v3"></param>
+	/// <returns></returns>
+	public static string ToV3String(this Vector3 v3)
+	{
+		return string.Format("{0}, {1}, {2}", v3.x, v3.y, v3.z);
+	}
+
+	// ToV3String
+	#endregion
+
+	#region ZeroY
+
+	/// <summary>
+	/// Returns a Vector3 with a 0 Y
+	/// </summary>
+	/// <param name="v3"></param>
+	/// <returns></returns>
+	public static Vector3 ZeroY(this Vector3 v3)
+	{
+		return new Vector3(v3.x, 0.0f, v3.z);
+	}
+
+	// ZeroY
+	#endregion
+
+	#region RotateAroundY
+
+	/// <summary>
+	/// Rotates goV3 around the vector v3, keeping y in the original position
+	/// </summary>
+	/// <param name="v3"></param>
+	/// <param name="goV3">the game object's transform, which will be rotating</param>
+	/// <returns></returns>
+	public static Vector3 RotateAroundY(this Vector3 v3, Vector3 goV3)
+	{
+		return new Vector3(v3.x, goV3.y, v3.z);
+	}
+
+	// RotateAroundY
+	#endregion
+
+	#region StringToBytes
+
+	/// <summary>
+	/// Converts a string to bytes, in a Unity friendly way
+	/// </summary>
+	/// <param name="source"></param>
+	/// <returns></returns>
+	public static byte[] StringToBytes(this string source)
+	{
+		// exit if null
+		if (string.IsNullOrEmpty(source))
+			return null;
+
+		// convert to bytes
+		using (MemoryStream compMemStream = new MemoryStream())
+		{
+			using (StreamWriter writer = new StreamWriter(compMemStream, Encoding.UTF8))
+			{
+				writer.Write(source);
+				writer.Close();
+
+				return compMemStream.ToArray();
+			}
+		}
+	}
+
+	// StringToBytes
+	#endregion
+
+	#region BytesToString
+
+	/// <summary>
+	/// Converts a byte array to a Unicode string, in a Unity friendly way
+	/// </summary>
+	/// <param name="source"></param>
+	/// <returns></returns>
+	public static string BytesToString(this byte[] source)
+	{
+		// exit if null
+		if (source.IsNullOrEmpty())
+			return string.Empty;
+
+		// read from bytes
+		using (MemoryStream compMemStream = new MemoryStream(source))
+		{
+			using (StreamReader reader = new StreamReader(compMemStream, Encoding.UTF8))
+			{
+				return reader.ReadToEnd();
+			}
+		}
+	}
+
+	// BytesToString
+	#endregion
 }
