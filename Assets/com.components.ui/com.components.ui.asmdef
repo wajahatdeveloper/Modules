@@ -2,9 +2,9 @@
     "name": "com.components.ui",
     "rootNamespace": "",
     "references": [
-        "com.datastructures",
         "Unity.TextMeshPro",
-        "com.extensions"
+        "com.extensions",
+        "com.components.general"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

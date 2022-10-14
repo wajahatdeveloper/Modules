@@ -59,6 +59,7 @@
         {
             UnityWebRequest www = UnityWebRequest.Get(url);
             yield return www.SendWebRequest();
+#pragma warning disable CS0618 // Type or member is obsolete
             if (www.isNetworkError || www.isHttpError || !string.IsNullOrEmpty(www.error))
             {
                 ConnectionFailed(completeMethod);       
@@ -68,6 +69,7 @@
                 completeMethod(ConnectionResult.Working);
                 StopAllCoroutines();
             }
+#pragma warning restore CS0618 // Type or member is obsolete
         }
 
 

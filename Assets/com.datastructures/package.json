@@ -1,7 +1,0 @@
-{
-  "name": "com.datastructures",
-  "version": "1.0.0",
-  "displayName": "Data Structures",
-  "description": "Advanced Data Structures not provided by C# or Unity by default",
-  "unity": "2020.3"
-}

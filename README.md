@@ -5,7 +5,7 @@ https://github.com/wajahatdeveloper/Modules.git
 "com.components.general":"https://github.com/wajahatdeveloper/Modules.git?path=/Assets/com.components.general" </br>
 "com.components.ui":"https://github.com/wajahatdeveloper/Modules.git?path=/Assets/com.components.ui" </br>
 "Extensions",
-"com.datastructures",
+"com.components.general",
 "Unity.TextMeshPro"
 </br>
 "com.multitagger":"https://github.com/wajahatdeveloper/Modules.git?path=/Assets/MultiTagger" </br>
@@ -22,13 +22,12 @@ https://github.com/wajahatdeveloper/Modules.git
 "com.lean.pool":"https://github.com/wajahatdeveloper/Modules.git?path=/Assets/com.lean.pool" </br>
 "com.runtime.lunarconsole":"https://github.com/wajahatdeveloper/Modules.git?path=/Assets/com.runtime.lunarconsole" </br>
 "com.runtime.inspector":"https://github.com/wajahatdeveloper/Modules.git?path=/Assets/com.runtime.inspector" </br>
-"com.datastructures":"https://github.com/wajahatdeveloper/Modules.git?path=/Assets/com.datastructures" </br>
-"com.eventsystem":"https://github.com/wajahatdeveloper/Modules.git?path=/Assets/com.eventsystem" </br>
 "com.extensions":"https://github.com/wajahatdeveloper/Modules.git?path=/Assets/com.extensions" </br>
 "com.rmvcc":"https://github.com/wajahatdeveloper/Modules.git?path=/Assets/com.rmvcc" </br>
 "com.statemachine":"https://github.com/wajahatdeveloper/Modules.git?path=/Assets/com.statemachine" </br>
 "com.network.pun2":"https://github.com/wajahatdeveloper/Modules.git?path=/Assets/com.network.pun2" </br>
-
+"com.components.general",
+</br>
 "com.components.editor":"https://github.com/wajahatdeveloper/Modules.git?path=/Assets/EditorModules/com.components.editor" </br>
 "com.utility.consoleprodebug":"https://github.com/wajahatdeveloper/Modules.git?path=/Assets/EditorModules/com.utility.consoleprodebug" </br>
 "com.utility.enhancedheirarchy":"https://github.com/wajahatdeveloper/Modules.git?path=/Assets/EditorModules/com.utility.enhancedheirarchy" </br>
