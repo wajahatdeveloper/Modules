@@ -1,5 +1,4 @@
-﻿#if UNITY_EDITOR
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEditor;
 using UnityEditor.Callbacks;
 
@@ -9,7 +8,7 @@ using System.Collections;
 
 public class ReporterEditor : Editor
 {
-	[MenuItem("Tools/Reporter/Create")]
+	[MenuItem("Reporter/Create")]
 	public static void CreateReporter()
 	{
 		const int ReporterExecOrder = -12000;
@@ -93,4 +92,3 @@ public class ReporterModificationProcessor : UnityEditor.AssetModificationProces
 		}
 	}
 }
-#endif
