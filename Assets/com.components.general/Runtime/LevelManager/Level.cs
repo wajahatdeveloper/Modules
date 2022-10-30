@@ -1,7 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
-public class Level : MonoBehaviour 
+namespace TemplateScripts
 {
+    public class Level : MonoBehaviour
+    {
+    }
 }
