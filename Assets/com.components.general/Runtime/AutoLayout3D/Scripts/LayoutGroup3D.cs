@@ -57,13 +57,11 @@ namespace AutoLayout3D
 
         public abstract void UpdateLayout();
 
-#if UNITY_EDITOR
         //update layout every frame only in editor
         private void Update()
         {
             //if (!Application.isPlaying) //update layout every frame only in edit mode
             UpdateLayout();
         }
-#endif
     }
 }
