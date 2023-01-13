@@ -98,7 +98,7 @@ public class Auth : MonoBehaviour
             }
         );
         
-        StartCoroutine(ApiHelper.Post("https://skirmish.microperts.com/users/sign-in",
+        StartCoroutine(ApiHelper.Post_CR("https://skirmish.microperts.com/users/sign-in",
             OnLoginSuccess,OnLoginError,payload));
     }
 
@@ -201,7 +201,7 @@ public class Auth : MonoBehaviour
             }
         );
         
-        StartCoroutine(ApiHelper.Post("https://skirmish.microperts.com/users/sign-up",
+        StartCoroutine(ApiHelper.Post_CR("https://skirmish.microperts.com/users/sign-up",
             OnSignUpSuccess,OnSignUpError,payload));
     }
 

@@ -16,5 +16,7 @@ public class Tester : MonoBehaviour
 		Fader.Instance.FadeFromBlack();
 		yield return new WaitForSeconds(2.0f);
 		Fader.Instance.FadeToBlack();
+
+		ApiHelper.Get("https://www.google.com", result => { Debug.Log(result); }, error => { Debug.Log(error); },"");
 	}
 }
