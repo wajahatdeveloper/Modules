@@ -72,3 +72,11 @@ crashlytics-build.properties
 
 # But keep the demo packages themselves.
 !/Assets/Plugins/Sirenix/Demos/*.unitypackage
+Assets/Plugins/DarkTonic/MasterAudio/3rd Party Plugin Integration.meta
+Assets/Plugins/Infinity Code/Ultimate Editor Enhancer Settings/LocalSettings.asset
+Assets/Plugins/Infinity Code/Ultimate Editor Enhancer Settings/LocalSettings.asset.meta
+Assets/Plugins/Infinity Code/Ultimate Editor Enhancer Settings/References.asset
+Assets/Plugins/Infinity Code/Ultimate Editor Enhancer Settings/References.asset.meta
+Assets/StreamingAssets/build_info
+ProjectSettings/ProjectVersion.txt
+UserSettings/Layouts/default-2021.dwlt

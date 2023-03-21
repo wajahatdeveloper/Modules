@@ -175,6 +175,4 @@ MonoBehaviour:
     customWindowSize: {x: 400, y: 300}
     alignWindowToBar: 1
     windowMode: 0
-  _sceneHistory:
-  - name: SampleScene
-    path: Assets/Scenes/SampleScene.unity
+  _sceneHistory: []
