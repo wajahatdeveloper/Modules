@@ -2,8 +2,6 @@
 
 using System.Collections;
 using System.Collections.Generic;
-using AdOns;
-using BehaviorDesigner.Runtime.Tactical;
 using UnityEditor;
 using UnityEngine;
 
@@ -44,7 +42,7 @@ public class Explosion : MonoBehaviour
         foreach( var collidedObject in collidersInRange )
         {
             if( collidedObject == null ) continue;
-            collidedObject.transform.GetComponent<IDamageable>()?.Damage( damage );
+            /*collidedObject.transform.GetComponent<IDamageable>()?.Damage( damage );*/
         }
     }
 }

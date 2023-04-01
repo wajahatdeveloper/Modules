@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using RootMotion.FinalIK;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -10,19 +9,17 @@ using UnityEngine;
 public class WeaponHandler : MonoBehaviour
 {
     public List<WeaponBase> availableWeapons = new List<WeaponBase>();
-    [SuffixLabel("Optional")] public AimIK aimIK;
+    //[SuffixLabel("Optional")] public AimIK aimIK;
 
     public event Action<WeaponBase> onWeaponChange;     // param: newWeapon
 
     [Header("Debug Variables")]
-    [SerializeField] private AnimatorControl animatorControl;
     [SerializeField] private WeaponBase currentWeapon;
     [SerializeField] private int currentWeaponIndex;
 
 
     private void OnEnable()
     {
-        animatorControl = GetComponent<AnimatorControl>();
         SelectFirstWeapon();
     }
 
@@ -39,14 +36,13 @@ public class WeaponHandler : MonoBehaviour
         }
 
         currentWeapon = availableWeapons[weaponIndex];
-        currentWeapon.animatorControl = animatorControl;
         currentWeapon.GetGameObject().SetActive(true);
         currentWeaponIndex = weaponIndex;
 
-        if (aimIK != null)
-        {
-            aimIK.solver.transform = currentWeapon.projectileSpawnVector;
-        }
+        //if (aimIK != null)
+        //{
+        //    aimIK.solver.transform = currentWeapon.projectileSpawnVector;
+        //}
 
         onWeaponChange?.Invoke(currentWeapon);
     }
@@ -75,8 +71,20 @@ public class WeaponHandler : MonoBehaviour
             return;
         }
 
-        currentWeaponIndex = 0;
+        //currentWeaponIndex = 0;
         SetCurrentWeapon(currentWeaponIndex);
+    }
+
+    [Button]
+    public void CurrentWeaponNextSkin()
+    {
+        if (availableWeapons.Count <= 1)
+        {
+            Debug.Log("Weapon Handler: No Next Weapons to select",gameObject);
+            return;
+        }
+
+        /*GetCurrentWeapon().GetComponent<SkinHandler>().NextSkin();*/
     }
 
     [Button]

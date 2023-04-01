@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using BehaviorDesigner.Runtime.Tactical;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Events;
@@ -24,11 +23,21 @@ public class Projectile : MonoBehaviour
     [Tooltip("Time to self destruct")]
     public float lifetime;
 
+    public bool damageOnce = false;
+
     public UnityEvent onProjectileDestroy;
 
     [SerializeField] private Rigidbody _rigidbody;
     private Vector3 _initialPosition;
-    
+    private bool hasDamaged = false;
+
+    private void Awake()
+    {
+        transform.localPosition = Vector3.zero;
+        transform.localRotation = Quaternion.identity;
+        transform.parent = null;
+    }
+
     /// <summary>
     /// Cache the component references and initialize the default values.
     /// </summary>
@@ -60,12 +69,21 @@ public class Projectile : MonoBehaviour
     /// <param name="collision"></param>
     private void OnTriggerEnter(Collider collision)
     {
-        IDamageable damageable;
+        if (damageOnce && hasDamaged)
+        {
+            return;
+        }
+
+        /*IDamageable damageable;
         if ((damageable = collision.gameObject.GetComponent(typeof(IDamageable)) as IDamageable) != null)
         {
-            damageable.Damage(damage);
+            damageable.Damage(damage, transform);
+            if (damageOnce)
+            {
+                hasDamaged = true;
+            }
             SelfDestruct();
-        }
+        }*/
     }
 
     /// <summary>

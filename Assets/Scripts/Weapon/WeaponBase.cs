@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using AdOns;
 using Sirenix.OdinInspector;
 using Unity.Mathematics;
 using UnityEditor;
@@ -13,7 +12,7 @@ public abstract class WeaponBase : MonoBehaviour
 {
     public GameObject projectilePrefab;
     public Transform projectileSpawnVector;
-    internal AnimatorControl animatorControl;
+    public int animatorWeaponType = 0;
     [Tooltip("Current Ammo")]
     public int ammo;
     [Tooltip("Ammo On Reload")]
@@ -29,7 +28,7 @@ public abstract class WeaponBase : MonoBehaviour
     public float reloadTime;
     [Tooltip("Will not auto reload if set to false")]
     public bool allowReload = true;
-    
+
     [Header("Damage Override")]
     public bool isDamageOverride = false;
     public int damageOverride;
@@ -41,10 +40,12 @@ public abstract class WeaponBase : MonoBehaviour
     [Header("VariantId")] public int upgradeLevel;
 
     public UnityEvent onOutOfAmmo;
-    
+
     private bool canShoot;
     private bool isReloading;
     private Transform dynamicParent;
+
+    //bool doShoot = false;
 
     public bool CanShoot
     {
@@ -72,41 +73,25 @@ public abstract class WeaponBase : MonoBehaviour
             if( allowReload )
             {
                 Reload();
-            } 
+            }
             else
             {
-                onOutOfAmmo?.Invoke();        
+                onOutOfAmmo?.Invoke();
             }
             return;
         }
-        
-        StartCoroutine(Routine_Shoot(useIK, callback));
+        if(gameObject.activeInHierarchy) {
+        StartCoroutine(Routine_Shoot(callback));
+
+        }
     }
 
-    
-
-    private IEnumerator Routine_Shoot(bool useIK, Action callback)
+    void ShootProjectile()
     {
-        CanShoot = false;
+        var projectileObject = Instantiate(projectilePrefab, projectileSpawnVector, false);
 
-        
-
-        var projectileObject = Instantiate(projectilePrefab);
-        //projectileObject.transform.parent = projectileSpawnVector;
-        projectileObject.transform.position = projectileSpawnVector.position;
-        projectileObject.transform.rotation = projectileSpawnVector.rotation;
         projectileObject.layer = projectileLayer;
-        //Debug.Break();
-        yield return null;
 
-        if (projectileObject == null)
-        {
-            CanShoot = true;
-            yield break;
-        }
-        
-        projectileObject.transform.SetParent(dynamicParent,true);
-        
         var projectile = projectileObject.GetComponent<Projectile>();
 
         if (isDamageOverride)
@@ -124,10 +109,18 @@ public abstract class WeaponBase : MonoBehaviour
 
         var forward = projectileSpawnVector.forward;
         projectile.ApplyVelocity(forward * projectile.speed);
-        animatorControl.Shoot();
-        ammo--;
 
-        
+        ammo--;
+    }
+
+    private IEnumerator Routine_Shoot( Action callback)
+    {
+        //doShoot = false;
+        CanShoot = false;
+
+        yield return new WaitForEndOfFrame();
+
+        ShootProjectile();
 
         // Fire Rate Handler
         float timeToNextShoot = (1f / fireRate);
@@ -143,6 +136,7 @@ public abstract class WeaponBase : MonoBehaviour
     public void Reload()
     {
         isReloading = true;
+
         StartCoroutine(Routine_Reload());
     }
 
@@ -151,17 +145,13 @@ public abstract class WeaponBase : MonoBehaviour
         return gameObject;
     }
 
-    
+
 
     private IEnumerator Routine_Reload()
     {
-        animatorControl.Reload();
-
         yield return new WaitForSeconds(reloadTime);
 
         ammo = magazineSize;
         isReloading = false;
-        animatorControl.StopReload();
-
     }
 }
