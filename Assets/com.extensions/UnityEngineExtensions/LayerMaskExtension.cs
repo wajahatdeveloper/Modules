@@ -91,4 +91,15 @@ public static class LayerMaskExtension
         int shifted = 1 << layer;
         return (mask & shifted) == shifted;
     }
+
+    /// <summary>
+    /// Extension method to check if a layer is in a layermask
+    /// </summary>
+    /// <param name="mask"></param>
+    /// <param name="layer"></param>
+    /// <returns></returns>
+    public static bool ContainsLayer(this LayerMask mask, int layer)
+    {
+        return mask == (mask | (1 << layer));
+    }
 }

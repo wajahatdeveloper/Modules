@@ -3,7 +3,7 @@
 // Issues: https://github.com/zzzprojects/Z.ExtensionMethods/issues
 // License (MIT): https://github.com/zzzprojects/Z.ExtensionMethods/blob/master/LICENSE
 // More projects: https://zzzprojects.com/
-// Copyright © ZZZ Projects Inc. All rights reserved.
+// Copyright Â© ZZZ Projects Inc. All rights reserved.
 using System;
 
 public static partial class Extensions

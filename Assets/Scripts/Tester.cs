@@ -2,12 +2,19 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Photon.Pun;
+using Quartzified.EditorAttributes;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Assertions;
 
 public class Tester : MonoBehaviour
 {
+	[Tag]
+	public string tag;
+
+	[Layer]
+	public int layer;
+
 	private IEnumerator Start()
 	{
 		Fader.Instance.OnFadeFromBlackComplete.AddListener(() => Debug.Log("OnFadeFromBlackComplete"));

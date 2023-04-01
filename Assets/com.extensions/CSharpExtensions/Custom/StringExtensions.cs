@@ -16,7 +16,7 @@ public static class StringExtensions
 
 	public const string Email = @"^([a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6})*$";
 	public const string URL = @"(https?:\/\/)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)";
-	
+
 	/// <summary>
 	/// Replace all but matching parts of the input string
 	/// </summary>
@@ -57,7 +57,39 @@ public static class StringExtensions
     		/// Convert a string value to an Enum value.
     		/// </summary>
     		public static T AsEnum<T>(this string source, bool ignoreCase = true) where T : Enum => (T) Enum.Parse(typeof(T), source, ignoreCase);
-    
+
+            /// <summary>
+            /// Converts a hex code into corresponding color. Supports RGB and RGBA
+            /// </summary>
+            /// <param name="hex">Color hex code, without prefixes.</param>
+            /// <returns></returns>
+            public static Color ParseColor(this string hex) {
+	            int length = hex.Length;
+	            if(!(length == 6 || length == 8))
+		            throw new ArgumentException($"Color Hex code {hex} is not a valid hex code.");
+
+	            var color = new Color32();
+	            if(
+		            byte.TryParse(hex.Substring(0, 2), NumberStyles.AllowHexSpecifier, NumberFormatInfo.InvariantInfo, out byte r) &&
+		            byte.TryParse(hex.Substring(2, 2), NumberStyles.AllowHexSpecifier, NumberFormatInfo.InvariantInfo, out byte g) &&
+		            byte.TryParse(hex.Substring(4, 2), NumberStyles.AllowHexSpecifier, NumberFormatInfo.InvariantInfo, out byte b))
+	            {
+		            color.r = r;
+		            color.b = b;
+		            color.g = g;
+	            } else
+		            throw new ArgumentException($"Color Hex code {hex} is not a valid hex code.");
+
+	            if(length == 8)
+		            if(byte.TryParse(hex.Substring(6, 2), NumberStyles.AllowHexSpecifier, NumberFormatInfo.InvariantInfo, out byte a))
+			            color.a = a;
+		            else
+			            throw new ArgumentException($"Color Hex code {hex} is not a valid hex code.");
+	            else
+		            color.a = 0xFF;
+
+	            return color;
+            }
     
     		/// <summary>
     		/// Number presented in Roman numerals
