@@ -47,6 +47,9 @@ namespace AssetUsageDetectorNamespace
 			public SearchRefactoring searchRefactoring = null;
 
 			public bool lazySceneSearch = true;
+#if ASSET_USAGE_ADDRESSABLES
+			public bool addressablesSupport = false;
+#endif
 			public bool calculateUnusedObjects = false;
 			public bool hideDuplicateRows = true;
 			public bool hideReduntantPrefabVariantLinks = true;
@@ -347,7 +350,7 @@ namespace AssetUsageDetectorNamespace
 
 				// Initialize the nodes of searched asset(s)
 				foreach( Object obj in objectsToSearchSet )
-					searchedUnityObjects.Add( obj.GetHashCode(), PopReferenceNode( obj ) );
+					searchedUnityObjects.Add( obj.GetInstanceID(), PopReferenceNode( obj ) );
 
 				// Progressbar values
 				int searchProgress = 0;
@@ -669,7 +672,7 @@ namespace AssetUsageDetectorNamespace
 						else
 						{
 							for( Transform parent = ( (GameObject) obj ).transform.parent; parent != null; parent = parent.parent )
-								usedObjectPathsSet.Add( parent.gameObject.GetHashCode().ToString() );
+								usedObjectPathsSet.Add( parent.gameObject.GetInstanceID().ToString() );
 						}
 					}
 				}
@@ -736,13 +739,13 @@ namespace AssetUsageDetectorNamespace
 					if( !searchedTopmostGameObject )
 					{
 						if( obj is GameObject )
-							unusedMainObjectNodes[obj.GetHashCode().ToString()] = node;
+							unusedMainObjectNodes[obj.GetInstanceID().ToString()] = node;
 						else
 							currentSearchResultGroup.AddReference( node );
 					}
 					else // List child GameObject scene objects under their parent GameObject
 					{
-						string dictionaryKey = searchedTopmostGameObject.GetHashCode().ToString();
+						string dictionaryKey = searchedTopmostGameObject.GetInstanceID().ToString();
 						List<ReferenceNode> unusedSubObjectNodesAtPath;
 						if( !unusedSubObjectNodes.TryGetValue( dictionaryKey, out unusedSubObjectNodesAtPath ) )
 							unusedSubObjectNodes[dictionaryKey] = unusedSubObjectNodesAtPath = new List<ReferenceNode>( 2 );
@@ -982,9 +985,13 @@ namespace AssetUsageDetectorNamespace
 			if( obj == null || obj.Equals( null ) )
 				return null;
 
-			// Avoid recursion (which leads to stackoverflow exception) using a stack
-			if( callStack.ContainsFast( obj ) )
-				return null;
+			// Avoid recursion (which leads to stackoverflow exception) using a stack (initially, I was using callStack.ContainsFast
+			// here but it returned false for objects that do exist in the call stack if VFX Graph window was open)
+			for( int i = callStack.Count - 1; i >= 0; i-- )
+			{
+				if( callStack[i].Equals( obj ) )
+					return null;
+			}
 
 			bool searchingSourceAsset = searchingSourceAssets && ReferenceEquals( currentSearchedObject, obj );
 
@@ -1009,14 +1016,14 @@ namespace AssetUsageDetectorNamespace
 				{
 					if( assetsToSearchSet.Count == 0 )
 					{
-						searchedUnityObjects.Add( unityObject.GetHashCode(), null );
+						searchedUnityObjects.Add( unityObject.GetInstanceID(), null );
 						return null;
 					}
 
 					assetPath = AssetDatabase.GetAssetPath( unityObject );
 					if( excludedAssetsPathsSet.Contains( assetPath ) || !AssetHasAnyReference( assetPath ) )
 					{
-						searchedUnityObjects.Add( unityObject.GetHashCode(), null );
+						searchedUnityObjects.Add( unityObject.GetInstanceID(), null );
 						return null;
 					}
 				}
@@ -1024,7 +1031,7 @@ namespace AssetUsageDetectorNamespace
 				callStack.Add( unityObject );
 
 				// Search the Object in detail
-				Func<Object, ReferenceNode> searchFunction;
+				Func<object, ReferenceNode> searchFunction;
 				if( assetPath != null && extensionToSearchFunction.TryGetValue( Utilities.GetFileExtension( assetPath ), out searchFunction ) && AssetDatabase.IsMainAsset( unityObject ) )
 					result = searchFunction( unityObject );
 				else if( typeToSearchFunction.TryGetValue( unityObject.GetType(), out searchFunction ) )
@@ -1086,13 +1093,13 @@ namespace AssetUsageDetectorNamespace
 				if( !searchingSourceAsset )
 				{
 					if( obj is Object )
-						searchedUnityObjects.Add( unityObject.GetHashCode(), result );
+						searchedUnityObjects.Add( unityObject.GetInstanceID(), result );
 					else
 						searchedObjects.Add( GetNodeObjectHash( obj ), result );
 				}
 				else if( result != null )
 				{
-					result.CopyReferencesTo( searchedUnityObjects[unityObject.GetHashCode()] );
+					result.CopyReferencesTo( searchedUnityObjects[unityObject.GetInstanceID()] );
 					PoolReferenceNode( result );
 				}
 			}
@@ -1103,6 +1110,11 @@ namespace AssetUsageDetectorNamespace
 		// Check if the asset at specified path depends on any of the references
 		private bool AssetHasAnyReference( string assetPath )
 		{
+#if ASSET_USAGE_ADDRESSABLES
+			if( searchParameters.addressablesSupport )
+				return true;
+#endif
+
 			if( assetsToSearchPathsSet.Contains( assetPath ) )
 				return true;
 
@@ -1221,7 +1233,7 @@ namespace AssetUsageDetectorNamespace
 		{
 			if( nodeObject is Object )
 			{
-				if( searchedUnityObjects.TryGetValue( nodeObject.GetHashCode(), out referenceNode ) )
+				if( searchedUnityObjects.TryGetValue( ( (Object) nodeObject ).GetInstanceID(), out referenceNode ) )
 					return true;
 			}
 			else if( searchedObjects.TryGetValue( GetNodeObjectHash( nodeObject ), out referenceNode ) )
@@ -1237,7 +1249,7 @@ namespace AssetUsageDetectorNamespace
 			ReferenceNode result;
 			if( nodeObject is Object )
 			{
-				int hash = nodeObject.GetHashCode();
+				int hash = ( (Object) nodeObject ).GetInstanceID();
 				if( !searchedUnityObjects.TryGetValue( hash, out result ) || result == null )
 				{
 					result = PopReferenceNode( nodeObject );
