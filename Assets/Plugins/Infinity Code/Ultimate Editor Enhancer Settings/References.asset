@@ -175,4 +175,8 @@ MonoBehaviour:
     customWindowSize: {x: 400, y: 300}
     alignWindowToBar: 1
     windowMode: 0
-  _sceneHistory: []
+  _sceneHistory:
+  - name: Daily Rewards Portrait
+    path: Assets/DailyRewards/Examples/Scenes/Daily Rewards Portrait.unity
+  - name: Daily Rewards Landscape
+    path: Assets/DailyRewards/Examples/Scenes/Daily Rewards Landscape.unity

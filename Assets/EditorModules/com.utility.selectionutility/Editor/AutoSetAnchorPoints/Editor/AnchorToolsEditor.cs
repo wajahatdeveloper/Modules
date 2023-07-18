@@ -1,6 +1,8 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using System.Collections;
 using UnityEditor;
+using Object = UnityEngine.Object;
 
 [InitializeOnLoad]
 public class AnchorToolsEditor : EditorWindow
@@ -32,14 +34,28 @@ public class AnchorToolsEditor : EditorWindow
     static private Vector2 pivotOld;
     static private Vector2 offsetMinOld;
     static private Vector2 offsetMaxOld;
-
+    
+    [MenuItem("Tools/Anchor &O")]
     static public void UpdateAnchors()
     {
-        TryToGetRectTransform();
-        if (currentRectTransform != null && parentRectTransform != null && ShouldStick())
+        foreach (var o in Selection.objects)
         {
-            //Debug.Log("[Anchors Tools] Updating");
-            Stick();
+            if (o.GetType() != typeof(GameObject))
+            {
+                continue;
+            }
+
+            if (((GameObject)(o)).GetComponent<RectTransform>() == null)
+            {
+                continue;
+            }
+            
+            TryToGetRectTransform((GameObject)o);
+            if (currentRectTransform != null && parentRectTransform != null && ShouldStick())
+            {
+                //Debug.Log("[Anchors Tools] Updating");
+                Stick();
+            }
         }
     }
 
@@ -69,10 +85,10 @@ public class AnchorToolsEditor : EditorWindow
         UnityEditor.EditorUtility.SetDirty( currentRectTransform.gameObject );
     }
 
-    static private void TryToGetRectTransform()
+    static private void TryToGetRectTransform(GameObject obj)
     {
-        if (UnityEditor.Selection.activeGameObject == null) { return; }
-        UnityEditor.Selection.activeGameObject.TryGetComponent<RectTransform>( out currentRectTransform );
+        if (obj == null) { return; }
+        obj.TryGetComponent<RectTransform>( out currentRectTransform );
         if (currentRectTransform == null) { return; }
         parentRectTransform = currentRectTransform.parent.gameObject.GetComponent<RectTransform>();
 

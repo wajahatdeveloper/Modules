@@ -1,0 +1,7 @@
+{
+  "name": "com.components.ui",
+  "version": "1.0.0",
+  "displayName": "Common UI Components",
+  "description": "UI Components for Ease of Use and Handling Various Situations",
+  "unity": "2020.3"
+}
