@@ -104,50 +104,53 @@ namespace ExtendedButtons
 
             if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject()) return;
 
-            Ray ray = button3DCamera.ScreenPointToRay(Input.mousePosition);
-            RaycastHit hit;
-            if (Physics.Raycast(ray, out hit, maxDistance, layerMask))
+            if (button3DCamera != null)
             {
-                Button3D button = hit.transform.GetComponent<Button3D>();
-                if (button != null)
+                Ray ray = button3DCamera.ScreenPointToRay(Input.mousePosition);
+                RaycastHit hit;
+                if (Physics.Raycast(ray, out hit, maxDistance, layerMask))
                 {
-                    if (followedButton3D != button)
+                    Button3D button = hit.transform.GetComponent<Button3D>();
+                    if (button != null)
                     {
-                        followedButton3D?.onExit?.Invoke();
-                        followedButton3D = button;
-                        followedButton3D?.onEnter?.Invoke();
-                    }
-
-                    if (Input.GetMouseButtonDown(0))
-                    {
-                        moved = false;
-                        firstInputPosition = Input.mousePosition;
-                        button.onDown?.Invoke();
-                        buttonLocked = button;
-                    }
-
-                    // button is pressed on Button3D, check if cursor is moved and cancel possibility to onClick (when flag: acceptClickAfterMove is false)
-                    // start read dragging
-                    if (Input.GetMouseButton(0))
-                    {
-                        float movedDistance = Mathf.Abs(Vector3.Distance(firstInputPosition, Input.mousePosition));
-                        if (!moved && movedDistance > moveTrashHold)
+                        if (followedButton3D != button)
                         {
-                            moved = true;
-                            button.onBeginDrag?.Invoke();
+                            followedButton3D?.onExit?.Invoke();
+                            followedButton3D = button;
+                            followedButton3D?.onEnter?.Invoke();
+                        }
+
+                        if (Input.GetMouseButtonDown(0))
+                        {
+                            moved = false;
+                            firstInputPosition = Input.mousePosition;
+                            button.onDown?.Invoke();
+                            buttonLocked = button;
+                        }
+
+                        // button is pressed on Button3D, check if cursor is moved and cancel possibility to onClick (when flag: acceptClickAfterMove is false)
+                        // start read dragging
+                        if (Input.GetMouseButton(0))
+                        {
+                            float movedDistance = Mathf.Abs(Vector3.Distance(firstInputPosition, Input.mousePosition));
+                            if (!moved && movedDistance > moveTrashHold)
+                            {
+                                moved = true;
+                                button.onBeginDrag?.Invoke();
+                            }
                         }
                     }
+                    else // exit
+                    {
+                        followedButton3D?.onExit?.Invoke();
+                        followedButton3D = null;
+                    }
                 }
-                else // exit
+                else
                 {
                     followedButton3D?.onExit?.Invoke();
                     followedButton3D = null;
                 }
-            }
-            else
-            {
-                followedButton3D?.onExit?.Invoke();
-                followedButton3D = null;
             }
 
             lastInputPosition = Input.mousePosition;

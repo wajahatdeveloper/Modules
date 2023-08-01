@@ -817,7 +817,17 @@
             "itemGUID": "f9386d11-bb98-47ed-8c20-92681e616e89"
         }
     ],
-    "sharedIgnoredStackEntries": [],
+    "sharedIgnoredStackEntries": [
+        {
+            "namespaceName": "<Any>",
+            "className": "ConsoleProDebug",
+            "methodName": "<Any>",
+            "name": "Untitled",
+            "isEnabled": true,
+            "collapsed": true,
+            "itemGUID": "b83f921a-e592-408c-8d12-e365a883dc76"
+        }
+    ],
     "sharedIgnoredLogEntries": [
         {
             "searchString": "Serialization depth",

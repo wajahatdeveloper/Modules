@@ -6,17 +6,27 @@ using UnityEngine;
 public class Destroy : MonoBehaviour
 {
 	public float delay = 0.0f;
+	public bool isRealtime = false;
 
 	private void OnEnable()
 	{
 		if (delay > 0.0f)
 		{
-			Invoke(nameof(DestroyGameObject), delay);
+			StartCoroutine(DestroyGameObject());
 		}
 	}
 
-	private void DestroyGameObject()
+	private IEnumerator DestroyGameObject()
 	{
+		if (isRealtime)
+		{
+			yield return new WaitForSecondsRealtime(delay);
+		}
+		else
+		{
+			yield return new WaitForSeconds(delay);
+		}
+		
 		Destroy(gameObject);
 	}
 }

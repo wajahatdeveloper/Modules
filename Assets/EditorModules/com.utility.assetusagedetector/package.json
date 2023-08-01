@@ -1,7 +1,0 @@
-{
-  "name": "com.utility.assetusagedetector",
-  "version": "1.0.0",
-  "displayName": "Asset Usage Detector",
-  "description": "Find All Asset and Game Object Usage In the Entire Project",
-  "unity": "2020.3"
-}

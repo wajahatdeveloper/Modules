@@ -1,0 +1,12 @@
+{
+  "name": "com.ui.widgets.selector",
+  "version": "1.0.0",
+  "displayName": "Selector Widget",
+  "description": "Simple General Purpose Selector Widget",
+  "unity": "2020.3",
+  "author": {
+    "name": "Zuraiz Ahmad Babar",
+    "email": "420zuraiz9211@gmail.com",
+    "url": "https://zuraizahmadbabar.github.io/ZuraizAhmadBabar.io/"
+  }
+}

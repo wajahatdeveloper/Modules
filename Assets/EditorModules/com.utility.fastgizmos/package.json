@@ -1,7 +1,0 @@
-{
-  "name": "com.utility.fastgizmos",
-  "version": "1.0.0",
-  "displayName": "Fast Gizmos",
-  "description": "Editor Gizmos for Game Objects",
-  "unity": "2020.3"
-}

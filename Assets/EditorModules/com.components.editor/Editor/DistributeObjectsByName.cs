@@ -17,7 +17,7 @@ public class DistributeObjectsByName {
     // Choose if you need all "walls" in one group, or separated by wall kind and modify the regex.
     static Regex namePrefix = new Regex("([A-Za-z]+)([\\s\\d()]*)");
 
-    [MenuItem("Hub/Editor/Distribute objects by name &1", priority = 5)]
+    [MenuItem("Hub/Editor/Group selected objects under root parent &1", priority = 5)]
     static void Distribute () {
         var items = Selection.transforms;
         for (int i = 0; i < items.Length; i++ ) {
