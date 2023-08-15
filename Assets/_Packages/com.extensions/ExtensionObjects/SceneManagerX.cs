@@ -5,6 +5,8 @@ using UnityEngine.SceneManagement;
 
 public static class SceneManagerX
 {
+    private static string LogClassName = "SceneManagerX";
+
     public static void LoadNextScene()
     {
         if (SceneManager.GetActiveScene().buildIndex + 2 > SceneManager.sceneCountInBuildSettings)
@@ -15,6 +17,12 @@ public static class SceneManagerX
         {
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
         }
+    }
+    
+    public static void LoadScene(int index)
+    {
+        DebugX.Log($"{LogClassName} : Loading Scene {index}.",Color.magenta, "", null);
+        SceneManager.LoadScene(index);
     }
     
     public static void LoadPreviousScene()

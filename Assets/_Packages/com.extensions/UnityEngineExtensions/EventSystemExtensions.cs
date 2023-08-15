@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public static class MiscExtensions
+public static class EventSystemExtensions
 {
     #region IsPointerOnUIElement
 

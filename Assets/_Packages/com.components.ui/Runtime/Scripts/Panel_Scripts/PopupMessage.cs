@@ -9,6 +9,7 @@ public class PopupMessage : SingletonBehaviourUI<PopupMessage>
     public Text messageText;
     public Text titleText;
     public GameObject messagePanel;
+    public Button okButton;
 
     public Sprite infoSignSprite;
     public Sprite warningSignSprite;
@@ -18,6 +19,7 @@ public class PopupMessage : SingletonBehaviourUI<PopupMessage>
 
     private bool _isAuto;
     private bool _allowCloseOnEnter;
+    private bool _allowBackgroundClick;
 
     public enum PopupSign
     {
@@ -27,11 +29,12 @@ public class PopupMessage : SingletonBehaviourUI<PopupMessage>
         ERROR,
     }
     
-    public void ShowOnce(string message, string id, string titleString = "",PopupSign sign = PopupSign.NONE , bool allowCloseOnEnter = true)
+    public void ShowOnce(string message, string id, string titleString = "",PopupSign sign = PopupSign.NONE , bool allowCloseOnEnter = true
+        , bool allowBackgroundClick = false)
     {
         if (PlayerPrefs.GetInt("showOnce_"+id,0) == 0)
         {
-            Show(message,titleString,sign,allowCloseOnEnter);
+            Show(message,titleString,sign,allowCloseOnEnter, allowBackgroundClick);
             PlayerPrefs.SetInt("showOnce_"+id,1);
         }
     }
@@ -39,10 +42,12 @@ public class PopupMessage : SingletonBehaviourUI<PopupMessage>
     public void ShowAuto(string message,string titleString="",PopupSign sign = PopupSign.NONE)
     {
         _isAuto = true;
-        Show(message,titleString,sign,false);
+        okButton.gameObject.SetActive(false);
+        Show(message,titleString,sign,false, false);
     }
 
-    public void Show(string message, string titleString = "",PopupSign sign = PopupSign.NONE , bool allowCloseOnEnter = true)
+    public void Show(string message, string titleString = "",PopupSign sign = PopupSign.NONE , bool allowCloseOnEnter = true
+        , bool allowBackgroundClick = false)
     {
         switch (sign)
         {
@@ -65,7 +70,8 @@ public class PopupMessage : SingletonBehaviourUI<PopupMessage>
 			default:
                 throw new ArgumentOutOfRangeException(nameof(sign), sign, null);
         }
-        
+
+        _allowBackgroundClick = allowBackgroundClick;
         _allowCloseOnEnter = allowCloseOnEnter;
         messageText.text = message;
         titleText.text = titleString;
@@ -85,9 +91,18 @@ public class PopupMessage : SingletonBehaviourUI<PopupMessage>
     public void HideAuto()
     {
         _isAuto = false;
+        okButton.gameObject.SetActive(true);
         Hide();
     }
 
+    public void OnClick_Background()
+    {
+        if (_allowBackgroundClick)
+        {
+            Hide();
+        }
+    }
+    
     public void Hide()
     {
         if (_isAuto) return;

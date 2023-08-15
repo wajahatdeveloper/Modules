@@ -440,7 +440,7 @@ GameObject:
   - component: {fileID: 364800777065277079}
   - component: {fileID: 364800777065277078}
   m_Layer: 5
-  m_Name: Panel_Message
+  m_Name: Panel_PopupMessage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -462,10 +462,10 @@ RectTransform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 100, y: 100}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &364800777065277078
 MonoBehaviour:
@@ -483,6 +483,7 @@ MonoBehaviour:
   messageText: {fileID: 364800776858820585}
   titleText: {fileID: 1248422667}
   messagePanel: {fileID: 364800778062436187}
+  okButton: {fileID: 538375796}
   infoSignSprite: {fileID: 21300000, guid: d374ca60f897b8a42993f4b460ee1d99, type: 3}
   warningSignSprite: {fileID: 21300000, guid: 0082ad0bce3882944854bbb3470da6cc, type: 3}
   errorSignSprite: {fileID: 21300000, guid: ad66afa41c098ea44b7d8da31b1cedcd, type: 3}
@@ -507,7 +508,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &364800778062436186
 RectTransform:
   m_ObjectHideFlags: 0
