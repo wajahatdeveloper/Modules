@@ -95,7 +95,20 @@ public static class UnityTransformExtensions
     }
 	#endregion
 
-
+	/// <summary>
+	/// Returns the Vecto3 distance between these two transforms
+	/// </summary>
+	/// <param name="start"></param>
+	/// <param name="dest"></param>
+	/// <remarks>
+	/// Suggested by: Vipsu
+	/// Link: http://forum.unity3d.com/members/vipsu.138664/
+	/// </remarks>
+	public static float DistanceTo(this Transform start, Transform dest)
+	{
+		return Vector3.Distance(start.position, dest.position);
+	}
+	
 	/// <summary>
 	/// Returns the 2D position of given transform on XY plane. Uses manual conversion.
 	/// </summary>

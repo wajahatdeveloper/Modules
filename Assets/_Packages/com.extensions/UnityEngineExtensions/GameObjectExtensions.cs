@@ -19,6 +19,28 @@ using System.Collections;
 /// </summary>
 public static class GameObjectExtensions
 {
+	/// <summary>
+	/// Returns the Vector3 distance between these two GameObjects
+	/// </summary>
+	/// <param name="go"></param>
+	/// <param name="otherGO"></param>
+	/// <returns></returns>
+	public static float DistanceTo(this GameObject go, GameObject otherGO)
+	{
+		return Vector3.Distance(go.transform.position, otherGO.transform.position);
+	}
+
+	/// <summary>
+	/// Returns the Vecto3 distance between these two points
+	/// </summary>
+	/// <param name="go"></param>
+	/// <param name="pos"></param>
+	/// <returns></returns>
+	public static float DistanceTo(this GameObject go, Vector3 pos)
+	{
+		return Vector3.Distance(go.transform.position, pos);
+	}
+	
 	#region GetComponentOnObject
 
 	/// <summary>

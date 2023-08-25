@@ -1,11 +1,249 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 using UnityEngine;
 
 public static class VectorExtensions
 {
+	
+	    /// <summary>
+	/// Finds the closest <see cref="Vector3"/> in <paramref name="allTargets"/>.
+	/// </summary>
+	public static Vector3 FindClosest(this Vector3 origin, IList<Vector3> allTargets)
+    {
+        if (allTargets == null)
+        {
+            throw new ArgumentNullException("allTargets");
+        }
+
+        switch (allTargets.Count)
+        {
+            case 0: return Vector3.zero;
+            case 1: return allTargets[0];
+        }
+
+        float closestDistance = Mathf.Infinity;
+        var closest = Vector3.zero;
+
+        foreach (var iteratingTarget in allTargets)
+        {
+            float distanceSqr = (iteratingTarget - origin).sqrMagnitude;
+
+            if (distanceSqr < closestDistance)
+            {
+                closestDistance = distanceSqr;
+                closest = iteratingTarget;
+            }
+        }
+
+        return closest;
+    }
+
+    /// <summary>
+    /// Finds the closest <see cref="Transform"/> in <paramref name="allTargets"/>.
+    /// </summary>
+    public static Transform FindClosest(this Vector3 origin, IList<Transform> allTargets)
+    {
+        if (allTargets == null)
+        {
+            throw new ArgumentNullException("allTargets");
+        }
+
+        switch (allTargets.Count)
+        {
+            case 0: return null;
+            case 1: return allTargets[0];
+        }
+
+        float closestDistance = Mathf.Infinity;
+        Transform closest = null;
+
+        foreach (var iteratingTarget in allTargets)
+        {
+            float distanceSqr = (iteratingTarget.position - origin).sqrMagnitude;
+
+            if (distanceSqr < closestDistance)
+            {
+                closestDistance = distanceSqr;
+                closest = iteratingTarget;
+            }
+        }
+
+        return closest;
+    }
+
+    /// <summary>
+    /// Finds the closest <see cref="GameObject"/> in <paramref name="allTargets"/>.
+    /// </summary>
+    public static GameObject FindClosest(this Vector3 origin, IList<GameObject> allTargets)
+    {
+        if (allTargets == null)
+        {
+            throw new ArgumentNullException("allTargets");
+        }
+
+        switch (allTargets.Count)
+        {
+            case 0: return null;
+            case 1: return allTargets[0];
+        }
+
+        float closestDistance = Mathf.Infinity;
+        GameObject closest = null;
+
+        foreach (var iteratingTarget in allTargets)
+        {
+            float distanceSqr = (iteratingTarget.transform.position - origin).sqrMagnitude;
+
+            if (distanceSqr < closestDistance)
+            {
+                closestDistance = distanceSqr;
+                closest = iteratingTarget;
+            }
+        }
+
+        return closest;
+    }
+	
+	/// <summary>
+	/// Returns the Vecto3 distance between these two points
+	/// </summary>
+	/// <param name="start"></param>
+	/// <param name="dest"></param>
+	/// <returns></returns>
+	public static float DistanceTo(this Vector3 start, Vector3 dest)
+	{
+		return Vector3.Distance(start, dest);
+	}
+	
+	   /// <summary>
+    /// Finds the closest <see cref="Vector2"/> in <paramref name="allTargets"/> on XY plane.
+    /// </summary>
+    public static Vector2 FindClosest2D(this Vector2 origin, IList<Vector2> allTargets)
+    {
+        if (allTargets == null)
+        {
+            throw new ArgumentNullException("allTargets");
+        }
+
+        switch (allTargets.Count)
+        {
+            case 0: return Vector2.zero;
+            case 1: return allTargets[0];
+        }
+
+        float closestDistance = Mathf.Infinity;
+        var closest = Vector2.zero;
+
+        foreach (var iteratingTarget in allTargets)
+        {
+            float distanceSqr = (iteratingTarget - origin).sqrMagnitude;
+
+            if (distanceSqr < closestDistance)
+            {
+                closestDistance = distanceSqr;
+                closest = iteratingTarget;
+            }
+        }
+
+        return closest;
+    }
+
+    /// <summary>
+    /// Finds the closest <see cref="UnityEngine.Transform"/> in <paramref name="allTargets"/> on XY plane.
+    /// </summary>
+    public static Transform FindClosest2D(this Vector2 origin, IList<Transform> allTargets)
+    {
+        if (allTargets == null)
+        {
+            throw new ArgumentNullException("allTargets");
+        }
+
+        switch (allTargets.Count)
+        {
+            case 0: return null;
+            case 1: return allTargets[0];
+        }
+
+        float closestDistance = Mathf.Infinity;
+        Transform closest = null;
+
+        foreach (var iteratingTarget in allTargets)
+        {
+            float distanceSqr = (iteratingTarget.Position2D() - origin).sqrMagnitude;
+
+            if (distanceSqr < closestDistance)
+            {
+                closestDistance = distanceSqr;
+                closest = iteratingTarget;
+            }
+        }
+
+        return closest;
+    }
+
+    /// <summary>
+    /// Finds the closest <see cref="GameObject"/> in <paramref name="allTargets"/> on XY plane.
+    /// </summary>
+    public static GameObject FindClosest2D(this Vector2 origin, IList<GameObject> allTargets)
+    {
+        if (allTargets == null)
+        {
+            throw new ArgumentNullException("allTargets");
+        }
+
+        switch (allTargets.Count)
+        {
+            case 0: return null;
+            case 1: return allTargets[0];
+        }
+
+        float closestDistance = Mathf.Infinity;
+        GameObject closest = null;
+
+        foreach (var iteratingTarget in allTargets)
+        {
+            float distanceSqr = (iteratingTarget.transform.Position2D() - origin).sqrMagnitude;
+
+            if (distanceSqr < closestDistance)
+            {
+                closestDistance = distanceSqr;
+                closest = iteratingTarget;
+            }
+        }
+
+        return closest;
+    }
+
+    /// <summary>
+    /// <para>Returns the 2D center of all the points given.</para>
+    /// <para>If <paramref name="weighted"/> is true, center point will be closer to the area that points are denser; if false, center will be the geometric exact center of bounding box of points.</para>
+    /// </summary>
+    public static Vector2 FindCenter2D(this IList<Vector2> points, bool weighted)
+    {
+        switch (points.Count)
+        {
+            case 0: return Vector2.zero;
+            case 1: return points[0];
+        }
+
+        if (weighted)
+        {
+            return points.Aggregate(Vector2.zero, (current, point) => current + point) / points.Count;
+        }
+
+        var bound = new Bounds { center = points[0] };
+        foreach (var point in points)
+        {
+            bound.Encapsulate(point);
+        }
+
+        return bound.center;
+    }
+
+	
     #region Set X/Y/Z
 
 	// Set X
