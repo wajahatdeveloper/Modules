@@ -1,0 +1,7 @@
+{
+  "name": "com.utility.playmodesaver",
+  "version": "1.0.0",
+  "displayName": "Play Mode Saver",
+  "description": "A lightweight tool which facilitates Saving Play Mode Changes in Editor",
+  "unity": "2020.3"
+}
