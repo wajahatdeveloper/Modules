@@ -1,5 +1,1620 @@
 {
-    "sharedSettingsFormatVersion": 1,
+    "standard": {
+        "standardSettingsFormatVersion": 3,
+        "tempFilterCharacter": "#",
+        "tempFilterCharacterEnd": "#",
+        "showLogFile": false,
+        "currentLogFilePath": "",
+        "_useLogFile": false,
+        "logPanelHeight": 167,
+        "maximumOutputPanelHeight": 44,
+        "maxLogEntryCharactersBeforeTruncate": 500,
+        "limitNumberOfProcessedLogsPerFrame": true,
+        "maxNumberOfProcessedLogsPerFrame": 500,
+        "prefsCategoryType": "Backup",
+        "showPathInFiles": true,
+        "showCompilingNotification": true,
+        "showCompilingNotificationSound": false,
+        "doubleClickStackLines": false,
+        "hideOtherLogsWhenCompilerError": true,
+        "overrideStatusBarClick": true,
+        "overrideStatusBarVisuals": true,
+        "clearOnCompile": false,
+        "showRemote": false,
+        "showWatch": false,
+        "useRemotAutoConnect": true,
+        "showLocalInRemoteMode": true,
+        "_useRemote": false,
+        "remotePort": 51000,
+        "remoteDevice": "",
+        "remoteManualIPs": [],
+        "errorPause": false,
+        "searchString": "",
+        "filterSearchType": "ExactCaseInsensitive",
+        "filterSearchMode": "Search",
+        "filterSearchColumn": "Log",
+        "logsShowSubHeader": true,
+        "showOutput": true,
+        "showStack": true,
+        "showColumnsHeader": true,
+        "showIgnoredLogs": false,
+        "usePlayModeTint": true,
+        "highlightObjectOnSelect": true,
+        "logsColorize": true,
+        "logsWordWrap": true,
+        "logsMultiline": true,
+        "filterButtonsDimInactive": true,
+        "filterButtonsAlignToRight": false,
+        "filterButtonsActiveShowLabel": true,
+        "filterButtonsInactiveShowLabel": true,
+        "filterButtonsShowMatchCount": true,
+        "sourceCodeAlwaysShow": true,
+        "sourceCodePreviewCount": 5,
+        "sourceCodeRemoveBlanks": true,
+        "standardFontPath": "",
+        "standardFontSize": 0,
+        "sourceFontPath": "",
+        "sourceFontSize": 0,
+        "outputFontPath": "",
+        "outputFontSize": 0,
+        "colorBG": {
+            "useCustomColor": false,
+            "customColor": {
+                "r": 1.0,
+                "g": 1.0,
+                "b": 1.0,
+                "a": 1.0
+            }
+        },
+        "colorBGAlternate": {
+            "useCustomColor": false,
+            "customColor": {
+                "r": 1.0,
+                "g": 1.0,
+                "b": 1.0,
+                "a": 1.0
+            }
+        },
+        "colorStackBG": {
+            "useCustomColor": false,
+            "customColor": {
+                "r": 1.0,
+                "g": 1.0,
+                "b": 1.0,
+                "a": 1.0
+            }
+        },
+        "colorStackBGAlternate": {
+            "useCustomColor": false,
+            "customColor": {
+                "r": 1.0,
+                "g": 1.0,
+                "b": 1.0,
+                "a": 1.0
+            }
+        },
+        "colorText": {
+            "useCustomColor": false,
+            "customColor": {
+                "r": 1.0,
+                "g": 1.0,
+                "b": 1.0,
+                "a": 1.0
+            }
+        },
+        "colorSelectedBG": {
+            "useCustomColor": false,
+            "customColor": {
+                "r": 1.0,
+                "g": 1.0,
+                "b": 1.0,
+                "a": 1.0
+            }
+        },
+        "colorSelectedText": {
+            "useCustomColor": false,
+            "customColor": {
+                "r": 1.0,
+                "g": 1.0,
+                "b": 1.0,
+                "a": 1.0
+            }
+        },
+        "colorStackLineBG": {
+            "useCustomColor": false,
+            "customColor": {
+                "r": 1.0,
+                "g": 1.0,
+                "b": 1.0,
+                "a": 1.0
+            }
+        },
+        "colorOutputBG": {
+            "useCustomColor": false,
+            "customColor": {
+                "r": 1.0,
+                "g": 1.0,
+                "b": 1.0,
+                "a": 1.0
+            }
+        },
+        "colorOutputText": {
+            "useCustomColor": false,
+            "customColor": {
+                "r": 1.0,
+                "g": 1.0,
+                "b": 1.0,
+                "a": 1.0
+            }
+        }
+    },
+    "ignoredStackEntries": [
+        {
+            "namespaceName": "<Any>",
+            "className": "<Any>",
+            "methodName": "LogToFilter",
+            "name": "Untitled",
+            "isEnabled": true,
+            "collapsed": false,
+            "itemGUID": "550a3fd1-1c6f-47bd-9d15-21d9ff5a8c9c"
+        },
+        {
+            "namespaceName": "<Any>",
+            "className": "<Any>",
+            "methodName": "Log",
+            "name": "Untitled",
+            "isEnabled": true,
+            "collapsed": false,
+            "itemGUID": "d9b5d205-44a2-4c5d-9554-28dc51cb509f"
+        }
+    ],
+    "ignoredLogEntries": [],
+    "columns": [
+        {
+            "columnType": "File",
+            "width": 200.0,
+            "name": null,
+            "isEnabled": false,
+            "collapsed": false,
+            "itemGUID": "3b95a193-1a27-4c29-bdea-5a38c871916e"
+        },
+        {
+            "columnType": "Class",
+            "width": 200.0,
+            "name": null,
+            "isEnabled": false,
+            "collapsed": false,
+            "itemGUID": "2f5c002b-7a9b-4924-b11a-0a689c1652e9"
+        },
+        {
+            "columnType": "Method",
+            "width": 200.0,
+            "name": null,
+            "isEnabled": false,
+            "collapsed": false,
+            "itemGUID": "e3bf3672-f000-438e-9c5f-acded83e8bc6"
+        },
+        {
+            "columnType": "Object",
+            "width": 200.0,
+            "name": null,
+            "isEnabled": false,
+            "collapsed": false,
+            "itemGUID": "d6addb6b-15e1-4588-adf7-91f4be72e9aa"
+        },
+        {
+            "columnType": "Namespace",
+            "width": 200.0,
+            "name": null,
+            "isEnabled": false,
+            "collapsed": false,
+            "itemGUID": "438fa438-b73e-477c-9320-7615bc66265f"
+        },
+        {
+            "columnType": "Time",
+            "width": 111.0,
+            "name": null,
+            "isEnabled": true,
+            "collapsed": false,
+            "itemGUID": "dd92d901-6619-49c3-a07f-e954fafae940"
+        },
+        {
+            "columnType": "Frame",
+            "width": 200.0,
+            "name": null,
+            "isEnabled": false,
+            "collapsed": false,
+            "itemGUID": "fea06a3b-bc77-44e2-b92d-584102ac164a"
+        },
+        {
+            "columnType": "Filter",
+            "width": 200.0,
+            "name": null,
+            "isEnabled": false,
+            "collapsed": false,
+            "itemGUID": "ccbe4222-9c6f-4f9b-b7a8-ecd3c4130555"
+        },
+        {
+            "columnType": "Log",
+            "width": 289.0,
+            "name": null,
+            "isEnabled": true,
+            "collapsed": false,
+            "itemGUID": "a7e973a6-0c48-41fd-8066-d71ecf5243b3"
+        }
+    ],
+    "customFilters": [
+        {
+            "filterName": "References",
+            "mainColor": {
+                "r": 1.0,
+                "g": 0.427350103855133,
+                "b": 0.0,
+                "a": 1.0
+            },
+            "isStandardFilter": false,
+            "isTempFilter": false,
+            "filterOnly": false,
+            "useAdvancedColors": false,
+            "customTextColor": {
+                "r": 1.0,
+                "g": 1.0,
+                "b": 1.0,
+                "a": 1.0
+            },
+            "customBackgroundColor": {
+                "r": 1.0,
+                "g": 1.0,
+                "b": 1.0,
+                "a": 1.0
+            },
+            "swallowStandard": true,
+            "standardCanSwallow": false,
+            "overrideStandardColors": true,
+            "overrideStandardIcon": true,
+            "collapseIconBackground": false,
+            "collapseIconSymbol": false,
+            "collapseIconLetter": false,
+            "collapseIconTexture": false,
+            "useIconBackground": true,
+            "useIconSymbol": false,
+            "useIconLetter": true,
+            "useIconTexture": false,
+            "filterFormatVersion": -1,
+            "iconColorize": false,
+            "useAndOpForSearchList": false,
+            "searchList": [
+                {
+                    "searchString": "Reference",
+                    "searchType": "Fuzzy",
+                    "removeSearchStringFromLog": false,
+                    "logTypeList": [
+                        {
+                            "logType": "Log",
+                            "name": null,
+                            "isEnabled": true,
+                            "collapsed": false,
+                            "itemGUID": "98eef676-87c7-4480-941c-5bd7dd08db54"
+                        }
+                    ],
+                    "columnTypeList": [
+                        {
+                            "columnType": "Log",
+                            "name": null,
+                            "isEnabled": true,
+                            "collapsed": false,
+                            "itemGUID": "bf78925f-fc57-417d-8e7d-80eea309717b"
+                        }
+                    ],
+                    "sourceCodeList": [],
+                    "name": null,
+                    "isEnabled": true,
+                    "collapsed": false,
+                    "itemGUID": "50b4f504-8d1f-42df-bed2-17b362e7b05b"
+                }
+            ],
+            "iconLetter": {
+                "iconType": "Text",
+                "iconType2": "None",
+                "iconText": "A",
+                "useIconTextFirstLetter": true,
+                "useIconLogColor": false,
+                "iconColor": {
+                    "r": 1.0,
+                    "g": 1.0,
+                    "b": 1.0,
+                    "a": 1.0
+                },
+                "iconBuiltInID": "BACKGROUNDS_ECPBGROUNDEDSQUARE",
+                "iconTextureGUID": "",
+                "useIconShadow": true,
+                "iconOffset": {
+                    "x": 0.0,
+                    "y": 0.0
+                },
+                "iconShadowOffset": {
+                    "x": 0.5,
+                    "y": 0.5
+                },
+                "iconSize": 13.0,
+                "name": null,
+                "isEnabled": true,
+                "collapsed": false,
+                "itemGUID": null
+            },
+            "iconSymbol": null,
+            "iconBackground": {
+                "iconType": "Background",
+                "iconType2": "None",
+                "iconText": "A",
+                "useIconTextFirstLetter": true,
+                "useIconLogColor": true,
+                "iconColor": {
+                    "r": 1.0,
+                    "g": 1.0,
+                    "b": 1.0,
+                    "a": 1.0
+                },
+                "iconBuiltInID": "BACKGROUNDS_ECPBGROUNDEDSQUARE",
+                "iconTextureGUID": "",
+                "useIconShadow": true,
+                "iconOffset": {
+                    "x": 0.0,
+                    "y": 0.0
+                },
+                "iconShadowOffset": {
+                    "x": 0.5,
+                    "y": 0.5
+                },
+                "iconSize": 13.0,
+                "name": null,
+                "isEnabled": true,
+                "collapsed": false,
+                "itemGUID": null
+            },
+            "iconTexture": null,
+            "showInToolbar": true,
+            "hideLabelInToolbar": true,
+            "hideWhenNoMatches": false,
+            "name": "References",
+            "isEnabled": true,
+            "collapsed": true,
+            "itemGUID": "ddba1363-a58f-4478-ae51-3ca320d3442a"
+        },
+        {
+            "filterName": "Events",
+            "mainColor": {
+                "r": 0.0,
+                "g": 0.487959861755371,
+                "b": 1.0,
+                "a": 1.0
+            },
+            "isStandardFilter": false,
+            "isTempFilter": false,
+            "filterOnly": false,
+            "useAdvancedColors": false,
+            "customTextColor": {
+                "r": 1.0,
+                "g": 1.0,
+                "b": 1.0,
+                "a": 1.0
+            },
+            "customBackgroundColor": {
+                "r": 1.0,
+                "g": 1.0,
+                "b": 1.0,
+                "a": 1.0
+            },
+            "swallowStandard": true,
+            "standardCanSwallow": false,
+            "overrideStandardColors": true,
+            "overrideStandardIcon": true,
+            "collapseIconBackground": false,
+            "collapseIconSymbol": false,
+            "collapseIconLetter": false,
+            "collapseIconTexture": false,
+            "useIconBackground": true,
+            "useIconSymbol": false,
+            "useIconLetter": true,
+            "useIconTexture": false,
+            "filterFormatVersion": -1,
+            "iconColorize": false,
+            "useAndOpForSearchList": false,
+            "searchList": [
+                {
+                    "searchString": "Event",
+                    "searchType": "Fuzzy",
+                    "removeSearchStringFromLog": false,
+                    "logTypeList": [
+                        {
+                            "logType": "Log",
+                            "name": null,
+                            "isEnabled": true,
+                            "collapsed": false,
+                            "itemGUID": "f3fd2bc9-8060-4c73-ace0-920f4c4f18fa"
+                        }
+                    ],
+                    "columnTypeList": [
+                        {
+                            "columnType": "Log",
+                            "name": null,
+                            "isEnabled": true,
+                            "collapsed": false,
+                            "itemGUID": "73174e8f-5761-472a-bec0-74f8f9349121"
+                        }
+                    ],
+                    "sourceCodeList": [],
+                    "name": null,
+                    "isEnabled": true,
+                    "collapsed": false,
+                    "itemGUID": "f4d70042-aa72-4c29-8079-a99b77408b19"
+                }
+            ],
+            "iconLetter": {
+                "iconType": "Text",
+                "iconType2": "None",
+                "iconText": "A",
+                "useIconTextFirstLetter": true,
+                "useIconLogColor": false,
+                "iconColor": {
+                    "r": 1.0,
+                    "g": 1.0,
+                    "b": 1.0,
+                    "a": 1.0
+                },
+                "iconBuiltInID": "BACKGROUNDS_ECPBGROUNDEDSQUARE",
+                "iconTextureGUID": "",
+                "useIconShadow": true,
+                "iconOffset": {
+                    "x": 0.0,
+                    "y": 0.0
+                },
+                "iconShadowOffset": {
+                    "x": 0.5,
+                    "y": 0.5
+                },
+                "iconSize": 13.0,
+                "name": null,
+                "isEnabled": true,
+                "collapsed": false,
+                "itemGUID": null
+            },
+            "iconSymbol": null,
+            "iconBackground": {
+                "iconType": "Background",
+                "iconType2": "None",
+                "iconText": "A",
+                "useIconTextFirstLetter": true,
+                "useIconLogColor": true,
+                "iconColor": {
+                    "r": 1.0,
+                    "g": 1.0,
+                    "b": 1.0,
+                    "a": 1.0
+                },
+                "iconBuiltInID": "BACKGROUNDS_ECPBGROUNDEDSQUARE",
+                "iconTextureGUID": "",
+                "useIconShadow": true,
+                "iconOffset": {
+                    "x": 0.0,
+                    "y": 0.0
+                },
+                "iconShadowOffset": {
+                    "x": 0.5,
+                    "y": 0.5
+                },
+                "iconSize": 13.0,
+                "name": null,
+                "isEnabled": true,
+                "collapsed": false,
+                "itemGUID": null
+            },
+            "iconTexture": null,
+            "showInToolbar": true,
+            "hideLabelInToolbar": true,
+            "hideWhenNoMatches": false,
+            "name": "Events",
+            "isEnabled": true,
+            "collapsed": true,
+            "itemGUID": "3ca3a558-0331-497d-a514-6caa1ed43ef2"
+        },
+        {
+            "filterName": "Create",
+            "mainColor": {
+                "r": 0.0695173740386963,
+                "g": 1.0,
+                "b": 0.0,
+                "a": 1.0
+            },
+            "isStandardFilter": false,
+            "isTempFilter": false,
+            "filterOnly": false,
+            "useAdvancedColors": false,
+            "customTextColor": {
+                "r": 1.0,
+                "g": 1.0,
+                "b": 1.0,
+                "a": 1.0
+            },
+            "customBackgroundColor": {
+                "r": 1.0,
+                "g": 1.0,
+                "b": 1.0,
+                "a": 1.0
+            },
+            "swallowStandard": true,
+            "standardCanSwallow": false,
+            "overrideStandardColors": true,
+            "overrideStandardIcon": true,
+            "collapseIconBackground": false,
+            "collapseIconSymbol": false,
+            "collapseIconLetter": false,
+            "collapseIconTexture": false,
+            "useIconBackground": true,
+            "useIconSymbol": false,
+            "useIconLetter": true,
+            "useIconTexture": false,
+            "filterFormatVersion": -1,
+            "iconColorize": false,
+            "useAndOpForSearchList": false,
+            "searchList": [
+                {
+                    "searchString": "create",
+                    "searchType": "Fuzzy",
+                    "removeSearchStringFromLog": false,
+                    "logTypeList": [
+                        {
+                            "logType": "Log",
+                            "name": null,
+                            "isEnabled": true,
+                            "collapsed": false,
+                            "itemGUID": "b92b467c-8106-4450-b3f6-2a284cf37f6e"
+                        }
+                    ],
+                    "columnTypeList": [
+                        {
+                            "columnType": "Log",
+                            "name": null,
+                            "isEnabled": true,
+                            "collapsed": false,
+                            "itemGUID": "d869f3f8-f11e-45b3-bc59-1c5fb5d16ac4"
+                        }
+                    ],
+                    "sourceCodeList": [],
+                    "name": null,
+                    "isEnabled": true,
+                    "collapsed": false,
+                    "itemGUID": "037c5823-5337-48ea-8a4a-b3c0f5e7817b"
+                }
+            ],
+            "iconLetter": {
+                "iconType": "Text",
+                "iconType2": "None",
+                "iconText": "A",
+                "useIconTextFirstLetter": true,
+                "useIconLogColor": false,
+                "iconColor": {
+                    "r": 1.0,
+                    "g": 1.0,
+                    "b": 1.0,
+                    "a": 1.0
+                },
+                "iconBuiltInID": "BACKGROUNDS_ECPBGROUNDEDSQUARE",
+                "iconTextureGUID": "",
+                "useIconShadow": true,
+                "iconOffset": {
+                    "x": 0.0,
+                    "y": 0.0
+                },
+                "iconShadowOffset": {
+                    "x": 0.5,
+                    "y": 0.5
+                },
+                "iconSize": 13.0,
+                "name": null,
+                "isEnabled": true,
+                "collapsed": false,
+                "itemGUID": null
+            },
+            "iconSymbol": null,
+            "iconBackground": {
+                "iconType": "Background",
+                "iconType2": "None",
+                "iconText": "A",
+                "useIconTextFirstLetter": true,
+                "useIconLogColor": true,
+                "iconColor": {
+                    "r": 1.0,
+                    "g": 1.0,
+                    "b": 1.0,
+                    "a": 1.0
+                },
+                "iconBuiltInID": "BACKGROUNDS_ECPBGROUNDEDSQUARE",
+                "iconTextureGUID": "",
+                "useIconShadow": true,
+                "iconOffset": {
+                    "x": 0.0,
+                    "y": 0.0
+                },
+                "iconShadowOffset": {
+                    "x": 0.5,
+                    "y": 0.5
+                },
+                "iconSize": 13.0,
+                "name": null,
+                "isEnabled": true,
+                "collapsed": false,
+                "itemGUID": null
+            },
+            "iconTexture": null,
+            "showInToolbar": true,
+            "hideLabelInToolbar": true,
+            "hideWhenNoMatches": true,
+            "name": "Create",
+            "isEnabled": true,
+            "collapsed": true,
+            "itemGUID": "cda45451-f3e0-4073-9eae-76a55952e420"
+        },
+        {
+            "filterName": "Destroy",
+            "mainColor": {
+                "r": 1.0,
+                "g": 0.0334907881915569,
+                "b": 0.0,
+                "a": 1.0
+            },
+            "isStandardFilter": false,
+            "isTempFilter": false,
+            "filterOnly": false,
+            "useAdvancedColors": false,
+            "customTextColor": {
+                "r": 1.0,
+                "g": 1.0,
+                "b": 1.0,
+                "a": 1.0
+            },
+            "customBackgroundColor": {
+                "r": 1.0,
+                "g": 1.0,
+                "b": 1.0,
+                "a": 1.0
+            },
+            "swallowStandard": true,
+            "standardCanSwallow": false,
+            "overrideStandardColors": true,
+            "overrideStandardIcon": true,
+            "collapseIconBackground": false,
+            "collapseIconSymbol": false,
+            "collapseIconLetter": false,
+            "collapseIconTexture": false,
+            "useIconBackground": true,
+            "useIconSymbol": false,
+            "useIconLetter": true,
+            "useIconTexture": false,
+            "filterFormatVersion": -1,
+            "iconColorize": false,
+            "useAndOpForSearchList": false,
+            "searchList": [
+                {
+                    "searchString": "destroy",
+                    "searchType": "Fuzzy",
+                    "removeSearchStringFromLog": false,
+                    "logTypeList": [
+                        {
+                            "logType": "Log",
+                            "name": null,
+                            "isEnabled": true,
+                            "collapsed": false,
+                            "itemGUID": "139bc15f-115e-4bc3-933c-e36c9bdb7ba9"
+                        }
+                    ],
+                    "columnTypeList": [
+                        {
+                            "columnType": "Log",
+                            "name": null,
+                            "isEnabled": true,
+                            "collapsed": false,
+                            "itemGUID": "320d3fe3-9f20-4fdd-bdde-b13829cea584"
+                        }
+                    ],
+                    "sourceCodeList": [],
+                    "name": null,
+                    "isEnabled": true,
+                    "collapsed": false,
+                    "itemGUID": "c4eb5d2b-95cd-4ff8-a153-d5f815758225"
+                }
+            ],
+            "iconLetter": {
+                "iconType": "Text",
+                "iconType2": "None",
+                "iconText": "A",
+                "useIconTextFirstLetter": true,
+                "useIconLogColor": false,
+                "iconColor": {
+                    "r": 1.0,
+                    "g": 1.0,
+                    "b": 1.0,
+                    "a": 1.0
+                },
+                "iconBuiltInID": "BACKGROUNDS_ECPBGROUNDEDSQUARE",
+                "iconTextureGUID": "",
+                "useIconShadow": true,
+                "iconOffset": {
+                    "x": 0.0,
+                    "y": 0.0
+                },
+                "iconShadowOffset": {
+                    "x": 0.5,
+                    "y": 0.5
+                },
+                "iconSize": 13.0,
+                "name": null,
+                "isEnabled": true,
+                "collapsed": false,
+                "itemGUID": null
+            },
+            "iconSymbol": null,
+            "iconBackground": {
+                "iconType": "Background",
+                "iconType2": "None",
+                "iconText": "A",
+                "useIconTextFirstLetter": true,
+                "useIconLogColor": true,
+                "iconColor": {
+                    "r": 1.0,
+                    "g": 1.0,
+                    "b": 1.0,
+                    "a": 1.0
+                },
+                "iconBuiltInID": "BACKGROUNDS_ECPBGROUNDEDSQUARE",
+                "iconTextureGUID": "",
+                "useIconShadow": true,
+                "iconOffset": {
+                    "x": 0.0,
+                    "y": 0.0
+                },
+                "iconShadowOffset": {
+                    "x": 0.5,
+                    "y": 0.5
+                },
+                "iconSize": 13.0,
+                "name": null,
+                "isEnabled": true,
+                "collapsed": false,
+                "itemGUID": null
+            },
+            "iconTexture": null,
+            "showInToolbar": true,
+            "hideLabelInToolbar": true,
+            "hideWhenNoMatches": true,
+            "name": "Destroy",
+            "isEnabled": true,
+            "collapsed": true,
+            "itemGUID": "1455d25f-c98f-470b-9d31-d2d312e7f090"
+        },
+        {
+            "filterName": "Economy",
+            "mainColor": {
+                "r": 0.248858451843262,
+                "g": 1.0,
+                "b": 0.0,
+                "a": 1.0
+            },
+            "isStandardFilter": false,
+            "isTempFilter": false,
+            "filterOnly": false,
+            "useAdvancedColors": false,
+            "customTextColor": {
+                "r": 1.0,
+                "g": 1.0,
+                "b": 1.0,
+                "a": 1.0
+            },
+            "customBackgroundColor": {
+                "r": 1.0,
+                "g": 1.0,
+                "b": 1.0,
+                "a": 1.0
+            },
+            "swallowStandard": true,
+            "standardCanSwallow": false,
+            "overrideStandardColors": true,
+            "overrideStandardIcon": true,
+            "collapseIconBackground": true,
+            "collapseIconSymbol": true,
+            "collapseIconLetter": true,
+            "collapseIconTexture": true,
+            "useIconBackground": false,
+            "useIconSymbol": false,
+            "useIconLetter": true,
+            "useIconTexture": true,
+            "filterFormatVersion": -1,
+            "iconColorize": false,
+            "useAndOpForSearchList": false,
+            "searchList": [
+                {
+                    "searchString": "Economy",
+                    "searchType": "ExactCaseInsensitive",
+                    "removeSearchStringFromLog": false,
+                    "logTypeList": [
+                        {
+                            "logType": "Log",
+                            "name": null,
+                            "isEnabled": true,
+                            "collapsed": false,
+                            "itemGUID": "e644ab76-555d-48d9-935a-f4a61ad4f954"
+                        }
+                    ],
+                    "columnTypeList": [
+                        {
+                            "columnType": "Log",
+                            "name": null,
+                            "isEnabled": true,
+                            "collapsed": false,
+                            "itemGUID": "19ade0ab-969a-436e-93f6-2613aa2a48fb"
+                        }
+                    ],
+                    "sourceCodeList": [],
+                    "name": null,
+                    "isEnabled": true,
+                    "collapsed": false,
+                    "itemGUID": "1e8792e4-f2da-485d-ab9d-9a8ff6a99a82"
+                }
+            ],
+            "iconLetter": {
+                "iconType": "Text",
+                "iconType2": "None",
+                "iconText": "A",
+                "useIconTextFirstLetter": true,
+                "useIconLogColor": false,
+                "iconColor": {
+                    "r": 1.0,
+                    "g": 1.0,
+                    "b": 1.0,
+                    "a": 1.0
+                },
+                "iconBuiltInID": "BACKGROUNDS_ECPBGROUNDEDSQUARE",
+                "iconTextureGUID": "",
+                "useIconShadow": true,
+                "iconOffset": {
+                    "x": 0.0,
+                    "y": 0.0
+                },
+                "iconShadowOffset": {
+                    "x": 0.5,
+                    "y": 0.5
+                },
+                "iconSize": 13.0,
+                "name": null,
+                "isEnabled": true,
+                "collapsed": false,
+                "itemGUID": null
+            },
+            "iconSymbol": null,
+            "iconBackground": null,
+            "iconTexture": {
+                "iconType": "Texture",
+                "iconType2": "None",
+                "iconText": "A",
+                "useIconTextFirstLetter": true,
+                "useIconLogColor": false,
+                "iconColor": {
+                    "r": 1.0,
+                    "g": 1.0,
+                    "b": 1.0,
+                    "a": 1.0
+                },
+                "iconBuiltInID": "BACKGROUNDS_ECPBGROUNDEDSQUARE",
+                "iconTextureGUID": "d4780dc1205c7c7478c970d8c61d24e8",
+                "useIconShadow": true,
+                "iconOffset": {
+                    "x": 0.0,
+                    "y": 0.0
+                },
+                "iconShadowOffset": {
+                    "x": 0.5,
+                    "y": 0.5
+                },
+                "iconSize": 13.0,
+                "name": null,
+                "isEnabled": true,
+                "collapsed": false,
+                "itemGUID": null
+            },
+            "showInToolbar": true,
+            "hideLabelInToolbar": false,
+            "hideWhenNoMatches": false,
+            "name": "Economy",
+            "isEnabled": true,
+            "collapsed": true,
+            "itemGUID": "3aa17bb6-ef67-4c53-a54b-8a83a2abc466"
+        },
+        {
+            "filterName": "Network",
+            "mainColor": {
+                "r": 0.933929443359375,
+                "g": 1.0,
+                "b": 0.0,
+                "a": 1.0
+            },
+            "isStandardFilter": false,
+            "isTempFilter": false,
+            "filterOnly": false,
+            "useAdvancedColors": false,
+            "customTextColor": {
+                "r": 1.0,
+                "g": 1.0,
+                "b": 1.0,
+                "a": 1.0
+            },
+            "customBackgroundColor": {
+                "r": 1.0,
+                "g": 1.0,
+                "b": 1.0,
+                "a": 1.0
+            },
+            "swallowStandard": true,
+            "standardCanSwallow": false,
+            "overrideStandardColors": true,
+            "overrideStandardIcon": true,
+            "collapseIconBackground": false,
+            "collapseIconSymbol": false,
+            "collapseIconLetter": false,
+            "collapseIconTexture": false,
+            "useIconBackground": true,
+            "useIconSymbol": false,
+            "useIconLetter": true,
+            "useIconTexture": false,
+            "filterFormatVersion": -1,
+            "iconColorize": false,
+            "useAndOpForSearchList": false,
+            "searchList": [
+                {
+                    "searchString": "Network",
+                    "searchType": "ExactCaseInsensitive",
+                    "removeSearchStringFromLog": false,
+                    "logTypeList": [
+                        {
+                            "logType": "Log",
+                            "name": null,
+                            "isEnabled": true,
+                            "collapsed": false,
+                            "itemGUID": "142a8cb7-2d00-422a-bbab-3acaec6681c9"
+                        }
+                    ],
+                    "columnTypeList": [
+                        {
+                            "columnType": "Log",
+                            "name": null,
+                            "isEnabled": true,
+                            "collapsed": false,
+                            "itemGUID": "65655b3f-bb10-40ce-baf3-526c96ffd2f4"
+                        }
+                    ],
+                    "sourceCodeList": [],
+                    "name": null,
+                    "isEnabled": true,
+                    "collapsed": false,
+                    "itemGUID": "69cd9b0f-a0bf-4626-b2b8-c481aa5a3cd4"
+                }
+            ],
+            "iconLetter": {
+                "iconType": "Text",
+                "iconType2": "None",
+                "iconText": "A",
+                "useIconTextFirstLetter": true,
+                "useIconLogColor": false,
+                "iconColor": {
+                    "r": 1.0,
+                    "g": 1.0,
+                    "b": 1.0,
+                    "a": 1.0
+                },
+                "iconBuiltInID": "BACKGROUNDS_ECPBGROUNDEDSQUARE",
+                "iconTextureGUID": "",
+                "useIconShadow": true,
+                "iconOffset": {
+                    "x": 0.0,
+                    "y": 0.0
+                },
+                "iconShadowOffset": {
+                    "x": 0.5,
+                    "y": 0.5
+                },
+                "iconSize": 13.0,
+                "name": null,
+                "isEnabled": true,
+                "collapsed": false,
+                "itemGUID": null
+            },
+            "iconSymbol": null,
+            "iconBackground": {
+                "iconType": "Background",
+                "iconType2": "None",
+                "iconText": "A",
+                "useIconTextFirstLetter": true,
+                "useIconLogColor": true,
+                "iconColor": {
+                    "r": 1.0,
+                    "g": 1.0,
+                    "b": 1.0,
+                    "a": 1.0
+                },
+                "iconBuiltInID": "BACKGROUNDS_ECPBGROUNDEDSQUARE",
+                "iconTextureGUID": "",
+                "useIconShadow": true,
+                "iconOffset": {
+                    "x": 0.0,
+                    "y": 0.0
+                },
+                "iconShadowOffset": {
+                    "x": 0.5,
+                    "y": 0.5
+                },
+                "iconSize": 13.0,
+                "name": null,
+                "isEnabled": true,
+                "collapsed": false,
+                "itemGUID": null
+            },
+            "iconTexture": null,
+            "showInToolbar": true,
+            "hideLabelInToolbar": false,
+            "hideWhenNoMatches": false,
+            "name": "Network",
+            "isEnabled": true,
+            "collapsed": true,
+            "itemGUID": "8b0caf4a-02b5-4ffe-a412-ab24b709457d"
+        },
+        {
+            "filterName": "Database",
+            "mainColor": {
+                "r": 0.0,
+                "g": 0.0,
+                "b": 1.0,
+                "a": 1.0
+            },
+            "isStandardFilter": false,
+            "isTempFilter": false,
+            "filterOnly": false,
+            "useAdvancedColors": false,
+            "customTextColor": {
+                "r": 1.0,
+                "g": 1.0,
+                "b": 1.0,
+                "a": 1.0
+            },
+            "customBackgroundColor": {
+                "r": 1.0,
+                "g": 1.0,
+                "b": 1.0,
+                "a": 1.0
+            },
+            "swallowStandard": true,
+            "standardCanSwallow": false,
+            "overrideStandardColors": true,
+            "overrideStandardIcon": true,
+            "collapseIconBackground": false,
+            "collapseIconSymbol": false,
+            "collapseIconLetter": false,
+            "collapseIconTexture": false,
+            "useIconBackground": true,
+            "useIconSymbol": false,
+            "useIconLetter": true,
+            "useIconTexture": false,
+            "filterFormatVersion": -1,
+            "iconColorize": false,
+            "useAndOpForSearchList": false,
+            "searchList": [
+                {
+                    "searchString": "Database",
+                    "searchType": "Exact",
+                    "removeSearchStringFromLog": false,
+                    "logTypeList": [
+                        {
+                            "logType": "Log",
+                            "name": null,
+                            "isEnabled": true,
+                            "collapsed": false,
+                            "itemGUID": "817c71ca-8aae-4ff4-bb26-b94a764e5144"
+                        }
+                    ],
+                    "columnTypeList": [
+                        {
+                            "columnType": "Log",
+                            "name": null,
+                            "isEnabled": true,
+                            "collapsed": false,
+                            "itemGUID": "e50d6b35-9bec-4a1f-b35a-256b86bba812"
+                        }
+                    ],
+                    "sourceCodeList": [],
+                    "name": null,
+                    "isEnabled": true,
+                    "collapsed": false,
+                    "itemGUID": "b38fc9f9-8790-431b-a99e-201be33ed660"
+                }
+            ],
+            "iconLetter": {
+                "iconType": "Text",
+                "iconType2": "None",
+                "iconText": "A",
+                "useIconTextFirstLetter": true,
+                "useIconLogColor": false,
+                "iconColor": {
+                    "r": 1.0,
+                    "g": 1.0,
+                    "b": 1.0,
+                    "a": 1.0
+                },
+                "iconBuiltInID": "BACKGROUNDS_ECPBGROUNDEDSQUARE",
+                "iconTextureGUID": "",
+                "useIconShadow": true,
+                "iconOffset": {
+                    "x": 0.0,
+                    "y": 0.0
+                },
+                "iconShadowOffset": {
+                    "x": 0.5,
+                    "y": 0.5
+                },
+                "iconSize": 13.0,
+                "name": null,
+                "isEnabled": true,
+                "collapsed": false,
+                "itemGUID": null
+            },
+            "iconSymbol": null,
+            "iconBackground": {
+                "iconType": "Background",
+                "iconType2": "None",
+                "iconText": "A",
+                "useIconTextFirstLetter": true,
+                "useIconLogColor": true,
+                "iconColor": {
+                    "r": 1.0,
+                    "g": 1.0,
+                    "b": 1.0,
+                    "a": 1.0
+                },
+                "iconBuiltInID": "BACKGROUNDS_ECPBGROUNDEDSQUARE",
+                "iconTextureGUID": "",
+                "useIconShadow": true,
+                "iconOffset": {
+                    "x": 0.0,
+                    "y": 0.0
+                },
+                "iconShadowOffset": {
+                    "x": 0.5,
+                    "y": 0.5
+                },
+                "iconSize": 13.0,
+                "name": null,
+                "isEnabled": true,
+                "collapsed": false,
+                "itemGUID": null
+            },
+            "iconTexture": null,
+            "showInToolbar": true,
+            "hideLabelInToolbar": false,
+            "hideWhenNoMatches": false,
+            "name": "Database",
+            "isEnabled": true,
+            "collapsed": true,
+            "itemGUID": "19596da2-19f8-49bd-ad7b-9d8a6fb38544"
+        },
+        {
+            "filterName": "State",
+            "mainColor": {
+                "r": 0.775580406188965,
+                "g": 0.0,
+                "b": 1.0,
+                "a": 1.0
+            },
+            "isStandardFilter": false,
+            "isTempFilter": false,
+            "filterOnly": false,
+            "useAdvancedColors": false,
+            "customTextColor": {
+                "r": 1.0,
+                "g": 1.0,
+                "b": 1.0,
+                "a": 1.0
+            },
+            "customBackgroundColor": {
+                "r": 1.0,
+                "g": 1.0,
+                "b": 1.0,
+                "a": 1.0
+            },
+            "swallowStandard": true,
+            "standardCanSwallow": false,
+            "overrideStandardColors": true,
+            "overrideStandardIcon": true,
+            "collapseIconBackground": false,
+            "collapseIconSymbol": false,
+            "collapseIconLetter": false,
+            "collapseIconTexture": false,
+            "useIconBackground": true,
+            "useIconSymbol": false,
+            "useIconLetter": true,
+            "useIconTexture": false,
+            "filterFormatVersion": -1,
+            "iconColorize": false,
+            "useAndOpForSearchList": false,
+            "searchList": [
+                {
+                    "searchString": "State",
+                    "searchType": "Exact",
+                    "removeSearchStringFromLog": false,
+                    "logTypeList": [
+                        {
+                            "logType": "Log",
+                            "name": null,
+                            "isEnabled": true,
+                            "collapsed": false,
+                            "itemGUID": "b44535ba-ed77-42c6-bba4-3c284189bdf9"
+                        }
+                    ],
+                    "columnTypeList": [
+                        {
+                            "columnType": "Log",
+                            "name": null,
+                            "isEnabled": true,
+                            "collapsed": false,
+                            "itemGUID": "99719657-47e9-4bcf-b3d8-a3ea4ba74152"
+                        }
+                    ],
+                    "sourceCodeList": [],
+                    "name": null,
+                    "isEnabled": true,
+                    "collapsed": false,
+                    "itemGUID": "0124354e-f608-491e-a01b-6b540b73464d"
+                }
+            ],
+            "iconLetter": {
+                "iconType": "Text",
+                "iconType2": "None",
+                "iconText": "A",
+                "useIconTextFirstLetter": true,
+                "useIconLogColor": false,
+                "iconColor": {
+                    "r": 1.0,
+                    "g": 1.0,
+                    "b": 1.0,
+                    "a": 1.0
+                },
+                "iconBuiltInID": "BACKGROUNDS_ECPBGROUNDEDSQUARE",
+                "iconTextureGUID": "",
+                "useIconShadow": true,
+                "iconOffset": {
+                    "x": 0.0,
+                    "y": 0.0
+                },
+                "iconShadowOffset": {
+                    "x": 0.5,
+                    "y": 0.5
+                },
+                "iconSize": 13.0,
+                "name": null,
+                "isEnabled": true,
+                "collapsed": false,
+                "itemGUID": null
+            },
+            "iconSymbol": null,
+            "iconBackground": {
+                "iconType": "Background",
+                "iconType2": "None",
+                "iconText": "A",
+                "useIconTextFirstLetter": true,
+                "useIconLogColor": true,
+                "iconColor": {
+                    "r": 1.0,
+                    "g": 1.0,
+                    "b": 1.0,
+                    "a": 1.0
+                },
+                "iconBuiltInID": "BACKGROUNDS_ECPBGROUNDEDSQUARE",
+                "iconTextureGUID": "",
+                "useIconShadow": true,
+                "iconOffset": {
+                    "x": 0.0,
+                    "y": 0.0
+                },
+                "iconShadowOffset": {
+                    "x": 0.5,
+                    "y": 0.5
+                },
+                "iconSize": 13.0,
+                "name": null,
+                "isEnabled": true,
+                "collapsed": false,
+                "itemGUID": null
+            },
+            "iconTexture": null,
+            "showInToolbar": true,
+            "hideLabelInToolbar": false,
+            "hideWhenNoMatches": false,
+            "name": "State",
+            "isEnabled": true,
+            "collapsed": true,
+            "itemGUID": "ac393498-6629-42c1-bf9e-424a8818370f"
+        },
+        {
+            "filterName": "",
+            "mainColor": {
+                "r": 1.0,
+                "g": 0.0,
+                "b": 0.878893375396729,
+                "a": 1.0
+            },
+            "isStandardFilter": false,
+            "isTempFilter": false,
+            "filterOnly": false,
+            "useAdvancedColors": false,
+            "customTextColor": {
+                "r": 1.0,
+                "g": 1.0,
+                "b": 1.0,
+                "a": 1.0
+            },
+            "customBackgroundColor": {
+                "r": 1.0,
+                "g": 1.0,
+                "b": 1.0,
+                "a": 1.0
+            },
+            "swallowStandard": true,
+            "standardCanSwallow": false,
+            "overrideStandardColors": true,
+            "overrideStandardIcon": true,
+            "collapseIconBackground": false,
+            "collapseIconSymbol": false,
+            "collapseIconLetter": false,
+            "collapseIconTexture": false,
+            "useIconBackground": true,
+            "useIconSymbol": false,
+            "useIconLetter": true,
+            "useIconTexture": false,
+            "filterFormatVersion": -1,
+            "iconColorize": false,
+            "useAndOpForSearchList": false,
+            "searchList": [
+                {
+                    "searchString": "API",
+                    "searchType": "Exact",
+                    "removeSearchStringFromLog": false,
+                    "logTypeList": [
+                        {
+                            "logType": "Log",
+                            "name": null,
+                            "isEnabled": true,
+                            "collapsed": false,
+                            "itemGUID": "a1315c5d-b749-4c25-a1e1-d2b6dd111a04"
+                        }
+                    ],
+                    "columnTypeList": [
+                        {
+                            "columnType": "Log",
+                            "name": null,
+                            "isEnabled": true,
+                            "collapsed": false,
+                            "itemGUID": "337c9033-6325-448d-9e11-e03ab060adfa"
+                        }
+                    ],
+                    "sourceCodeList": [],
+                    "name": null,
+                    "isEnabled": true,
+                    "collapsed": false,
+                    "itemGUID": "d1be682e-3eac-4f08-8f73-aaea41107536"
+                }
+            ],
+            "iconLetter": {
+                "iconType": "Text",
+                "iconType2": "None",
+                "iconText": "A",
+                "useIconTextFirstLetter": true,
+                "useIconLogColor": false,
+                "iconColor": {
+                    "r": 1.0,
+                    "g": 1.0,
+                    "b": 1.0,
+                    "a": 1.0
+                },
+                "iconBuiltInID": "BACKGROUNDS_ECPBGROUNDEDSQUARE",
+                "iconTextureGUID": "",
+                "useIconShadow": true,
+                "iconOffset": {
+                    "x": 0.0,
+                    "y": 0.0
+                },
+                "iconShadowOffset": {
+                    "x": 0.5,
+                    "y": 0.5
+                },
+                "iconSize": 13.0,
+                "name": null,
+                "isEnabled": true,
+                "collapsed": false,
+                "itemGUID": null
+            },
+            "iconSymbol": null,
+            "iconBackground": {
+                "iconType": "Background",
+                "iconType2": "None",
+                "iconText": "A",
+                "useIconTextFirstLetter": true,
+                "useIconLogColor": true,
+                "iconColor": {
+                    "r": 1.0,
+                    "g": 1.0,
+                    "b": 1.0,
+                    "a": 1.0
+                },
+                "iconBuiltInID": "BACKGROUNDS_ECPBGROUNDEDSQUARE",
+                "iconTextureGUID": "",
+                "useIconShadow": true,
+                "iconOffset": {
+                    "x": 0.0,
+                    "y": 0.0
+                },
+                "iconShadowOffset": {
+                    "x": 0.5,
+                    "y": 0.5
+                },
+                "iconSize": 13.0,
+                "name": null,
+                "isEnabled": true,
+                "collapsed": false,
+                "itemGUID": null
+            },
+            "iconTexture": null,
+            "showInToolbar": true,
+            "hideLabelInToolbar": false,
+            "hideWhenNoMatches": false,
+            "name": "API",
+            "isEnabled": true,
+            "collapsed": true,
+            "itemGUID": "83118fbd-48bc-4833-a9c2-3b08f3fa6fb9"
+        },
+        {
+            "filterName": "",
+            "mainColor": {
+                "r": 0.431001573801041,
+                "g": 0.528301894664764,
+                "b": 0.266642957925797,
+                "a": 1.0
+            },
+            "isStandardFilter": false,
+            "isTempFilter": false,
+            "filterOnly": false,
+            "useAdvancedColors": false,
+            "customTextColor": {
+                "r": 1.0,
+                "g": 1.0,
+                "b": 1.0,
+                "a": 1.0
+            },
+            "customBackgroundColor": {
+                "r": 1.0,
+                "g": 1.0,
+                "b": 1.0,
+                "a": 1.0
+            },
+            "swallowStandard": true,
+            "standardCanSwallow": false,
+            "overrideStandardColors": true,
+            "overrideStandardIcon": true,
+            "collapseIconBackground": false,
+            "collapseIconSymbol": false,
+            "collapseIconLetter": false,
+            "collapseIconTexture": false,
+            "useIconBackground": true,
+            "useIconSymbol": false,
+            "useIconLetter": true,
+            "useIconTexture": false,
+            "filterFormatVersion": -1,
+            "iconColorize": false,
+            "useAndOpForSearchList": false,
+            "searchList": [
+                {
+                    "searchString": "Analytics",
+                    "searchType": "Exact",
+                    "removeSearchStringFromLog": false,
+                    "logTypeList": [
+                        {
+                            "logType": "Log",
+                            "name": null,
+                            "isEnabled": true,
+                            "collapsed": false,
+                            "itemGUID": "88c9f7c6-7ff3-4863-beb9-ee3e4af6c767"
+                        }
+                    ],
+                    "columnTypeList": [
+                        {
+                            "columnType": "Log",
+                            "name": null,
+                            "isEnabled": true,
+                            "collapsed": false,
+                            "itemGUID": "4f599b86-1c96-402e-9289-b6f6c9883ec7"
+                        }
+                    ],
+                    "sourceCodeList": [],
+                    "name": null,
+                    "isEnabled": true,
+                    "collapsed": false,
+                    "itemGUID": "b6e95cad-3d99-4cb7-ab84-a891dbe35a7f"
+                }
+            ],
+            "iconLetter": {
+                "iconType": "Text",
+                "iconType2": "None",
+                "iconText": "A",
+                "useIconTextFirstLetter": true,
+                "useIconLogColor": false,
+                "iconColor": {
+                    "r": 1.0,
+                    "g": 1.0,
+                    "b": 1.0,
+                    "a": 1.0
+                },
+                "iconBuiltInID": "BACKGROUNDS_ECPBGROUNDEDSQUARE",
+                "iconTextureGUID": "",
+                "useIconShadow": true,
+                "iconOffset": {
+                    "x": 0.0,
+                    "y": 0.0
+                },
+                "iconShadowOffset": {
+                    "x": 0.5,
+                    "y": 0.5
+                },
+                "iconSize": 13.0,
+                "name": null,
+                "isEnabled": true,
+                "collapsed": false,
+                "itemGUID": null
+            },
+            "iconSymbol": null,
+            "iconBackground": {
+                "iconType": "Background",
+                "iconType2": "None",
+                "iconText": "A",
+                "useIconTextFirstLetter": true,
+                "useIconLogColor": true,
+                "iconColor": {
+                    "r": 1.0,
+                    "g": 1.0,
+                    "b": 1.0,
+                    "a": 1.0
+                },
+                "iconBuiltInID": "BACKGROUNDS_ECPBGROUNDEDSQUARE",
+                "iconTextureGUID": "",
+                "useIconShadow": true,
+                "iconOffset": {
+                    "x": 0.0,
+                    "y": 0.0
+                },
+                "iconShadowOffset": {
+                    "x": 0.5,
+                    "y": 0.5
+                },
+                "iconSize": 13.0,
+                "name": null,
+                "isEnabled": true,
+                "collapsed": false,
+                "itemGUID": null
+            },
+            "iconTexture": null,
+            "showInToolbar": true,
+            "hideLabelInToolbar": false,
+            "hideWhenNoMatches": false,
+            "name": "Analytics",
+            "isEnabled": true,
+            "collapsed": true,
+            "itemGUID": "5c9fb273-6f31-4b56-963a-285b4e87d70b"
+        }
+    ],
     "standardFilters": [
         {
             "filterName": "",
@@ -815,889 +2430,6 @@
             "isEnabled": true,
             "collapsed": true,
             "itemGUID": "f9386d11-bb98-47ed-8c20-92681e616e89"
-        }
-    ],
-    "sharedIgnoredStackEntries": [
-        {
-            "namespaceName": "<Any>",
-            "className": "ConsoleProDebug",
-            "methodName": "LogToFilter",
-            "name": "Untitled",
-            "isEnabled": true,
-            "collapsed": false,
-            "itemGUID": "b83f921a-e592-408c-8d12-e365a883dc76"
-        },
-        {
-            "namespaceName": "<Any>",
-            "className": "DebugX",
-            "methodName": "<Any>",
-            "name": "Untitled",
-            "isEnabled": true,
-            "collapsed": false,
-            "itemGUID": "1e8d1a74-cac0-4cc2-86a6-0c7d4d2f77ea"
-        },
-        {
-            "namespaceName": "<Any>",
-            "className": "ConsoleProDebug",
-            "methodName": "<Any>",
-            "name": "Untitled",
-            "isEnabled": true,
-            "collapsed": false,
-            "itemGUID": "5ff25dd3-594f-4836-a749-4668f5ccc4d6"
-        }
-    ],
-    "sharedIgnoredLogEntries": [
-        {
-            "searchString": "Serialization depth",
-            "searchType": "Exact",
-            "removeSearchStringFromLog": true,
-            "logTypeList": [
-                {
-                    "logType": "Warning",
-                    "name": "Untitled",
-                    "isEnabled": true,
-                    "collapsed": false,
-                    "itemGUID": "5031de39-f271-432d-95c2-fd7b5bd0d7af"
-                }
-            ],
-            "columnTypeList": [
-                {
-                    "columnType": "Log",
-                    "name": "Untitled",
-                    "isEnabled": true,
-                    "collapsed": false,
-                    "itemGUID": "be840d22-08af-4dcf-aa7c-66ec2405796d"
-                }
-            ],
-            "sourceCodeList": [],
-            "name": "Untitled",
-            "isEnabled": true,
-            "collapsed": true,
-            "itemGUID": "e523152e-78d4-4feb-b309-aa9ea139cfc7"
-        }
-    ],
-    "sharedFilters": [
-        {
-            "filterName": "References",
-            "mainColor": {
-                "r": 1.0,
-                "g": 0.427350103855133,
-                "b": 0.0,
-                "a": 1.0
-            },
-            "isStandardFilter": false,
-            "isTempFilter": false,
-            "filterOnly": false,
-            "useAdvancedColors": false,
-            "customTextColor": {
-                "r": 1.0,
-                "g": 1.0,
-                "b": 1.0,
-                "a": 1.0
-            },
-            "customBackgroundColor": {
-                "r": 1.0,
-                "g": 1.0,
-                "b": 1.0,
-                "a": 1.0
-            },
-            "swallowStandard": true,
-            "standardCanSwallow": false,
-            "overrideStandardColors": true,
-            "overrideStandardIcon": true,
-            "collapseIconBackground": false,
-            "collapseIconSymbol": false,
-            "collapseIconLetter": false,
-            "collapseIconTexture": false,
-            "useIconBackground": true,
-            "useIconSymbol": false,
-            "useIconLetter": true,
-            "useIconTexture": false,
-            "filterFormatVersion": -1,
-            "iconColorize": false,
-            "useAndOpForSearchList": false,
-            "searchList": [
-                {
-                    "searchString": "Reference",
-                    "searchType": "Fuzzy",
-                    "removeSearchStringFromLog": false,
-                    "logTypeList": [
-                        {
-                            "logType": "Log",
-                            "name": null,
-                            "isEnabled": true,
-                            "collapsed": false,
-                            "itemGUID": "98eef676-87c7-4480-941c-5bd7dd08db54"
-                        }
-                    ],
-                    "columnTypeList": [
-                        {
-                            "columnType": "Log",
-                            "name": null,
-                            "isEnabled": true,
-                            "collapsed": false,
-                            "itemGUID": "bf78925f-fc57-417d-8e7d-80eea309717b"
-                        }
-                    ],
-                    "sourceCodeList": [],
-                    "name": null,
-                    "isEnabled": true,
-                    "collapsed": false,
-                    "itemGUID": "50b4f504-8d1f-42df-bed2-17b362e7b05b"
-                }
-            ],
-            "iconLetter": {
-                "iconType": "Text",
-                "iconType2": "None",
-                "iconText": "A",
-                "useIconTextFirstLetter": true,
-                "useIconLogColor": false,
-                "iconColor": {
-                    "r": 1.0,
-                    "g": 1.0,
-                    "b": 1.0,
-                    "a": 1.0
-                },
-                "iconBuiltInID": "BACKGROUNDS_ECPBGROUNDEDSQUARE",
-                "iconTextureGUID": "",
-                "useIconShadow": true,
-                "iconOffset": {
-                    "x": 0.0,
-                    "y": 0.0
-                },
-                "iconShadowOffset": {
-                    "x": 0.5,
-                    "y": 0.5
-                },
-                "iconSize": 13.0,
-                "name": null,
-                "isEnabled": true,
-                "collapsed": false,
-                "itemGUID": null
-            },
-            "iconSymbol": null,
-            "iconBackground": {
-                "iconType": "Background",
-                "iconType2": "None",
-                "iconText": "A",
-                "useIconTextFirstLetter": true,
-                "useIconLogColor": true,
-                "iconColor": {
-                    "r": 1.0,
-                    "g": 1.0,
-                    "b": 1.0,
-                    "a": 1.0
-                },
-                "iconBuiltInID": "BACKGROUNDS_ECPBGROUNDEDSQUARE",
-                "iconTextureGUID": "",
-                "useIconShadow": true,
-                "iconOffset": {
-                    "x": 0.0,
-                    "y": 0.0
-                },
-                "iconShadowOffset": {
-                    "x": 0.5,
-                    "y": 0.5
-                },
-                "iconSize": 13.0,
-                "name": null,
-                "isEnabled": true,
-                "collapsed": false,
-                "itemGUID": null
-            },
-            "iconTexture": null,
-            "showInToolbar": true,
-            "hideLabelInToolbar": true,
-            "hideWhenNoMatches": false,
-            "name": "References",
-            "isEnabled": true,
-            "collapsed": true,
-            "itemGUID": "ddba1363-a58f-4478-ae51-3ca320d3442a"
-        },
-        {
-            "filterName": "Events",
-            "mainColor": {
-                "r": 0.0,
-                "g": 0.0,
-                "b": 1.0,
-                "a": 1.0
-            },
-            "isStandardFilter": false,
-            "isTempFilter": false,
-            "filterOnly": false,
-            "useAdvancedColors": false,
-            "customTextColor": {
-                "r": 1.0,
-                "g": 1.0,
-                "b": 1.0,
-                "a": 1.0
-            },
-            "customBackgroundColor": {
-                "r": 1.0,
-                "g": 1.0,
-                "b": 1.0,
-                "a": 1.0
-            },
-            "swallowStandard": true,
-            "standardCanSwallow": false,
-            "overrideStandardColors": true,
-            "overrideStandardIcon": true,
-            "collapseIconBackground": false,
-            "collapseIconSymbol": false,
-            "collapseIconLetter": false,
-            "collapseIconTexture": false,
-            "useIconBackground": true,
-            "useIconSymbol": false,
-            "useIconLetter": true,
-            "useIconTexture": false,
-            "filterFormatVersion": -1,
-            "iconColorize": false,
-            "useAndOpForSearchList": false,
-            "searchList": [
-                {
-                    "searchString": "Event",
-                    "searchType": "Fuzzy",
-                    "removeSearchStringFromLog": false,
-                    "logTypeList": [
-                        {
-                            "logType": "Log",
-                            "name": null,
-                            "isEnabled": true,
-                            "collapsed": false,
-                            "itemGUID": "f3fd2bc9-8060-4c73-ace0-920f4c4f18fa"
-                        }
-                    ],
-                    "columnTypeList": [
-                        {
-                            "columnType": "Log",
-                            "name": null,
-                            "isEnabled": true,
-                            "collapsed": false,
-                            "itemGUID": "73174e8f-5761-472a-bec0-74f8f9349121"
-                        }
-                    ],
-                    "sourceCodeList": [],
-                    "name": null,
-                    "isEnabled": true,
-                    "collapsed": false,
-                    "itemGUID": "f4d70042-aa72-4c29-8079-a99b77408b19"
-                }
-            ],
-            "iconLetter": {
-                "iconType": "Text",
-                "iconType2": "None",
-                "iconText": "A",
-                "useIconTextFirstLetter": true,
-                "useIconLogColor": false,
-                "iconColor": {
-                    "r": 1.0,
-                    "g": 1.0,
-                    "b": 1.0,
-                    "a": 1.0
-                },
-                "iconBuiltInID": "BACKGROUNDS_ECPBGROUNDEDSQUARE",
-                "iconTextureGUID": "",
-                "useIconShadow": true,
-                "iconOffset": {
-                    "x": 0.0,
-                    "y": 0.0
-                },
-                "iconShadowOffset": {
-                    "x": 0.5,
-                    "y": 0.5
-                },
-                "iconSize": 13.0,
-                "name": null,
-                "isEnabled": true,
-                "collapsed": false,
-                "itemGUID": null
-            },
-            "iconSymbol": null,
-            "iconBackground": {
-                "iconType": "Background",
-                "iconType2": "None",
-                "iconText": "A",
-                "useIconTextFirstLetter": true,
-                "useIconLogColor": true,
-                "iconColor": {
-                    "r": 1.0,
-                    "g": 1.0,
-                    "b": 1.0,
-                    "a": 1.0
-                },
-                "iconBuiltInID": "BACKGROUNDS_ECPBGROUNDEDSQUARE",
-                "iconTextureGUID": "",
-                "useIconShadow": true,
-                "iconOffset": {
-                    "x": 0.0,
-                    "y": 0.0
-                },
-                "iconShadowOffset": {
-                    "x": 0.5,
-                    "y": 0.5
-                },
-                "iconSize": 13.0,
-                "name": null,
-                "isEnabled": true,
-                "collapsed": false,
-                "itemGUID": null
-            },
-            "iconTexture": null,
-            "showInToolbar": true,
-            "hideLabelInToolbar": true,
-            "hideWhenNoMatches": false,
-            "name": "Events",
-            "isEnabled": true,
-            "collapsed": true,
-            "itemGUID": "3ca3a558-0331-497d-a514-6caa1ed43ef2"
-        },
-        {
-            "filterName": "Create",
-            "mainColor": {
-                "r": 0.0695173740386963,
-                "g": 1.0,
-                "b": 0.0,
-                "a": 1.0
-            },
-            "isStandardFilter": false,
-            "isTempFilter": false,
-            "filterOnly": false,
-            "useAdvancedColors": false,
-            "customTextColor": {
-                "r": 1.0,
-                "g": 1.0,
-                "b": 1.0,
-                "a": 1.0
-            },
-            "customBackgroundColor": {
-                "r": 1.0,
-                "g": 1.0,
-                "b": 1.0,
-                "a": 1.0
-            },
-            "swallowStandard": true,
-            "standardCanSwallow": false,
-            "overrideStandardColors": true,
-            "overrideStandardIcon": true,
-            "collapseIconBackground": false,
-            "collapseIconSymbol": false,
-            "collapseIconLetter": false,
-            "collapseIconTexture": false,
-            "useIconBackground": true,
-            "useIconSymbol": false,
-            "useIconLetter": true,
-            "useIconTexture": false,
-            "filterFormatVersion": -1,
-            "iconColorize": false,
-            "useAndOpForSearchList": false,
-            "searchList": [
-                {
-                    "searchString": "create",
-                    "searchType": "Fuzzy",
-                    "removeSearchStringFromLog": false,
-                    "logTypeList": [
-                        {
-                            "logType": "Log",
-                            "name": null,
-                            "isEnabled": true,
-                            "collapsed": false,
-                            "itemGUID": "b92b467c-8106-4450-b3f6-2a284cf37f6e"
-                        }
-                    ],
-                    "columnTypeList": [
-                        {
-                            "columnType": "Log",
-                            "name": null,
-                            "isEnabled": true,
-                            "collapsed": false,
-                            "itemGUID": "d869f3f8-f11e-45b3-bc59-1c5fb5d16ac4"
-                        }
-                    ],
-                    "sourceCodeList": [],
-                    "name": null,
-                    "isEnabled": true,
-                    "collapsed": false,
-                    "itemGUID": "037c5823-5337-48ea-8a4a-b3c0f5e7817b"
-                }
-            ],
-            "iconLetter": {
-                "iconType": "Text",
-                "iconType2": "None",
-                "iconText": "A",
-                "useIconTextFirstLetter": true,
-                "useIconLogColor": false,
-                "iconColor": {
-                    "r": 1.0,
-                    "g": 1.0,
-                    "b": 1.0,
-                    "a": 1.0
-                },
-                "iconBuiltInID": "BACKGROUNDS_ECPBGROUNDEDSQUARE",
-                "iconTextureGUID": "",
-                "useIconShadow": true,
-                "iconOffset": {
-                    "x": 0.0,
-                    "y": 0.0
-                },
-                "iconShadowOffset": {
-                    "x": 0.5,
-                    "y": 0.5
-                },
-                "iconSize": 13.0,
-                "name": null,
-                "isEnabled": true,
-                "collapsed": false,
-                "itemGUID": null
-            },
-            "iconSymbol": null,
-            "iconBackground": {
-                "iconType": "Background",
-                "iconType2": "None",
-                "iconText": "A",
-                "useIconTextFirstLetter": true,
-                "useIconLogColor": true,
-                "iconColor": {
-                    "r": 1.0,
-                    "g": 1.0,
-                    "b": 1.0,
-                    "a": 1.0
-                },
-                "iconBuiltInID": "BACKGROUNDS_ECPBGROUNDEDSQUARE",
-                "iconTextureGUID": "",
-                "useIconShadow": true,
-                "iconOffset": {
-                    "x": 0.0,
-                    "y": 0.0
-                },
-                "iconShadowOffset": {
-                    "x": 0.5,
-                    "y": 0.5
-                },
-                "iconSize": 13.0,
-                "name": null,
-                "isEnabled": true,
-                "collapsed": false,
-                "itemGUID": null
-            },
-            "iconTexture": null,
-            "showInToolbar": true,
-            "hideLabelInToolbar": true,
-            "hideWhenNoMatches": true,
-            "name": "Create",
-            "isEnabled": true,
-            "collapsed": true,
-            "itemGUID": "cda45451-f3e0-4073-9eae-76a55952e420"
-        },
-        {
-            "filterName": "Destroy",
-            "mainColor": {
-                "r": 1.0,
-                "g": 0.0334907881915569,
-                "b": 0.0,
-                "a": 1.0
-            },
-            "isStandardFilter": false,
-            "isTempFilter": false,
-            "filterOnly": false,
-            "useAdvancedColors": false,
-            "customTextColor": {
-                "r": 1.0,
-                "g": 1.0,
-                "b": 1.0,
-                "a": 1.0
-            },
-            "customBackgroundColor": {
-                "r": 1.0,
-                "g": 1.0,
-                "b": 1.0,
-                "a": 1.0
-            },
-            "swallowStandard": true,
-            "standardCanSwallow": false,
-            "overrideStandardColors": true,
-            "overrideStandardIcon": true,
-            "collapseIconBackground": false,
-            "collapseIconSymbol": false,
-            "collapseIconLetter": false,
-            "collapseIconTexture": false,
-            "useIconBackground": true,
-            "useIconSymbol": false,
-            "useIconLetter": true,
-            "useIconTexture": false,
-            "filterFormatVersion": -1,
-            "iconColorize": false,
-            "useAndOpForSearchList": false,
-            "searchList": [
-                {
-                    "searchString": "destroy",
-                    "searchType": "Fuzzy",
-                    "removeSearchStringFromLog": false,
-                    "logTypeList": [
-                        {
-                            "logType": "Log",
-                            "name": null,
-                            "isEnabled": true,
-                            "collapsed": false,
-                            "itemGUID": "139bc15f-115e-4bc3-933c-e36c9bdb7ba9"
-                        }
-                    ],
-                    "columnTypeList": [
-                        {
-                            "columnType": "Log",
-                            "name": null,
-                            "isEnabled": true,
-                            "collapsed": false,
-                            "itemGUID": "320d3fe3-9f20-4fdd-bdde-b13829cea584"
-                        }
-                    ],
-                    "sourceCodeList": [],
-                    "name": null,
-                    "isEnabled": true,
-                    "collapsed": false,
-                    "itemGUID": "c4eb5d2b-95cd-4ff8-a153-d5f815758225"
-                }
-            ],
-            "iconLetter": {
-                "iconType": "Text",
-                "iconType2": "None",
-                "iconText": "A",
-                "useIconTextFirstLetter": true,
-                "useIconLogColor": false,
-                "iconColor": {
-                    "r": 1.0,
-                    "g": 1.0,
-                    "b": 1.0,
-                    "a": 1.0
-                },
-                "iconBuiltInID": "BACKGROUNDS_ECPBGROUNDEDSQUARE",
-                "iconTextureGUID": "",
-                "useIconShadow": true,
-                "iconOffset": {
-                    "x": 0.0,
-                    "y": 0.0
-                },
-                "iconShadowOffset": {
-                    "x": 0.5,
-                    "y": 0.5
-                },
-                "iconSize": 13.0,
-                "name": null,
-                "isEnabled": true,
-                "collapsed": false,
-                "itemGUID": null
-            },
-            "iconSymbol": null,
-            "iconBackground": {
-                "iconType": "Background",
-                "iconType2": "None",
-                "iconText": "A",
-                "useIconTextFirstLetter": true,
-                "useIconLogColor": true,
-                "iconColor": {
-                    "r": 1.0,
-                    "g": 1.0,
-                    "b": 1.0,
-                    "a": 1.0
-                },
-                "iconBuiltInID": "BACKGROUNDS_ECPBGROUNDEDSQUARE",
-                "iconTextureGUID": "",
-                "useIconShadow": true,
-                "iconOffset": {
-                    "x": 0.0,
-                    "y": 0.0
-                },
-                "iconShadowOffset": {
-                    "x": 0.5,
-                    "y": 0.5
-                },
-                "iconSize": 13.0,
-                "name": null,
-                "isEnabled": true,
-                "collapsed": false,
-                "itemGUID": null
-            },
-            "iconTexture": null,
-            "showInToolbar": true,
-            "hideLabelInToolbar": true,
-            "hideWhenNoMatches": true,
-            "name": "Destroy",
-            "isEnabled": true,
-            "collapsed": true,
-            "itemGUID": "1455d25f-c98f-470b-9d31-d2d312e7f090"
-        },
-        {
-            "filterName": "Missions",
-            "mainColor": {
-                "r": 1.0,
-                "g": 0.901366174221039,
-                "b": 0.0,
-                "a": 1.0
-            },
-            "isStandardFilter": false,
-            "isTempFilter": false,
-            "filterOnly": false,
-            "useAdvancedColors": false,
-            "customTextColor": {
-                "r": 1.0,
-                "g": 1.0,
-                "b": 1.0,
-                "a": 1.0
-            },
-            "customBackgroundColor": {
-                "r": 1.0,
-                "g": 1.0,
-                "b": 1.0,
-                "a": 1.0
-            },
-            "swallowStandard": true,
-            "standardCanSwallow": false,
-            "overrideStandardColors": true,
-            "overrideStandardIcon": true,
-            "collapseIconBackground": false,
-            "collapseIconSymbol": false,
-            "collapseIconLetter": false,
-            "collapseIconTexture": false,
-            "useIconBackground": true,
-            "useIconSymbol": false,
-            "useIconLetter": true,
-            "useIconTexture": false,
-            "filterFormatVersion": -1,
-            "iconColorize": false,
-            "useAndOpForSearchList": false,
-            "searchList": [
-                {
-                    "searchString": "mission",
-                    "searchType": "Fuzzy",
-                    "removeSearchStringFromLog": false,
-                    "logTypeList": [
-                        {
-                            "logType": "Log",
-                            "name": null,
-                            "isEnabled": true,
-                            "collapsed": false,
-                            "itemGUID": "a70b626c-149c-47a2-9894-b5e7e1cc0442"
-                        }
-                    ],
-                    "columnTypeList": [
-                        {
-                            "columnType": "Log",
-                            "name": null,
-                            "isEnabled": true,
-                            "collapsed": false,
-                            "itemGUID": "f782aa0d-08bd-42ec-8f61-8faabf3f81d0"
-                        }
-                    ],
-                    "sourceCodeList": [],
-                    "name": null,
-                    "isEnabled": true,
-                    "collapsed": false,
-                    "itemGUID": "61392c5d-f3f3-42e1-8d99-9d9c5a0e0a65"
-                }
-            ],
-            "iconLetter": {
-                "iconType": "Text",
-                "iconType2": "None",
-                "iconText": "A",
-                "useIconTextFirstLetter": true,
-                "useIconLogColor": false,
-                "iconColor": {
-                    "r": 1.0,
-                    "g": 1.0,
-                    "b": 1.0,
-                    "a": 1.0
-                },
-                "iconBuiltInID": "BACKGROUNDS_ECPBGROUNDEDSQUARE",
-                "iconTextureGUID": "",
-                "useIconShadow": true,
-                "iconOffset": {
-                    "x": 0.0,
-                    "y": 0.0
-                },
-                "iconShadowOffset": {
-                    "x": 0.5,
-                    "y": 0.5
-                },
-                "iconSize": 13.0,
-                "name": null,
-                "isEnabled": true,
-                "collapsed": false,
-                "itemGUID": null
-            },
-            "iconSymbol": null,
-            "iconBackground": {
-                "iconType": "Background",
-                "iconType2": "None",
-                "iconText": "A",
-                "useIconTextFirstLetter": true,
-                "useIconLogColor": true,
-                "iconColor": {
-                    "r": 1.0,
-                    "g": 1.0,
-                    "b": 1.0,
-                    "a": 1.0
-                },
-                "iconBuiltInID": "BACKGROUNDS_ECPBGROUNDEDSQUARE",
-                "iconTextureGUID": "",
-                "useIconShadow": true,
-                "iconOffset": {
-                    "x": 0.0,
-                    "y": 0.0
-                },
-                "iconShadowOffset": {
-                    "x": 0.5,
-                    "y": 0.5
-                },
-                "iconSize": 13.0,
-                "name": null,
-                "isEnabled": true,
-                "collapsed": false,
-                "itemGUID": null
-            },
-            "iconTexture": null,
-            "showInToolbar": true,
-            "hideLabelInToolbar": true,
-            "hideWhenNoMatches": true,
-            "name": "Missions",
-            "isEnabled": true,
-            "collapsed": true,
-            "itemGUID": "6a6af4be-7c6d-4e05-823b-6b8dd46a2911"
-        },
-        {
-            "filterName": "States",
-            "mainColor": {
-                "r": 1.0,
-                "g": 0.0,
-                "b": 0.840500831604004,
-                "a": 1.0
-            },
-            "isStandardFilter": false,
-            "isTempFilter": false,
-            "filterOnly": false,
-            "useAdvancedColors": false,
-            "customTextColor": {
-                "r": 1.0,
-                "g": 1.0,
-                "b": 1.0,
-                "a": 1.0
-            },
-            "customBackgroundColor": {
-                "r": 1.0,
-                "g": 1.0,
-                "b": 1.0,
-                "a": 1.0
-            },
-            "swallowStandard": true,
-            "standardCanSwallow": false,
-            "overrideStandardColors": true,
-            "overrideStandardIcon": true,
-            "collapseIconBackground": false,
-            "collapseIconSymbol": false,
-            "collapseIconLetter": false,
-            "collapseIconTexture": false,
-            "useIconBackground": true,
-            "useIconSymbol": false,
-            "useIconLetter": true,
-            "useIconTexture": false,
-            "filterFormatVersion": -1,
-            "iconColorize": false,
-            "useAndOpForSearchList": false,
-            "searchList": [
-                {
-                    "searchString": "State",
-                    "searchType": "Fuzzy",
-                    "removeSearchStringFromLog": false,
-                    "logTypeList": [
-                        {
-                            "logType": "Log",
-                            "name": null,
-                            "isEnabled": true,
-                            "collapsed": false,
-                            "itemGUID": "5db85f3a-6878-4ef5-9dbd-cf9285cb4655"
-                        }
-                    ],
-                    "columnTypeList": [
-                        {
-                            "columnType": "Log",
-                            "name": null,
-                            "isEnabled": true,
-                            "collapsed": false,
-                            "itemGUID": "ce85dbde-6c35-4c00-b85f-4e8532da5e20"
-                        }
-                    ],
-                    "sourceCodeList": [],
-                    "name": null,
-                    "isEnabled": true,
-                    "collapsed": false,
-                    "itemGUID": "b08f9812-847c-4207-8c3f-4660a90e6830"
-                }
-            ],
-            "iconLetter": {
-                "iconType": "Text",
-                "iconType2": "None",
-                "iconText": "A",
-                "useIconTextFirstLetter": true,
-                "useIconLogColor": false,
-                "iconColor": {
-                    "r": 1.0,
-                    "g": 1.0,
-                    "b": 1.0,
-                    "a": 1.0
-                },
-                "iconBuiltInID": "BACKGROUNDS_ECPBGROUNDEDSQUARE",
-                "iconTextureGUID": "",
-                "useIconShadow": true,
-                "iconOffset": {
-                    "x": 0.0,
-                    "y": 0.0
-                },
-                "iconShadowOffset": {
-                    "x": 0.5,
-                    "y": 0.5
-                },
-                "iconSize": 13.0,
-                "name": null,
-                "isEnabled": true,
-                "collapsed": false,
-                "itemGUID": null
-            },
-            "iconSymbol": null,
-            "iconBackground": {
-                "iconType": "Background",
-                "iconType2": "None",
-                "iconText": "A",
-                "useIconTextFirstLetter": true,
-                "useIconLogColor": true,
-                "iconColor": {
-                    "r": 1.0,
-                    "g": 1.0,
-                    "b": 1.0,
-                    "a": 1.0
-                },
-                "iconBuiltInID": "BACKGROUNDS_ECPBGROUNDEDSQUARE",
-                "iconTextureGUID": "",
-                "useIconShadow": true,
-                "iconOffset": {
-                    "x": 0.0,
-                    "y": 0.0
-                },
-                "iconShadowOffset": {
-                    "x": 0.5,
-                    "y": 0.5
-                },
-                "iconSize": 13.0,
-                "name": null,
-                "isEnabled": true,
-                "collapsed": false,
-                "itemGUID": null
-            },
-            "iconTexture": null,
-            "showInToolbar": true,
-            "hideLabelInToolbar": true,
-            "hideWhenNoMatches": true,
-            "name": "States",
-            "isEnabled": true,
-            "collapsed": true,
-            "itemGUID": "f5bc606e-2c65-4082-8e24-ef962936a51d"
         }
     ]
 }
