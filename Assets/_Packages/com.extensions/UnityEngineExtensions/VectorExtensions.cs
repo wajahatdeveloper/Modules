@@ -1162,7 +1162,7 @@ public static Vector3 RotateAround(this Vector3 point, Vector3 pivot, Quaternion
 		switch (canvas.renderMode)
 		{
 			case RenderMode.ScreenSpaceCamera:
-				return MathUtils.ScreenPointToLocalPointInRectangle(canvas, position: screenPoint);
+				return MathExtensions.ScreenPointToLocalPointInRectangle(canvas, position: screenPoint);
 			case RenderMode.ScreenSpaceOverlay:
 				return screenPoint;
 			default:

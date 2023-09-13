@@ -46,6 +46,29 @@ public static class MathX
                 min : value;
     }
 
+    /// <summary>
+    /// Maps a value from some arbitrary range to the 0 to 1 range
+    /// </summary>
+    /// <param name="value">Value.</param>
+    /// <param name="min">Lminimum value.</param>
+    /// <param name="max">maximum value</param>
+    public static float map01( float value, float min, float max )
+    {
+        return ( value - min ) * 1f / ( max - min );
+    }
+
+
+    /// <summary>
+    /// Maps a value from some arbitrary range to the 1 to 0 range. this is just the reverse of map01
+    /// </summary>
+    /// <param name="value">Value.</param>
+    /// <param name="min">minimum value.</param>
+    /// <param name="max">maximum value</param>
+    public static float map10( float value, float min, float max )
+    {
+        return 1f - map01( value, min, max );
+    }
+
     #region ReMap
 
      public static float ReMap(

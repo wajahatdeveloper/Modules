@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Numerics;
 using Baracuda.Monitoring;
 using Photon.Pun;
 using Quartzified.EditorAttributes;
@@ -33,8 +34,12 @@ public class Tester : MonitoredBehaviour
 		ApiHelper.Get("https://www.google.com", result => { Debug.Log(result); }, error => { Debug.Log(error); },"");#1#
 	}*/
 
+	private BigInteger num = BigInteger.Zero;
+
 	private void Update()
 	{
 		val += slider;
+		/*num += 100000000;
+		Debug.Log($"{num.ToStringAbbreviated("0")}");*/
 	}
 }

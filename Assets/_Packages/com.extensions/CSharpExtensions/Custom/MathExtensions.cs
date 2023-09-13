@@ -1,8 +1,30 @@
 ﻿using System;
+using System.Numerics;
 using UnityEngine;
+using Matrix4x4 = UnityEngine.Matrix4x4;
+using Quaternion = UnityEngine.Quaternion;
+using Vector2 = UnityEngine.Vector2;
+using Vector3 = UnityEngine.Vector3;
+using Vector4 = UnityEngine.Vector4;
 
-public static class MathUtils
+public static class MathExtensions
 {
+	private static readonly string[] abbreviations = { "", "k", "M", "B", "T", "aa", "ab", "ac", "ad", "ae", "af", "ag", "ah", "ai", "aj", "ak", "al", "am", "an", "ao", "ap", "aq", "ar", "as", "at", "au", "av", "aw", "ax", "ay", "az", "ba", "bb", "bc", "bd", "be", "bf", "bg", "bh", "bi", "bj", "bk", "bl", "bm", "bn", "bo", "bp", "bq", "br", "bs", "bt", "bu", "bv", "bw", "bx", "by", "bz" };
+
+	public static string ToStringAbbreviated(this BigInteger value, string format = "0.00")
+	{
+		int suffixIndex = 0;
+		while (value >= BigInteger.Pow(10, 3) && suffixIndex < abbreviations.Length - 1)
+		{
+			value /= BigInteger.Pow(10, 3);
+			suffixIndex++;
+		}
+
+		// Format value with two decimal places
+		string formattedValue = string.Format($"{{0:{format}}}", (double)value) + abbreviations[suffixIndex];
+		return formattedValue;
+	}
+
 	public static Quaternion ExtractRotation(this Matrix4x4 matrix)
 	{
 		Vector3 forward;
@@ -37,9 +59,9 @@ public static class MathUtils
 	}
 
 	public static Quaternion Clamp(this Quaternion q, Vector3 min, Vector3 max)
-		=> Quaternion.Euler(Mathf.Clamp(MathUtils.NormalizeAngle(q.eulerAngles.x), min.x, max.x),
-							Mathf.Clamp(MathUtils.NormalizeAngle(q.eulerAngles.y), min.y, max.y),
-							Mathf.Clamp(MathUtils.NormalizeAngle(q.eulerAngles.z), min.z, max.z));
+		=> Quaternion.Euler(Mathf.Clamp(MathExtensions.NormalizeAngle(q.eulerAngles.x), min.x, max.x),
+							Mathf.Clamp(MathExtensions.NormalizeAngle(q.eulerAngles.y), min.y, max.y),
+							Mathf.Clamp(MathExtensions.NormalizeAngle(q.eulerAngles.z), min.z, max.z));
 
 	/// <summary>
 	/// Truncates the decimal places of <paramref name="value"/> to fit <paramref name="decimalCount"/>.
