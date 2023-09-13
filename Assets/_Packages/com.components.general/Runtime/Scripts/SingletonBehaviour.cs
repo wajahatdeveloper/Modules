@@ -8,32 +8,18 @@ public class SingletonBehaviour<T> : MonoBehaviour where T : MonoBehaviour
     {
         get
         {
-            if (instance == null)
+            lock (Lock)
             {
-                instance = GameObject.FindObjectOfType<T>();
+                if (instance == null)
+                {
+                    instance = FindObjectOfType<T>();
+                }
+                return instance;
             }
-            return instance;
         }
     }
 
-    /*public virtual void Awake()
-    {
-        if (instance)
-        {
-            Debug.LogError("Duplicate subclass of type " + typeof(T) + "! eliminating " + name + " while preserving " + instance.name);
-            Destroy(gameObject);
-        }
-        else
-        {
-            instance = this as T;
-        }
-    }*/
-
-    /*public virtual void OnDestroy()
-    {
-        if (instance == this)
-            instance = null;
-    }*/
+    private static readonly object Lock = new object();
 }
 
 public class Singleton<T> where T : new()
@@ -44,11 +30,16 @@ public class Singleton<T> where T : new()
     {
         get
         {
-            if (instance == null)
+            lock (Lock)
             {
-                instance = new T();
+                if (instance == null)
+                {
+                    instance = new T();
+                }
+                return instance;
             }
-            return instance;
         }
     }
+    
+    private static readonly object Lock = new object();
 }

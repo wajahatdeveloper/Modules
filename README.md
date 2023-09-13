@@ -1,7 +1,7 @@
 # Modules
 
 "https://github.com/mob-sakai/UIEffect.git"</br>
-
+"https://github.com/MephestoKhaan/UnityEventVisualizer.git"
 "":"https://github.com/wajahatdeveloper/Modules.git?path=/Assets/" </br>
 
 # Direct Downloads
