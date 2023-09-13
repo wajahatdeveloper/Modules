@@ -176,6 +176,10 @@ MonoBehaviour:
     alignWindowToBar: 1
     windowMode: 0
   _sceneHistory:
+  - name: demo_scene
+    path: Assets/_Packages/com.components.general/Runtime/Timers/Demo/demo_scene.unity
+  - name: SampleScene
+    path: Assets/Scenes/SampleScene.unity
   - name: Daily Rewards Portrait
     path: Assets/DailyRewards/Examples/Scenes/Daily Rewards Portrait.unity
   - name: Daily Rewards Landscape
