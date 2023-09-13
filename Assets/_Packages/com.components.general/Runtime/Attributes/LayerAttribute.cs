@@ -6,6 +6,5 @@ namespace Quartzified.EditorAttributes
     [AttributeUsage(AttributeTargets.Field, AllowMultiple = false)]
     public class LayerAttribute : PropertyAttribute
     {
-
     }
 }
