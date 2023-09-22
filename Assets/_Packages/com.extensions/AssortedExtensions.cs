@@ -123,6 +123,11 @@ public static class AssortedExtensions
             return a * a + r * r + g * g + b * b;
         }
 
+        public static Color SetA(this Color color, float a)
+        {
+	        return new Color(color.r, color.g, color.b, a);
+        }
+
 	public static bool IsWorldPointInViewport(this Camera camera, Vector3 point)
 	{
 		var position = camera.WorldToViewportPoint(point);

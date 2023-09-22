@@ -41,6 +41,13 @@ public static class IEnumerableExtensions
 	        return enumerable.Except(Enumerable.Repeat(item, 1));
         }
 
+        public static void Rewrite<T>(this ICollection<T> collection, IEnumerable<T> newCollection)
+        {
+	        collection.Clear();
+	        foreach (T item in newCollection)
+		        collection.Add(item);
+        }
+
         public static IEnumerable<T> Concat<T>(IEnumerable<T> enumerable, T item)
         {
             return enumerable.Concat(Enumerable.Repeat(item, 1));

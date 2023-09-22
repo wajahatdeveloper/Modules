@@ -454,6 +454,17 @@ public static class VectorExtensions
 
 	#endregion
 
+	public static Vector2 MakePixelPerfect(this Vector2 position)
+	{
+		return new Vector2((int)position.x, (int)position.y);
+	}
+
+	public static float Angle(this Vector2 direction)
+	{
+		return direction.y > 0
+			? Vector2.Angle(new Vector2(1, 0), direction)
+			: -Vector2.Angle(new Vector2(1, 0), direction);
+	}
 
 	#region Clamp X/Y
 
@@ -467,12 +478,6 @@ public static class VectorExtensions
 		return vector.SetX(Mathf.Clamp(vector.x, min, max));
 	}
 
-	public static void ClampX(this Transform transform, float min, float max)
-	{
-		transform.SetX(Mathf.Clamp(transform.position.x, min, max));
-	}
-
-
 	public static Vector3 ClampY(this Vector3 vector, float min, float max)
 	{
 		return vector.SetY(Mathf.Clamp(vector.x, min, max));
@@ -481,11 +486,6 @@ public static class VectorExtensions
 	public static Vector2 ClampY(this Vector2 vector, float min, float max)
 	{
 		return vector.SetY(Mathf.Clamp(vector.x, min, max));
-	}
-
-	public static void ClampY(this Transform transform, float min, float max)
-	{
-		transform.SetY(Mathf.Clamp(transform.position.x, min, max));
 	}
 
 	#endregion
