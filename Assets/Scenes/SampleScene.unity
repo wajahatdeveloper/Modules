@@ -681,6 +681,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a8a5537f015951428daa25b541d1772, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  dontDestroyOnLoad: 0
   tag: Untagged
   layer: 0
   slider: 0
@@ -784,15 +785,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 89c13b41f39c4aa44a7970696e731b14, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  holdDuration: 0.5
-  onLongPress:
-    m_PersistentCalls:
-      m_Calls: []
-    m_CallsDirty: 1
-  isPointerDown: 0
-  isLongPressed: 0
-  elapsedTime: 0
-  button: {fileID: 0}
 --- !u!114 &1723840195
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -805,14 +797,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ad54b525485e2ed43a1f512a49dd5b45, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  doubleClickDuration: 0.4
-  onDoubleClick:
-    m_PersistentCalls:
-      m_Calls: []
-    m_CallsDirty: 1
-  clicks: 0
-  elapsedTime: 0
-  button: {fileID: 0}
 --- !u!114 &1723840196
 MonoBehaviour:
   m_ObjectHideFlags: 0

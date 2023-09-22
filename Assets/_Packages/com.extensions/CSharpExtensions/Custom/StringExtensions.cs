@@ -6,8 +6,18 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using UnityEngine;
 
-public static class StringExtensions
-{
+public static class RegexPattern {
+	public const string EmptyOrWhiteSpace = @"^[A-Z\s]*$";
+	public const string URL = @"^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$";
+	public const string EmailAddress = @"^([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})$";
+	public const string HexCode = @"^#?([a-f0-9]{6}|[a-f0-9]{3})$";
+	public const string IPAddress = @"^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$";
+	public const string HTMLTag = @"^<([a-z]+)([^<]+)*(?:>(.*)<\/\1>|\s+\/>)$";
+
+	public const string ExtractFromBrackets = @"\(([^)]*)\)";
+	public const string ExtractFromSquareBrackets = @"\[([^\]]*)\]";
+	public const string ExtractFromCurlyBrackets = @"\{([^\}]*)\}";
+
 	public const string WholeNumber = @"^-?\d+$";
 	public const string FloatingNumber = @"^-?\d*(\.\d+)?$";
 
@@ -15,9 +25,12 @@ public static class StringExtensions
 	public const string AlphanumericWithSpace = @"^[a-zA-Z0-9 ]*$";
 
 	public const string Email = @"^([a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6})*$";
-	public const string URL = @"(https?:\/\/)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)";
+	public const string URL_STRICT = @"(https?:\/\/)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)";
+}
 
-	   public static bool IsWhitespace(this char character)
+public static class StringExtensions
+{
+	public static bool IsWhitespace(this char character)
         {
             switch (character)
             {
@@ -276,4 +289,56 @@ public static class StringExtensions
 	            yellow
 	            // ReSharper restore InconsistentNaming
             }
+
+             public static bool IsEmpty(this string @string) =>
+            @string == string.Empty;
+
+        public static bool IsNullOrEmpty(this string @string) =>
+            string.IsNullOrEmpty(@string);
+
+        public static bool IsNumber(this string @string) =>
+            double.TryParse(@string, NumberStyles.Any, CultureInfo.InvariantCulture, out _);
+
+        public static bool Contains(this string @string, char @char) =>
+            @string.IndexOf(@char) != 1;
+
+        public static bool ContainsAnyOf(this string @string, params char[] chars) =>
+            chars.Any(@string.Contains);
+
+        public static string WithoutPrefix(this string @string, string prefix) =>
+            @string.StartsWith(prefix) ? @string.Substring(prefix.Length) : @string;
+
+        public static string WithoutSuffix(this string @string, string suffix) =>
+            @string.EndsWith(suffix) ? @string.Remove(@string.Length - suffix.Length) : @string;
+
+        public static string Without(this string @string, string part) =>
+            @string.Replace(part, string.Empty);
+
+        public static string AllAfter(this string @string, string part)
+        {
+            int index = @string.IndexOf(part, StringComparison.Ordinal);
+
+            return index == -1 ? @string : @string.Substring(index + part.Length);
+        }
+
+        public static string FromLeft(this string @string, int length) =>
+            @string.Length > length ? @string.Substring(0, length) : @string;
+
+        public static string FromRight(this string @string, int length) =>
+            @string.Length > length ? @string.Substring(@string.Length - length) : @string;
+
+        public static float ToFloat(this string @string, NumberStyles style = NumberStyles.Any) =>
+            float.Parse(@string, style, CultureInfo.InvariantCulture);
+
+        public static float ToFloat(this string @string, float @default, NumberStyles style = NumberStyles.Any) =>
+            float.TryParse(@string, style, CultureInfo.InvariantCulture, out float result) ? result : @default;
+
+        public static int ToInt(this string @string, NumberStyles style = NumberStyles.Any) =>
+            int.Parse(@string, style, CultureInfo.InvariantCulture);
+
+        public static int ToInt(this string @string, int @default, NumberStyles style = NumberStyles.Any) =>
+            int.TryParse(@string, style, CultureInfo.InvariantCulture, out int result) ? result : @default;
+
+        public static T ToEnum<T>(this string @string) where T : struct, Enum =>
+            (T) Enum.Parse(typeof(T), @string, true);
 }

@@ -1,15 +1,9 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Numerics;
 using Baracuda.Monitoring;
-using Photon.Pun;
 using Quartzified.EditorAttributes;
-using Sirenix.OdinInspector;
 using UnityEngine;
-using UnityEngine.Assertions;
 
-public class Tester : MonitoredBehaviour
+public class Tester : SingletonBehaviour<Tester>
 {
 	[Tag]
 	public string tag;
@@ -19,6 +13,7 @@ public class Tester : MonitoredBehaviour
 
 	[Range(-100,100)]
 	public float slider;
+
 	[Monitor]
 	private float val;
 
