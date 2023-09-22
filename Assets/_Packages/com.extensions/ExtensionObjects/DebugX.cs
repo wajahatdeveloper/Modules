@@ -6,14 +6,16 @@ using UnityEngine;
 
 public static class DebugX
 {
-    public static void Log(string inLog,string inFilterName, GameObject inContext)
-    {
-        #if CONSOLE_PRO
+	#region Log
+
+	public static void Log(string inLog,string inFilterName, GameObject inContext)
+	{
+#if CONSOLE_PRO
         ConsoleProDebug.LogToFilter(inLog,inFilterName,inContext);
-        #else
-        Debug.Log(inFilterName + " : " + inLog, inContext);
-        #endif
-    }
+#else
+		Debug.Log(inFilterName + " : " + inLog, inContext);
+#endif
+	}
 
 	public static void Log(string inLog, Color color, string inFilterName, GameObject inContext)
 	{
@@ -23,6 +25,28 @@ public static class DebugX
 		Debug.Log($"<color={color.ColorToHex()}{inFilterName} : {inLog}</color>", inContext);
 #endif
 	}
+
+
+	#endregion
+	#region Log Error
+
+    	public static void LogError(string inLog,string inFilterName, GameObject inContext)
+    	{
+    #if CONSOLE_PRO
+    		if (inFilterName == "")
+    		{
+    			Debug.LogError(inLog, inContext);
+    		}
+    		else
+    		{
+    			ConsoleProDebug.LogToFilter(inLog.Colored(StringExtensions.UnityConsoleColors.red).Bold(),inFilterName,inContext);
+    		}
+    #else
+            Debug.LogError(inFilterName + " : " + inLog, inContext);
+    #endif
+    	}
+
+    	#endregion
 
 	#region Log Array
 
