@@ -176,23 +176,41 @@ MonoBehaviour:
     alignWindowToBar: 1
     windowMode: 0
   _sceneHistory:
+  - name: UITools Examples
+    path: Assets/_Packages/com.components.ui/UI Tools/Example/UITools Examples.unity
+  - name: UITools Examples
+    path: Assets/UITools/UI Tools/Example/UITools Examples.unity
+  - name: Tab Window
+    path: Assets/Devion Games/UI Widgets/Example/Scenes/Tab Window.unity
+  - name: ContextMenu
+    path: Assets/Devion Games/UI Widgets/Example/Scenes/ContextMenu.unity
+  - name: DialogBox
+    path: Assets/Devion Games/UI Widgets/Example/Scenes/DialogBox.unity
+  - name: Notification
+    path: Assets/Devion Games/UI Widgets/Example/Scenes/Notification.unity
+  - name: RadialMenu
+    path: Assets/Devion Games/UI Widgets/Example/Scenes/RadialMenu.unity
+  - name: Tooltip
+    path: Assets/Devion Games/UI Widgets/Example/Scenes/Tooltip.unity
+  - name: Window
+    path: Assets/Devion Games/UI Widgets/Example/Scenes/Window.unity
+  - name: Main Menu Demo
+    path: Assets/Quantum Tek/Quantum UI/Scenes/Main Menu Demo.unity
+  - name: UI Windows Demo
+    path: Assets/Quantum Tek/Quantum UI/Scenes/UI Windows Demo.unity
+  - name: UI Elements Demo
+    path: Assets/Quantum Tek/Quantum UI/Scenes/UI Elements Demo.unity
+  - name: Pause Menu Demo
+    path: Assets/Quantum Tek/Quantum UI/Scenes/Pause Menu Demo.unity
+  - name: DemoSceneOptions
+    path: Assets/_Packages/com.components.general/Runtime/Timers/EasyTimer/Scenes/DemoSceneOptions.unity
+  - name: DemoSceneOptions
+    path: Assets/GolemiteGames/TimersMadeEasyLite/Scenes/DemoSceneOptions.unity
+  - name: 01 Button
+    path: Assets/Plugins/CW/LeanGUI/Examples/01 Button.unity
   - name: 03 Radio
     path: Assets/Plugins/CW/LeanGUI/Examples/03 Radio.unity
   - name: 02 Toggle
     path: Assets/Plugins/CW/LeanGUI/Examples/02 Toggle.unity
-  - name: 01 Button
-    path: Assets/Plugins/CW/LeanGUI/Examples/01 Button.unity
   - name: HorizontalClassicListView
     path: Assets/ClassicSRIA/HorizontalClassicListView.unity
-  - name: ClassicGridView
-    path: Assets/ClassicSRIA/ClassicGridView.unity
-  - name: SampleScene
-    path: Assets/Scenes/SampleScene.unity
-  - name: VerticalClassicListView
-    path: Assets/ClassicSRIA/VerticalClassicListView.unity
-  - name: demo_scene
-    path: Assets/_Packages/com.components.general/Runtime/Timers/Demo/demo_scene.unity
-  - name: Daily Rewards Portrait
-    path: Assets/DailyRewards/Examples/Scenes/Daily Rewards Portrait.unity
-  - name: Daily Rewards Landscape
-    path: Assets/DailyRewards/Examples/Scenes/Daily Rewards Landscape.unity

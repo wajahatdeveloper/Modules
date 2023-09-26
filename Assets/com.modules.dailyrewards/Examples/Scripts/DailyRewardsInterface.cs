@@ -8,6 +8,7 @@ using UnityEngine.UI;
 using UnityEngine.Events;
 using System;
 using System.Collections.Generic;
+using UnityEngine.SceneManagement;
 
 namespace NiobiumStudios
 {
@@ -114,7 +115,7 @@ namespace NiobiumStudios
 				// Reloads the same scene
 				buttonReloadScene.onClick.AddListener(() =>
 				{
-					Application.LoadLevel(Application.loadedLevelName);
+					SceneManager.LoadScene(SceneManager.GetActiveScene().name);
 				});
 
 			UpdateUI();

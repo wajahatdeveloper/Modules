@@ -6,7 +6,7 @@ using UnityEngine;
 public class Tester : SingletonBehaviour<Tester>
 {
 	[Tag]
-	public string tag;
+	public string tagString;
 
 	[Layer]
 	public int layer;
