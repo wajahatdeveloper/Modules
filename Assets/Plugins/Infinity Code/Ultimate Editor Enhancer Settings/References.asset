@@ -176,10 +176,22 @@ MonoBehaviour:
     alignWindowToBar: 1
     windowMode: 0
   _sceneHistory:
-  - name: demo_scene
-    path: Assets/_Packages/com.components.general/Runtime/Timers/Demo/demo_scene.unity
+  - name: 03 Radio
+    path: Assets/Plugins/CW/LeanGUI/Examples/03 Radio.unity
+  - name: 02 Toggle
+    path: Assets/Plugins/CW/LeanGUI/Examples/02 Toggle.unity
+  - name: 01 Button
+    path: Assets/Plugins/CW/LeanGUI/Examples/01 Button.unity
+  - name: HorizontalClassicListView
+    path: Assets/ClassicSRIA/HorizontalClassicListView.unity
+  - name: ClassicGridView
+    path: Assets/ClassicSRIA/ClassicGridView.unity
   - name: SampleScene
     path: Assets/Scenes/SampleScene.unity
+  - name: VerticalClassicListView
+    path: Assets/ClassicSRIA/VerticalClassicListView.unity
+  - name: demo_scene
+    path: Assets/_Packages/com.components.general/Runtime/Timers/Demo/demo_scene.unity
   - name: Daily Rewards Portrait
     path: Assets/DailyRewards/Examples/Scenes/Daily Rewards Portrait.unity
   - name: Daily Rewards Landscape
