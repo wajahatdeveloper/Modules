@@ -89,6 +89,21 @@ public static class AssortedExtensions
 	}
 
 	/// <summary>
+	/// Set's alpha channel for the Material `_Color` property
+	/// </summary>
+	/// <param name="material">Material to operate with.</param>
+	/// <param name="value">Alpha channel value.</param>
+	public static void SetAlpha(this Material material, float value)
+	{
+		if (material.HasProperty("_Color"))
+		{
+			var color = material.color;
+			color.a = value;
+			material.color = color;
+		}
+	}
+
+	/// <summary>
 	/// Get scale factor which canvas scaler calculated when work in <see cref="CanvasScaler.ScaleMode.ScaleWithScreenSize"/> mode.
 	/// </summary>
 	/// <param name="scaler">The canvas scaler.</param>

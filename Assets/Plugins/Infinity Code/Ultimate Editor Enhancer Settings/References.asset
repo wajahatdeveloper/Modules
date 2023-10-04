@@ -176,6 +176,8 @@ MonoBehaviour:
     alignWindowToBar: 1
     windowMode: 0
   _sceneHistory:
+  - name: Demo
+    path: Assets/TRavljen/Unit Formation/Demo/Scene/Demo.unity
   - name: SampleScene
     path: Assets/Scenes/SampleScene.unity
   - name: FeelGettingStartedTutorial
@@ -212,5 +214,3 @@ MonoBehaviour:
     path: Assets/GolemiteGames/TimersMadeEasyLite/Scenes/DemoSceneOptions.unity
   - name: 01 Button
     path: Assets/Plugins/CW/LeanGUI/Examples/01 Button.unity
-  - name: 03 Radio
-    path: Assets/Plugins/CW/LeanGUI/Examples/03 Radio.unity

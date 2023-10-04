@@ -962,4 +962,16 @@ public static class UnityTransformExtensions
         /// </summary>
         /// <param name="transform">Target transform.</param>
         public static void DestroyLastChild(this Transform transform) => DestroyChild(transform, transform.childCount - 1);
+
+        /// <summary>
+        /// Sets <see cref="Transform.lossyScale"/> value.
+        /// </summary>
+        /// <param name="transform">Transform component.</param>
+        /// <param name="lossyScale">New lossyScale value.</param>
+        public static void SetLossyScale(this Transform transform, Vector3 lossyScale)
+        {
+	        transform.localScale = Vector3.one;
+	        var currentLossyScale = transform.lossyScale;
+	        transform.localScale = new Vector3(lossyScale.x / currentLossyScale.x, lossyScale.y / currentLossyScale.y, lossyScale.z / currentLossyScale.z);
+        }
 }
