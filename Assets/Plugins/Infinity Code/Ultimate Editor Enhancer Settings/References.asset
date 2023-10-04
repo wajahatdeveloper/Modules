@@ -176,6 +176,8 @@ MonoBehaviour:
     alignWindowToBar: 1
     windowMode: 0
   _sceneHistory:
+  - name: FeelGettingStartedTutorial
+    path: Assets/Feel/FeelDemos/GettingStartedTutorial/FeelGettingStartedTutorial.unity
   - name: UITools Examples
     path: Assets/_Packages/com.components.ui/UI Tools/Example/UITools Examples.unity
   - name: UITools Examples
@@ -212,5 +214,3 @@ MonoBehaviour:
     path: Assets/Plugins/CW/LeanGUI/Examples/03 Radio.unity
   - name: 02 Toggle
     path: Assets/Plugins/CW/LeanGUI/Examples/02 Toggle.unity
-  - name: HorizontalClassicListView
-    path: Assets/ClassicSRIA/HorizontalClassicListView.unity

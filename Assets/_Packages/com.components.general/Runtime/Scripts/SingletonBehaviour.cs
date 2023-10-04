@@ -2,9 +2,6 @@ using UnityEngine;
 
  public abstract class SingletonBehaviour<T> : MonoBehaviour where T : MonoBehaviour
 {
-    [SerializeField]
-    protected bool dontDestroyOnLoad = true;
-
     public static bool FindInstanceIfNull = false;
     public static bool CreateInstanceIfNull = false;
 
@@ -56,13 +53,6 @@ using UnityEngine;
         if (instance == null)
         {
             instance = this as T;
-
-            if (dontDestroyOnLoad)
-            {
-                transform.SetParent(null);
-
-                DontDestroyOnLoad(gameObject);
-            }
         }
         else if (instance != this)
         {

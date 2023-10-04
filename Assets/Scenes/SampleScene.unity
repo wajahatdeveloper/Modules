@@ -681,8 +681,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a8a5537f015951428daa25b541d1772, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dontDestroyOnLoad: 0
-  tag: Untagged
+  tagString: Untagged
   layer: 0
   slider: 0
 --- !u!4 &1656297086
