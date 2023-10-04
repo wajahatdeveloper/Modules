@@ -61,7 +61,7 @@ public static class Texture2DExtensions
 		tex.Apply(true);
 		return tex;
 	}
-	
+
 	/// <summary>
 	/// Will texture with solid color
 	/// </summary>

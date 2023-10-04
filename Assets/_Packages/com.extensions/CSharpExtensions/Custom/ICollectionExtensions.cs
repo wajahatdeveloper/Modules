@@ -98,51 +98,7 @@ public static class ICollectionExtensions
             @this.Remove(value);
         }
     }
-
-    /// <summary>
-    ///     An ICollection&lt;T&gt; extension method that queries if the collection is null or is empty.
-    /// </summary>
-    /// <typeparam name="T">Generic type parameter.</typeparam>
-    /// <param name="this">The @this to act on.</param>
-    /// <returns>true if null or empty&lt; t&gt;, false if not.</returns>
-    public static bool IsNullOrEmpty<T>(this ICollection<T> @this)
-    {
-        return @this == null || @this.Count == 0;
-    }
-
-    /// <summary>
-    ///     An ICollection&lt;T&gt; extension method that queries if the collection is not (null or is empty).
-    /// </summary>
-    /// <typeparam name="T">Generic type parameter.</typeparam>
-    /// <param name="this">The @this to act on.</param>
-    /// <returns>true if the collection is not (null or empty), false if not.</returns>
-    public static bool IsNotNullOrEmpty<T>(this ICollection<T> @this)
-    {
-        return @this != null && @this.Count != 0;
-    }
-
-    /// <summary>
-    ///     An ICollection&lt;T&gt; extension method that query if the collection is not empty.
-    /// </summary>
-    /// <typeparam name="T">Generic type parameter.</typeparam>
-    /// <param name="this">The @this to act on.</param>
-    /// <returns>true if not empty&lt; t&gt;, false if not.</returns>
-    public static bool IsNotEmpty<T>(this ICollection<T> @this)
-    {
-        return @this.Count != 0;
-    }
-
-    /// <summary>
-    ///     An ICollection&lt;T&gt; extension method that query if the collection is empty.
-    /// </summary>
-    /// <typeparam name="T">Generic type parameter.</typeparam>
-    /// <param name="this">The @this to act on.</param>
-    /// <returns>true if empty&lt; t&gt;, false if not.</returns>
-    public static bool IsEmpty<T>(this ICollection<T> @this)
-    {
-        return @this.Count == 0;
-    }
-
+    
     /// <summary>
     ///     An ICollection&lt;T&gt; extension method that query if '@this' contains any value.
     /// </summary>

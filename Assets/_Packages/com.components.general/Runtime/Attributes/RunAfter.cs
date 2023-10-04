@@ -1,8 +1,4 @@
-/* Copyright Kupio Limited. Registered in Scotland; SC426881.
- * All rights reserved. Not for distribution. */
 
-namespace com.kupio.declarativeorder
-{
     using System;
     using System.Text;
 
@@ -39,4 +35,3 @@ namespace com.kupio.declarativeorder
         }
 
     }
-}

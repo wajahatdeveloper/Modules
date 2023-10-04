@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using Quartzified.EditorAttributes;
 using Sirenix.OdinInspector;
 using Unity.Mathematics;
 using UnityEditor;

@@ -2,8 +2,7 @@ using UnityEditor;
 using UnityEngine;
 using System;
 
-namespace Quartzified.EditorAttributes
-{
+
     [CustomPropertyDrawer(typeof(LayerAttribute))]
     public class LayerDrawer : PropertyDrawer
     {
@@ -56,6 +55,3 @@ namespace Quartzified.EditorAttributes
         }
 
     }
-
-
-}

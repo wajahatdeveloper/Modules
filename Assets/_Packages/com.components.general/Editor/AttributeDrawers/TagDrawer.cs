@@ -2,8 +2,7 @@ using UnityEditor;
 using UnityEngine;
 using System;
 
-namespace Quartzified.EditorAttributes
-{
+
     [CustomPropertyDrawer(typeof(TagAttribute))]
     public class TagDrawer : PropertyDrawer
     {
@@ -55,6 +54,3 @@ namespace Quartzified.EditorAttributes
         }
 
     }
-
-
-}
