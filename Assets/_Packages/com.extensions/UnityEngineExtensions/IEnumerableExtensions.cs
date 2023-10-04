@@ -2,17 +2,168 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using UnityRandom = UnityEngine.Random;
 
 public static class IEnumerableExtensions
 {
-	  public static IEnumerable<T> ForEach<T>(this IEnumerable<T> enumerable, Action<T> action)
-        {
-            foreach (T item in enumerable)
-            {
-                action(item);
+	/// <summary>
+	///     An IEnumerable&lt;T&gt; extension method that queries if a not is empty.
+	/// </summary>
+	/// <typeparam name="T">Generic type parameter.</typeparam>
+	/// <param name="this">The collection to act on.</param>
+	/// <returns>true if a not is t>, false if not.</returns>
+	public static bool IsNotEmpty<T>(this IEnumerable<T> @this)
+	{
+		return @this.Any();
+	}
 
-                yield return item;
+	/// <summary>
+	///     An IEnumerable&lt;T&gt; extension method that queries if a not null or is empty.
+	/// </summary>
+	/// <typeparam name="T">Generic type parameter.</typeparam>
+	/// <param name="this">The collection to act on.</param>
+	/// <returns>true if a not null or is t>, false if not.</returns>
+	public static bool IsNotNullOrEmpty<T>(this IEnumerable<T> @this)
+	{
+		return @this != null && @this.Any();
+	}
+
+	/// <summary>
+	///     Concatenates all the elements of a IEnumerable, using the specified separator between each element.
+	/// </summary>
+	/// <typeparam name="T">Generic type parameter.</typeparam>
+	/// <param name="this">An IEnumerable that contains the elements to concatenate.</param>
+	/// <param name="separator">
+	///     The string to use as a separator. separator is included in the returned string only if
+	///     value has more than one element.
+	/// </param>
+	/// <returns>
+	///     A string that consists of the elements in value delimited by the separator string. If value is an empty array,
+	///     the method returns String.Empty.
+	/// </returns>
+	public static string StringJoin<T>(this IEnumerable<T> @this, string separator)
+	{
+		return string.Join(separator, @this);
+	}
+
+	/// <summary>
+	///     Concatenates all the elements of a IEnumerable, using the specified separator between
+	///     each element.
+	/// </summary>
+	/// <typeparam name="T">Generic type parameter.</typeparam>
+	/// <param name="this">The @this to act on.</param>
+	/// <param name="separator">
+	///     The string to use as a separator. separator is included in the
+	///     returned string only if value has more than one element.
+	/// </param>
+	/// <returns>
+	///     A string that consists of the elements in value delimited by the separator string. If
+	///     value is an empty array, the method returns String.Empty.
+	/// </returns>
+	public static string StringJoin<T>(this IEnumerable<T> @this, char separator)
+	{
+		return string.Join(separator.ToString(), @this);
+	}
+
+
+	/// <summary>
+        /// Get random element from the <paramref name="enumerable"/>.
+        /// </summary>
+        /// <typeparam name="T">Source type.</typeparam>
+        /// <param name="enumerable">The enumerable.</param>
+        /// <returns>Random element from enumerable.</returns>
+        public static T GetRandomElement<T>(this IEnumerable<T> enumerable) => enumerable.ElementAt(UnityRandom.Range(0, enumerable.Count()));
+
+        /// <summary>
+        /// Get random elements from the <paramref name="enumerable"/>.
+        /// </summary>
+        /// <typeparam name="T">Source type.</typeparam>
+        /// <param name="enumerable">The enumerable.</param>
+        /// <param name="count">Count of the random elements.</param>
+        /// <returns>Random elements from enumerable.</returns>
+        public static List<T> GetRandomElements<T>(this IEnumerable<T> enumerable, int count)
+        {
+            var poppedIndexes = Enumerable.Range(0, enumerable.Count()).ToList().PopRandoms(count).Select(p => p.index);
+            return enumerable.Where((el, i) => poppedIndexes.Contains(i)).ToList();
+        }
+
+        /// <summary>
+        /// Excepts passed elements from <paramref name="enumerable"/>.
+        /// </summary>
+        /// <typeparam name="T">Source type.</typeparam>
+        /// <param name="enumerable">The enumerable.</param>
+        /// <param name="elements">Elements to exclude.</param>
+        /// <returns>Enumerable without passed elements.</returns>
+        public static IEnumerable<T> Except<T>(this IEnumerable<T> enumerable, params T[] elements) => enumerable.Except((IEnumerable<T>)elements);
+
+        /// <summary>
+        /// Shuffles <paramref name="enumerable"/>.
+        /// </summary>
+        /// <typeparam name="T">Source type.</typeparam>
+        /// <param name="enumerable">The enumerable.</param>
+        /// <returns>Shuffled <paramref name="enumerable"/>.</returns>
+        public static IEnumerable<T> Shuffled<T>(this IEnumerable<T> enumerable) => enumerable.OrderBy(v => UnityRandom.value);
+
+        /// <summary>
+        /// Get random element index with probability selector.
+        /// </summary>
+        /// <typeparam name="T">Enumerable elements type.</typeparam>
+        /// <param name="enumerable">The enumerable.</param>
+        /// <param name="probabilities">Probabilities, must match in count with enumerable.</param>
+        /// <returns>Tuple with random element and it's index.</returns>
+        /// <exception cref="ArgumentException">Throwed when <paramref name="enumerable"/> and <paramref name="probabilities"/> counts are not match.</exception>
+        public static (T element, int index) GetRandomElementWithProbability<T>(this IEnumerable<T> enumerable, params float[] probabilities) => GetRandomElementWithProbability(enumerable, (IEnumerable<float>)probabilities);
+
+        /// <summary>
+        /// <inheritdoc cref="GetRandomElementWithProbability{T}(IEnumerable{T}, float[])"/>
+        /// </summary>
+        /// <typeparam name="T"><inheritdoc cref="GetRandomElementWithProbability{T}(IEnumerable{T}, float[])"/></typeparam>
+        /// <param name="enumerable"><inheritdoc cref="GetRandomElementWithProbability{T}(IEnumerable{T}, float[])" path="/param[@name='enumerable']"/></param>
+        /// <param name="probabilities"><inheritdoc cref="GetRandomElementWithProbability{T}(IEnumerable{T}, float[])" path="/param[@name='probabilities']"/></param>
+        /// <returns>Tuple with random element and it's index.</returns>
+        /// <exception cref="ArgumentException">Throwed when <paramref name="enumerable"/> and <paramref name="probabilities"/> counts are not match.</exception>
+        public static (T element, int index) GetRandomElementWithProbability<T>(this IEnumerable<T> enumerable, IEnumerable<float> probabilities)
+        {
+            var count = enumerable.Count();
+
+            if (probabilities.Count() != count)
+                throw new ArgumentException($"Count of probabilities and enumerble elements must be equal.");
+
+            if (count == 0)
+                throw new ArgumentException($"Enumerable count must be greater than zero");
+
+            var randomValue = UnityRandom.value * probabilities.Sum();
+            var sum = 0f;
+
+            var index = -1;
+            var enumerator = probabilities.GetEnumerator();
+
+            while (enumerator.MoveNext())
+            {
+                index += 1;
+                var probability = enumerator.Current;
+
+                sum += probability;
+
+                if (randomValue < sum || randomValue.Approximately(sum))
+                    return (enumerable.ElementAt(index), index);
             }
+
+            index = probabilities.Count() - 1;
+            return (enumerable.ElementAt(index), index);
+        }
+
+        /// <summary>
+        /// <inheritdoc cref="GetRandomElementWithProbability{T}(IEnumerable{T}, float[])"/>
+        /// </summary>
+        /// <typeparam name="T"><inheritdoc cref="GetRandomElementWithProbability{T}(IEnumerable{T}, float[])"/></typeparam>
+        /// <param name="enumerable"><inheritdoc cref="GetRandomElementWithProbability{T}(IEnumerable{T}, float[])" path="/param[@name='enumerable']"/></param>
+        /// <param name="probabilitySelector">Probabilities selector.</param>
+        /// <returns>Tuple with random element and it's index.</returns>
+        /// <exception cref="ArgumentException">Throwed when <paramref name="enumerable"/> and <paramref name="probabilities"/> counts are not match.</exception>
+        public static (T element, int index) GetRandomElementWithProbability<T>(this IEnumerable<T> enumerable, Func<T, float> probabilitySelector)
+        {
+            return GetRandomElementWithProbability(enumerable, enumerable.Select(el => probabilitySelector(el)));
         }
 
         public static IEnumerable<T> ForEach<T>(this IEnumerable<T> enumerable, Action<T, int> action)

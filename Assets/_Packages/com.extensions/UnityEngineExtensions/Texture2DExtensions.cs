@@ -61,34 +61,7 @@ public static class Texture2DExtensions
 		tex.Apply(true);
 		return tex;
 	}
-
-	/// <summary>
-	/// Crop texture to desired size.
-	/// Somehow cropped image seemed darker, brightness offset may fix this
-	/// </summary>
-	public static Texture2D Crop(this Texture2D original, int left, int right, int top, int down, float brightnessOffset = 0)
-	{
-		int x = left + right;
-		int y = top + down;
-		int resW = original.width - x;
-		int resH = original.height - y;
-		var pixels = original.GetPixels(left, down, resW, resH);
-
-		if (!Mathf.Approximately(brightnessOffset, 0))
-		{
-			for (var i = 0; i < pixels.Length; i++)
-			{
-				pixels[i] = pixels[i].BrightnessOffset(brightnessOffset);
-			}
-		}
-
-		Texture2D result = new Texture2D(resW, resH, TextureFormat.RGB24, false);
-		result.SetPixels(pixels);
-		result.Apply();
-
-		return result;
-	}
-
+	
 	/// <summary>
 	/// Will texture with solid color
 	/// </summary>
