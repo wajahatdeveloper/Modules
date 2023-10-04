@@ -98,7 +98,7 @@ public static class ICollectionExtensions
             @this.Remove(value);
         }
     }
-    
+
     /// <summary>
     ///     An ICollection&lt;T&gt; extension method that query if '@this' contains any value.
     /// </summary>

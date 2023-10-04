@@ -6,7 +6,24 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using UnityEngine;
 
-public static class RegexPattern {
+public static class RegexPattern
+{
+	/// <summary>
+	/// The regex used for stripping html tags from strings.
+	/// </summary>
+	public static readonly Regex htmlRegex = new Regex(@"<.*?>", RegexOptions.Compiled);
+
+	/// <summary>
+	/// The regular expression used for determining whether a string is a valid hexadecimal.
+	/// </summary>
+	public static readonly Regex hexadecimalRegex = new Regex(@"^#([a-fA-F0-9]{6}|[a-fA-F0-9]{3})$", RegexOptions.Compiled);
+
+	/// <summary>
+	/// The regular expression used for determining whether a string corresponds with a variable name
+	/// usable in the CSharp programming language.
+	/// </summary>
+	public static readonly Regex variableRegex = new Regex(@"^[a-zA-Z0-9_]+$", RegexOptions.Compiled);
+
 	public const string EmptyOrWhiteSpace = @"^[A-Z\s]*$";
 	public const string URL = @"^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$";
 	public const string EmailAddress = @"^([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})$";
