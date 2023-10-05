@@ -176,10 +176,14 @@ MonoBehaviour:
     alignWindowToBar: 1
     windowMode: 0
   _sceneHistory:
-  - name: Demo
-    path: Assets/TRavljen/Unit Formation/Demo/Scene/Demo.unity
+  - name: PhysicsSample
+    path: Assets/CastVisualizer/Samples/SampleScenes/PhysicsSample.unity
+  - name: LebugDemoScene
+    path: Assets/Lebug/Demo/LebugDemoScene.unity
   - name: SampleScene
     path: Assets/Scenes/SampleScene.unity
+  - name: Demo
+    path: Assets/TRavljen/Unit Formation/Demo/Scene/Demo.unity
   - name: FeelGettingStartedTutorial
     path: Assets/Feel/FeelDemos/GettingStartedTutorial/FeelGettingStartedTutorial.unity
   - name: UITools Examples
@@ -210,7 +214,3 @@ MonoBehaviour:
     path: Assets/Quantum Tek/Quantum UI/Scenes/Pause Menu Demo.unity
   - name: DemoSceneOptions
     path: Assets/_Packages/com.components.general/Runtime/Timers/EasyTimer/Scenes/DemoSceneOptions.unity
-  - name: DemoSceneOptions
-    path: Assets/GolemiteGames/TimersMadeEasyLite/Scenes/DemoSceneOptions.unity
-  - name: 01 Button
-    path: Assets/Plugins/CW/LeanGUI/Examples/01 Button.unity
