@@ -1,7 +1,0 @@
-{
-  "name": "com.multitagger",
-  "version": "1.0.0",
-  "displayName": "MultiTagger",
-  "description": "Multiple Tags Support For GameObjects",
-  "unity": "2021.3"
-}

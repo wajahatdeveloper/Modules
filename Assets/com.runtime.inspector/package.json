@@ -1,7 +1,0 @@
-{
-    "name": "com.runtime.inspector",
-    "version": "1.0.0",
-    "displayName": "Runtime Inspector and Heirarchy",
-    "description": "Runtime Inspector and Heirarchy for Testing",
-    "unity": "2020.3"
-  }
