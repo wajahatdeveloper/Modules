@@ -6,28 +6,35 @@ using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
+[RequireComponent(typeof(Button))]
 public class ButtonX : MonoBehaviour , IPointerDownHandler, IPointerUpHandler, IPointerEnterHandler, IPointerExitHandler
 {
+    [Header("Cooldown")]
     public float clickCooldown = 0.1f;
     public bool cooldownRealtime = false;
-    public bool debugLogEvents = false;
+
+    [Header("Additional Functionality")]
     public bool closeParentOnClick = false;
-    
+    public bool debugLogEvents = false;
+
+    [Space]
+
     public UnityEvent onEnter;
     public UnityEvent onDown;
     public UnityEvent onUp;
     public UnityEvent onExit;
 
-    private Button _button;
+    [HideInInspector] public Button button;
+
     private bool _lockClick = false;
 
     private void Start()
     {
-        _button = GetComponent<Button>();
+        button = GetComponent<Button>();
 
         if (debugLogEvents)
         {
-            _button.onClick.AddListener(()=>Debug.Log($"{gameObject.name} : On Pointer Click"));
+            button.onClick.AddListener(()=>Debug.Log($"{gameObject.name} : On Pointer Click"));
         }
     }
 
@@ -42,20 +49,20 @@ public class ButtonX : MonoBehaviour , IPointerDownHandler, IPointerUpHandler, I
             yield return new WaitForSeconds(clickCooldown);
         }
 
-        _button.enabled = true;
+        button.enabled = true;
         _lockClick = false;
     }
 
     private void EnableLock()
     {
         _lockClick = true;
-        _button.enabled = false;
+        button.enabled = false;
     }
     
     public void OnPointerDown(PointerEventData eventData)
     {
-        if (!_button.enabled) return;
-        if (!_button.interactable) return;
+        if (!button.enabled) return;
+        if (!button.interactable) return;
             
         if (_lockClick) { return; }
         EnableLock();
