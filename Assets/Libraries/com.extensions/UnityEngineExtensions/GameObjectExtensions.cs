@@ -3453,4 +3453,13 @@ public static class GameObjectExtensions
             }
             return null;
         }
+
+        public static void DestroySelf(this GameObject @this)
+        {
+	        GameObject.Destroy(@this);
+        }
+        public static void DestroySelf(this GameObject @this, float t)
+        {
+	        GameObject.Destroy(@this, t);
+        }
 }

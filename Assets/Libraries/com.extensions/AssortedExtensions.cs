@@ -9,6 +9,18 @@ using Object = UnityEngine.Object;
 
 public static class AssortedExtensions
 {
+	public static void PushRange<T>(this Stack<T> stack, IEnumerable<T> items)
+	{
+		foreach (T item in items)
+			stack.Push(item);
+	}
+
+	public static void EnqueueRange<T>(this Queue<T> queue, IEnumerable<T> items)
+	{
+		foreach (T item in items)
+			queue.Enqueue(item);
+	}
+
 	/// <summary>
 	///     A NameValueCollection extension method that converts the @this to a dictionary.
 	/// </summary>
