@@ -57,7 +57,7 @@ public static class CameraExtensions
             var sprite = Sprite.Create(texture2D, new Rect(0, 0, texture2D.width, texture2D.height), Vector2.zero);
             return sprite;
         }
-    
+
 
 	 /// <summary>
         /// Set red channel of camera's background color.

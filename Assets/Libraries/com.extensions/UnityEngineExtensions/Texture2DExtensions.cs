@@ -14,7 +14,7 @@ public static class Texture2DExtensions
             return newTex;
         }
 
-        
+
         /// <summary>
         /// 双线性插值法缩放图片，等比缩放
         /// </summary>
