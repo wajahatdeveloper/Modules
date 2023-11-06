@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 /// <summary>
@@ -5,6 +6,12 @@ using UnityEngine;
 /// </summary>
 public class PanelBase : MonoBehaviour
 {
+    public event Action OnBeforeShown;
+    public event Action OnAfterShown;
+
+    public event Action OnBeforeHidden;
+    public event Action OnAfterHidden;
+
     /// <summary>
     /// Activates the panel <see cref="GameObject"/>.
     /// </summary>
@@ -30,6 +37,7 @@ public class PanelBase : MonoBehaviour
     /// </summary>
     protected virtual void OnBeforeShow()
     {
+        OnBeforeShown?.Invoke();
     }
 
     /// <summary>
@@ -37,6 +45,8 @@ public class PanelBase : MonoBehaviour
     /// </summary>
     protected virtual void OnAfterShow()
     {
+        DebugX.Log($"{gameObject.name} : Shown",LogFilters.None, null);
+        OnAfterShown?.Invoke();
     }
 
     /// <summary>
@@ -44,6 +54,7 @@ public class PanelBase : MonoBehaviour
     /// </summary>
     protected virtual void OnBeforeHide()
     {
+        OnBeforeHidden?.Invoke();
     }
 
     /// <summary>
@@ -51,5 +62,6 @@ public class PanelBase : MonoBehaviour
     /// </summary>
     protected virtual void OnAfterHide()
     {
+        OnAfterHidden?.Invoke();
     }
 }
