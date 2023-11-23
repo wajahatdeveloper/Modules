@@ -11,15 +11,15 @@ public class WaitPanel : SingletonBehaviourUI<WaitPanel>
 
     private int _count = 0;
     
-    public void Show(string text="")
+    public void Show(string text="Please Wait..")
     {
         if (waitPanel == null)
         {
-            Debug.LogError($"{SceneManager.GetActiveScene().name}: <b>Wait Panel</b> game object not assigned");
+            Debug.LogError($"Scene: {SceneManager.GetActiveScene().name}: <b>Wait Panel</b> game object not assigned");
         }
         else
         {
-            Debug.Log($"{SceneManager.GetActiveScene().name}: <b>Wait Panel</b> Shown");
+            Debug.Log($"Scene: {SceneManager.GetActiveScene().name}: <b>Wait Panel</b> Shown");
             waitingText.text = text;
             waitPanel.SetActive(true);
         }
@@ -29,12 +29,12 @@ public class WaitPanel : SingletonBehaviourUI<WaitPanel>
     {
         if (waitPanel == null)
         {
-            Debug.LogError($"{SceneManager.GetActiveScene().name}: <b>Wait Panel</b> game object not assigned");
+            Debug.LogError($"Scene: {SceneManager.GetActiveScene().name}: <b>Wait Panel</b> game object not assigned");
         }
         else
         {
             _count++;
-            Debug.Log($"{SceneManager.GetActiveScene().name}: <b>Wait Panel</b> Shown : count = " + _count);
+            Debug.Log($"Scene: {SceneManager.GetActiveScene().name}: <b>Wait Panel</b> Shown : count = " + _count);
             waitingText.text = text;
             waitPanel.SetActive(true);
         }
@@ -51,7 +51,7 @@ public class WaitPanel : SingletonBehaviourUI<WaitPanel>
     
     public void Hide()
     {
-        Debug.Log($"{SceneManager.GetActiveScene().name}: <b>Wait Panel</b> Hidden");
+        Debug.Log($"Scene: {SceneManager.GetActiveScene().name}: <b>Wait Panel</b> Hidden");
         waitPanel.SetActive(false);
         onClose?.Invoke();
         onClose?.RemoveAllListeners();

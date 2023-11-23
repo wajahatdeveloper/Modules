@@ -47,10 +47,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 2245382841028542011}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d11b30561bd85c2409c167bd097ffd04, type: 3}
+  m_Script: {fileID: 11500000, guid: 5e3767aed6e7671419141615cf25ee2e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  messagePrefab: {fileID: 1039149753979080771, guid: 421e1b0563a72ba4085d8ce63c8d566a, type: 3}
+  messagePrefab: {fileID: 1039149753979080771, guid: e1c8b0ed80e7da041b91f49245c10507,
+    type: 3}
 --- !u!114 &2245382841028542006
 MonoBehaviour:
   m_ObjectHideFlags: 0

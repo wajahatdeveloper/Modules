@@ -117,7 +117,53 @@ public class UIUtilitiesWindow : EditorWindow
 
 	private void DrawMainWindow()
 	{
-		_viewScrollPosition = EditorGUILayout.BeginScrollView(_viewScrollPosition, false, false);
+		if (GUILayout.Button("Select All Button Text"))
+		{
+			Button[] buttons = FindObjectsOfType<Button>(true);
+			List<GameObject> firstChildrenOfButtons = new();
+
+			foreach (Button button in buttons)
+			{
+				if (button.transform.childCount > 0)
+				{
+					Transform firstChild = button.transform.GetChild(0);
+					if (firstChild.GetComponent<Text>() == null)
+					{
+						continue;
+					}
+					firstChildrenOfButtons.Add(firstChild.gameObject);
+				}
+			}
+
+			//var arr = firstChildrenOfButtons.Select(x=>x.GetComponent<Object>()).ToArray();
+			Selection.objects = firstChildrenOfButtons.ToArray();
+		}
+
+		if (GUILayout.Button("Select All Button Text Mesh Pro"))
+		{
+			Button[] buttons = FindObjectsOfType<Button>(true);
+			List<GameObject> firstChildrenOfButtons = new();
+
+			foreach (Button button in buttons)
+			{
+				if (button.transform.childCount > 0)
+				{
+					Transform firstChild = button.transform.GetChild(0);
+					if (firstChild.GetComponent<TextMeshProUGUI>() == null)
+					{
+						continue;
+					}
+					firstChildrenOfButtons.Add(firstChild.gameObject);
+				}
+			}
+
+			//var arr = firstChildrenOfButtons.Select(x=>x.GetComponent<Object>()).ToArray();
+			Selection.objects = firstChildrenOfButtons.ToArray();
+		}
+
+		_serialObj.ApplyModifiedProperties();
+
+		/*_viewScrollPosition = EditorGUILayout.BeginScrollView(_viewScrollPosition, false, false);
 
 		GUILayout.Space(10);
 		EditorGUILayout.BeginHorizontal();
@@ -133,7 +179,7 @@ public class UIUtilitiesWindow : EditorWindow
 		_serialObj.ApplyModifiedProperties();
 
 		GUILayout.Space(20);
-		GUILayout.EndScrollView();
+		GUILayout.EndScrollView();*/
 	}
 
 	private void DrawUtilities()

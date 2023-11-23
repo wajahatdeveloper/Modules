@@ -190,7 +190,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 142562}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8253542baa4e466479a8e858faa1bb0c, type: 3}
+  m_Script: {fileID: 11500000, guid: c965b483b06b67f42891e108e4b52549, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   title: {fileID: 11420504}
@@ -319,7 +319,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_FontData:
-    m_Font: {fileID: 12800000, guid: 9f23b524ba771af4c9d5f5105188f4c2, type: 3}
+    m_Font: {fileID: 12800000, guid: b8af58820f69b474e8f63dc40a702fbc, type: 3}
     m_FontSize: 26
     m_FontStyle: 0
     m_BestFit: 0

@@ -1,6 +1,7 @@
 ﻿using System;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class PopupMessage : SingletonBehaviourUI<PopupMessage>
@@ -76,6 +77,8 @@ public class PopupMessage : SingletonBehaviourUI<PopupMessage>
         messageText.text = message;
         titleText.text = titleString;
         messagePanel.SetActive(true);
+        
+        Debug.Log($"Scene: {SceneManager.GetActiveScene().name}: <b>Popup Panel</b> : Shown");
     }
 
     private void Update()
@@ -109,5 +112,7 @@ public class PopupMessage : SingletonBehaviourUI<PopupMessage>
         messagePanel.SetActive(false);
         onClose?.Invoke();
         onClose?.RemoveAllListeners();
+        
+        Debug.Log($"Scene: {SceneManager.GetActiveScene().name}: <b>Popup Panel</b> : Hidden");
     }
 }

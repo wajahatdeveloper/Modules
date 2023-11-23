@@ -68,7 +68,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 273c0a1afeea56a4db915cb188b2ff67, type: 3}
+  m_Sprite: {fileID: 0}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1
@@ -265,7 +265,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_FontData:
-    m_Font: {fileID: 12800000, guid: 9f23b524ba771af4c9d5f5105188f4c2, type: 3}
+    m_Font: {fileID: 12800000, guid: b8af58820f69b474e8f63dc40a702fbc, type: 3}
     m_FontSize: 49
     m_FontStyle: 0
     m_BestFit: 0
@@ -334,7 +334,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 4094106894949888639}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e2203565e6cc36747a77673204905675, type: 3}
+  m_Script: {fileID: 11500000, guid: d1b6d8941fb01f649b4174ec7e1791b2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   waitPanel: {fileID: 5386745339834101086}

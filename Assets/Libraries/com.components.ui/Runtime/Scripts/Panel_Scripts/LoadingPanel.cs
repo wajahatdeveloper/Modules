@@ -1,6 +1,8 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class LoadingPanel : SingletonBehaviourUI<LoadingPanel>
@@ -10,26 +12,34 @@ public class LoadingPanel : SingletonBehaviourUI<LoadingPanel>
     public GameObject loadingBar;
     public Image loadingBarImage;
 
+    private static int _counter = 0;
+    
     public float loadingPercentage { 
-        get {
+        get
+        {
             return loadingBarImage.fillAmount*100.0f;
         } 
-        set {
+        set 
+        {
             loadingBarImage.fillAmount = value/100.0f;
         } }
 
     public UnityEvent onClose;
 
-    public void Show(string text = "",bool showLoadingBar = false)
+    public void Show(string text = "Loading..",bool showLoadingBar = false)
     {
         infoText.text = text;
         loadingBar.SetActive(showLoadingBar);
         loadingPanel.SetActive(true);
+        
+        Debug.Log($"{SceneManager.GetActiveScene().name}: <b>Loading Panel</b> : Shown id:{_counter}");
+
+        _counter++;
     }
 
     public void StartLoadingWithTime(float time)
     {
-        StartCoroutine(TimerLoading(time));   
+        StartCoroutine(TimerLoading(time));
     }
 
     private IEnumerator TimerLoading(float time)
@@ -46,8 +56,20 @@ public class LoadingPanel : SingletonBehaviourUI<LoadingPanel>
 
     public void Hide()
     {
+        Debug.Log($"{SceneManager.GetActiveScene().name}: <b>Loading Panel</b> : Hidden id:{_counter}");
+
         loadingPanel.SetActive(false);
         onClose?.Invoke();
         onClose?.RemoveAllListeners();
+
+        _counter--;
+    }
+
+    public void HideIfShown()
+    {
+        if (loadingPanel.activeSelf)
+        {
+            Hide();
+        }
     }
 }

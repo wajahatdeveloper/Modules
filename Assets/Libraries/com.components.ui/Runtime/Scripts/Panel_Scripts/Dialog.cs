@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 
@@ -28,9 +29,21 @@ public class Dialog : SingletonBehaviourUI<Dialog>
         message.text = text;
         title.text = titleText;
         panel.SetActive(true);
+        
+        Debug.Log($"Scene: {SceneManager.GetActiveScene().name}: <b>Dialog Panel</b> : Shown");
     }
 
-    public void SetActionAndButton(Action actionToAssign,out Action myAction, Button button)
+    public void Hide()
+    {
+        OnYes = null;
+        OnNo = null;
+        OnCancel = null;
+        OnOk = null;
+        
+        panel.SetActive(false);
+    }
+
+    private void SetActionAndButton(Action actionToAssign,out Action myAction, Button button)
     {
         myAction = actionToAssign;
         button.gameObject.SetActive(myAction==null?false:true);
@@ -39,28 +52,32 @@ public class Dialog : SingletonBehaviourUI<Dialog>
     public void OnClick_Yes()
     {
         OnYes?.Invoke();
-        OnYes = null;
-        panel.SetActive(false);
+
+        Hide();
+        Debug.Log($"Scene: {SceneManager.GetActiveScene().name}: <b>Dialog Panel (OnYes)</b> : Hidden");
     }
 
     public void OnClick_No()
     {
         OnNo?.Invoke();
-        OnNo = null;
-        panel.SetActive(false);
+
+        Hide();
+        Debug.Log($"Scene: {SceneManager.GetActiveScene().name}: <b>Dialog Panel (OnNo)</b> : Hidden");
     }
 
     public void OnClick_Cancel()
     {
         OnCancel?.Invoke();
-        OnCancel = null;
-        panel.SetActive(false);
+
+        Hide();
+        Debug.Log($"Scene: {SceneManager.GetActiveScene().name}: <b>Dialog Panel (OnCancel)</b> : Hidden");
     }
 
     public void OnClick_Ok()
     {
         OnOk?.Invoke();
-        OnOk = null;
-        panel.SetActive(false);
+        
+        Hide();
+        Debug.Log($"Scene: {SceneManager.GetActiveScene().name}: <b>Dialog Panel (OnOK)</b> : Hidden");
     }
 }
