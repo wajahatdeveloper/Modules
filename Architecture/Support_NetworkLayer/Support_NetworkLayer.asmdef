@@ -1,0 +1,23 @@
+{
+    "name": "Support_NetworkLayer",
+    "rootNamespace": "NetworkLayer",
+    "references": [
+        "PhotonUnityNetworking",
+        "PhotonRealtime",
+        "com.components.general",
+        "com.extensions",
+        "Unity.TextMeshPro",
+        "L1_CloudServices",
+        "Support_DataLayer",
+        "com.components.ui"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

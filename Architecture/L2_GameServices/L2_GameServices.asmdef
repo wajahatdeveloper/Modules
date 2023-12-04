@@ -1,0 +1,23 @@
+{
+    "name": "L2_GameServices",
+    "rootNamespace": "GameServices",
+    "references": [
+        "com.components.general",
+        "com.extensions",
+        "com.components.ui",
+        "PhotonUnityNetworking",
+        "PhotonRealtime",
+        "Support_DataLayer",
+        "Support_NetworkLayer",
+        "L1_CloudServices"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

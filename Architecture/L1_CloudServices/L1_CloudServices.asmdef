@@ -1,0 +1,20 @@
+{
+    "name": "L1_CloudServices",
+    "rootNamespace": "CloudServices",
+    "references": [
+        "PhotonRealtime",
+        "PhotonUnityNetworking",
+        "com.components.general",
+        "com.extensions",
+        "MultiPlay.Editor"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
