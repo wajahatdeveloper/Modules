@@ -1,5 +1,4 @@
 ﻿using UnityEngine ;
-using EasyUI.Toast ;
 using UnityEngine.UI ;
 
 public class ToastDemo : MonoBehaviour {
