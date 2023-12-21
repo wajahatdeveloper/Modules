@@ -1,11 +1,12 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using TMPro;
 
 public class ScrollableListItem : MonoBehaviour
 {
-    public Text title;
-    public Text subtitle;
+    public TextMeshProUGUI title;
+    public TextMeshProUGUI subtitle;
     public Image image;
     public Button button;
 

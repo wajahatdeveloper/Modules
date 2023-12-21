@@ -14,7 +14,7 @@ public class ScrollableList : MonoBehaviour
     public float itemHeight = 90;
     public Color itemColor = Color.gray;
 
-    [Header("Internal References")] public Text title;
+    [Header("Internal References")]
     public ScrollRect scrollRect;
     public Transform content;
     public GameObject itemPrefab;
