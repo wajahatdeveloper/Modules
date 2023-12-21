@@ -1,8 +1,12 @@
+using MonitorComponents;
 using UnityEngine;
 
 public class Tester : SingletonBehaviour<Tester>
 {
-    private void Start()
+    private float val;
+
+    private void Update()
     {
+        val += Time.deltaTime;
     }
 }

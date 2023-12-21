@@ -531,5 +531,11 @@ MonoBehaviour:
   - folderName: Video|Videos
     icon: VideoPlayer Icon
     color: {r: 0.5764706, g: 0.43921572, b: 0.8588236, a: 1}
-  _sceneHistory: []
+  _sceneHistory:
+  - name: SampleScene
+    path: Assets/Scenes/SampleScene.unity
+  - name: TestScene
+    path: Assets/LazyCoroutines/EmreBeratKR/LazyCoroutines/Test/Scenes/TestScene.unity
+  - name: AnimationParameters
+    path: Assets/BitStrap/Examples/Animation/AnimationParameters/AnimationParameters.unity
   _notes: []
