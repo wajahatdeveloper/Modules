@@ -4,6 +4,10 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using InfinityCode.UltimateEditorEnhancer.HierarchyTools;
+using InfinityCode.UltimateEditorEnhancer.InspectorTools;
+using InfinityCode.UltimateEditorEnhancer.PostHeader;
+using InfinityCode.UltimateEditorEnhancer.ProjectTools;
 using InfinityCode.UltimateEditorEnhancer.SceneTools;
 using InfinityCode.UltimateEditorEnhancer.Windows;
 using UnityEditor;
@@ -18,17 +22,29 @@ namespace InfinityCode.UltimateEditorEnhancer
         private List<ProjectBookmark> _bookmarks = new List<ProjectBookmark>();
 
         [SerializeField]
+        private List<EmptyInspector.Group> _emptyInspectorItems = new List<EmptyInspector.Group>();
+
+        [SerializeField]
         private List<FavoriteWindowItem> _favoriteWindows = new List<FavoriteWindowItem>();
+
+        [SerializeField]
+        private List<HeaderRule> _headerRules = new List<HeaderRule>();
 
         [SerializeField]
         private List<QuickAccessItem> _quickAccessItems = new List<QuickAccessItem>();
 
         [SerializeField]
+        private List<ProjectFolderRule> _projectFolderIcons = new List<ProjectFolderRule>();
+
+        [SerializeField]
         private List<SceneHistoryItem> _sceneHistory = new List<SceneHistoryItem>();
+
+        [SerializeField]
+        private List<NoteItem> _notes = new List<NoteItem>();
 
         private static ReferenceManager _instance;
 
-        private static ReferenceManager instance
+        public static ReferenceManager instance
         {
             get
             {
@@ -42,14 +58,34 @@ namespace InfinityCode.UltimateEditorEnhancer
             get { return instance._bookmarks; }
         }
 
+        public static List<EmptyInspector.Group> emptyInspectorItems
+        {
+            get { return instance._emptyInspectorItems; }
+        }
+
         public static List<FavoriteWindowItem> favoriteWindows
         {
             get { return instance._favoriteWindows; }
         }
 
+        public static List<HeaderRule> headerRules
+        {
+            get { return instance._headerRules; }
+        }
+
+        public static List<NoteItem> notes
+        {
+            get { return instance._notes; }
+        }
+
         public static List<QuickAccessItem> quickAccessItems
         {
             get { return instance._quickAccessItems; }
+        }
+
+        public static List<ProjectFolderRule> projectFolderIcons
+        {
+            get { return instance._projectFolderIcons; }
         }
 
         public static List<SceneHistoryItem> sceneHistory
@@ -93,6 +129,16 @@ namespace InfinityCode.UltimateEditorEnhancer
             {
                 Log.Add(e);
             }
+        }
+
+        public static void ResetContent()
+        {
+            bookmarks.Clear();
+            favoriteWindows.Clear();
+            headerRules.Clear();
+            quickAccessItems.Clear();
+            RecordUpgrader.InitDefaultQuickAccessItems();
+            Save();
         }
 
         public static void Save()

@@ -52,7 +52,7 @@ namespace InfinityCode.UltimateEditorEnhancer.UnityTypes
 
         public static Type type
         {
-            get { return typeof(EditorGUIUtility); }
+            get => typeof(EditorGUIUtility);
         }
 
         public static void DrawEditorHeaderItems(Rect rect, Object[] objects, int id)

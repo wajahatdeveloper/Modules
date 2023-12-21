@@ -33,11 +33,11 @@ namespace InfinityCode.UltimateEditorEnhancer.Behaviors
 
             KeyManager.KeyBinding prevBinding = KeyManager.AddBinding();
             prevBinding.OnValidate += ValidatePrev;
-            prevBinding.OnInvoke += Prev;
+            prevBinding.OnPress += Prev;
 
             KeyManager.KeyBinding nextBinding = KeyManager.AddBinding();
             nextBinding.OnValidate += ValidateNext;
-            nextBinding.OnInvoke += Next;
+            nextBinding.OnPress += Next;
 
             _records = new List<SelectionRecord>();
             if (Selection.instanceIDs.Length > 0) Add(Selection.instanceIDs);

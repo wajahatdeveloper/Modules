@@ -24,6 +24,23 @@ namespace InfinityCode.UltimateEditorEnhancer
             }
         }
 
+        public static bool IsExpanded(int id)
+        {
+            EditorWindow hierarchyWindow = SceneHierarchyWindowRef.GetLastInteractedHierarchy();
+            if (hierarchyWindow == null) return false;
+            
+            object sceneHierarchy = SceneHierarchyWindowRef.GetSceneHierarchy(hierarchyWindow);
+            if (sceneHierarchy == null) return false;
+
+            object treeView = SceneHierarchyRef.GetTreeView(sceneHierarchy);
+            if (treeView == null) return false;
+
+            object data = TreeViewControllerRef.GetData(treeView);
+            if (data == null) return false;
+
+            return ITreeViewDataSourceRef.IsExpanded(data, id);
+        }
+
         public static void SetDefaultIconsSize(EditorWindow hierarchyWindow, int size = 0)
         {
             object sceneHierarchy = SceneHierarchyWindowRef.GetSceneHierarchy(hierarchyWindow);

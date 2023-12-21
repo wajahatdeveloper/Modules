@@ -7,6 +7,7 @@ using InfinityCode.UltimateEditorEnhancer.EditorMenus;
 using InfinityCode.UltimateEditorEnhancer.Integration;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 namespace InfinityCode.UltimateEditorEnhancer.SceneTools
 {
@@ -25,10 +26,14 @@ namespace InfinityCode.UltimateEditorEnhancer.SceneTools
         private static GUIStyle _activeContentStyle;
         private static Texture2D _collapseLineTexture;
         private static GUIStyle _contentStyle;
+        private static GUIStyle _tooltipStyle;
         private static bool _visible;
         private static Texture2D background;
         private static Action invokeItemAction;
         private static Rect rect;
+        private static Rect tooltipRect;
+        private static string tooltip;
+        private static bool collapseLineDrawn;
 
         public static GUIStyle activeContentStyle
         {
@@ -61,18 +66,41 @@ namespace InfinityCode.UltimateEditorEnhancer.SceneTools
             {
                 if (_contentStyle == null || _contentStyle.normal.background == null)
                 {
-                    _contentStyle = new GUIStyle(EditorStyles.toolbarButton)
+                    _contentStyle = new GUIStyle
                     {
                         fontSize = 8,
                         fixedHeight = 32,
                         normal = { background = Resources.CreateSinglePixelTexture(0, 0.1f), textColor = Color.white },
-                        hover = { background = Resources.CreateSinglePixelTexture(0, 0.2f) },
-                        active = { background = Resources.CreateSinglePixelTexture(0, 0.3f) },
-                        padding = new RectOffset()
+                        hover = { background = Resources.CreateSinglePixelTexture(0, 0.2f), textColor = Color.white },
+                        active = { background = Resources.CreateSinglePixelTexture(0, 0.3f), textColor = Color.white },
+                        padding = new RectOffset(),
+                        alignment = TextAnchor.MiddleCenter,
+                        imagePosition = ImagePosition.ImageAbove
                     };
                 }
 
                 return _contentStyle;
+            }
+        }
+
+        public static GUIStyle tooltipStyle
+        {
+            get
+            {
+                if (_tooltipStyle == null || _tooltipStyle.normal.background == null)
+                {
+                    _tooltipStyle = new GUIStyle()
+                    {
+                        normal =
+                        {
+                            background = Resources.CreateSinglePixelTexture(0.2f),
+                            textColor = Color.white
+                        },
+                        padding = new RectOffset(5, 5, 5, 5)
+                    };
+                }
+
+                return _tooltipStyle;
             }
         }
 
@@ -139,14 +167,22 @@ namespace InfinityCode.UltimateEditorEnhancer.SceneTools
             GUI.DrawTexture(new Rect(0, minIntend, rect.width, rect.height - minIntend - maxIntend), background, ScaleMode.StretchToFill);
         }
 
-        private static void DrawCollapseArea(float minIntend, float maxIntend)
+        private static void DrawCollapseArea(SceneView view, float minIntend, float maxIntend)
         {
             if (!(EditorWindow.mouseOverWindow is SceneView)) return;
 
             Event e = Event.current;
             Vector2 p = e.mousePosition;
-            if (p.y < minIntend || p.y > rect.height - maxIntend) return;
-            if (p.x < rect.width || p.x > rect.width + 3) return;
+            if (p.y < minIntend || p.y > rect.height - maxIntend ||
+                p.x < rect.width || p.x > rect.width + 3)
+            {
+                if (collapseLineDrawn)
+                {
+                    collapseLineDrawn = false;
+                    view.Repaint();
+                }
+                return;
+            }
 
             if (e.type == EventType.Repaint)
             {
@@ -158,14 +194,19 @@ namespace InfinityCode.UltimateEditorEnhancer.SceneTools
                 e.Use();
                 SceneViewManager.BlockMouseUp();
             }
+            else if (e.type == EventType.MouseMove && !collapseLineDrawn)
+            {
+                collapseLineDrawn = true;
+                view.Repaint();
+            }
         }
 
-        private static void DrawContent(SceneView sceneView)
+        private static void DrawContent(SceneView view)
         {
             CheckActiveWindow();
 
             Event e = Event.current;
-            bool maximized = WindowsHelper.IsMaximized(sceneView);
+            bool maximized = WindowsHelper.IsMaximized(view);
 
             int index = -1;
             int visibleIndex = -1;
@@ -200,7 +241,12 @@ namespace InfinityCode.UltimateEditorEnhancer.SceneTools
                 GUIStyle style = activeWindowIndex == index ? activeContentStyle : contentStyle;
                 int padding = Mathf.RoundToInt(rect.width / 2 * (1 - item.iconScale));
                 style.padding = new RectOffset(padding, padding, padding, padding);
-                ButtonEvent buttonEvent = GUILayoutUtils.Button(item.content, style, GUILayout.Width(width), GUILayout.Height(width));
+
+                string contentTooltip = item.content.tooltip;
+                GUIContent content = TempContent.Get(item.content);
+                content.tooltip = null;
+
+                ButtonEvent buttonEvent = GUILayoutUtils.Button(content, style, GUILayout.Width(width), GUILayout.Height(width));
                 if (buttonEvent == ButtonEvent.press)
                 {
                     if (e.button == 0)
@@ -215,9 +261,29 @@ namespace InfinityCode.UltimateEditorEnhancer.SceneTools
                     }
                     else if (e.button == 1) ShowContextMenu();
                 }
+                else if (buttonEvent == ButtonEvent.hover && !string.IsNullOrEmpty(contentTooltip))
+                {
+                    tooltipRect = GUILayoutUtils.lastRect;
+                    tooltip = contentTooltip;
+                }
             }
 
             if (e.type == EventType.MouseDown && e.mousePosition.x < width && e.button == 1) ShowContextMenu();
+        }
+
+        private static void DrawTooltip(SceneView view)
+        {
+            if (Event.current.type != EventType.Repaint || string.IsNullOrEmpty(tooltip)) return;
+
+            GUIContent content = TempContent.Get(tooltip);
+            Vector2 size = tooltipStyle.CalcSize(content);
+
+            Rect r = new Rect(tooltipRect.x + width + 3, tooltipRect.center.y - size.y / 2, size.x, size.y);
+
+            if (r.y < 2) r.y = 2;
+            else if (r.yMax > view.position.height - 2) r.y = view.position.height - size.y - 2;
+
+            tooltipStyle.Draw(r, content, -1);
         }
 
         private static float GetMinIntend()
@@ -257,7 +323,7 @@ namespace InfinityCode.UltimateEditorEnhancer.SceneTools
             invokeItemVisibleIndex = invokeItemIndex = -1;
         }
 
-        private static void OnSceneGUI(SceneView sceneView)
+        private static void OnSceneGUI(SceneView view)
         {
             Event e = Event.current;
             if (e.type == EventType.Layout)
@@ -271,13 +337,15 @@ namespace InfinityCode.UltimateEditorEnhancer.SceneTools
             }
             if (!_visible) return;
 
-            Rect viewRect = SceneViewManager.GetRect(sceneView);
+            Rect viewRect = SceneViewManager.GetRect(view);
 
             rect = new Rect(0, 0, width, viewRect.height);
 
             try
             {
                 Handles.BeginGUI();
+
+                tooltip = null;
 
                 float minIntend = GetMinIntend();
                 float maxIntend = Mathf.Max(Prefs.quickAccessBarIndentMax, 0);
@@ -297,6 +365,16 @@ namespace InfinityCode.UltimateEditorEnhancer.SceneTools
                             e.Use();
                             SceneViewManager.BlockMouseUp();
                         }
+                        else if (e.type == EventType.MouseMove && !collapseLineDrawn)
+                        {
+                            collapseLineDrawn = true;
+                            view.Repaint();
+                        }
+                    }
+                    else if (collapseLineDrawn)
+                    {
+                        collapseLineDrawn = false;
+                        view.Repaint();
                     }
 
                     Handles.EndGUI();
@@ -306,10 +384,11 @@ namespace InfinityCode.UltimateEditorEnhancer.SceneTools
 
                 DrawBackground();
 
-                GUILayout.BeginArea(new Rect(0, minIntend, rect.width, rect.height - minIntend - maxIntend));
+                Rect areaRect = new Rect(0, minIntend, rect.width, rect.height - minIntend - maxIntend);
+                GUILayout.BeginArea(areaRect);
                 try
                 {
-                    DrawContent(sceneView);
+                    DrawContent(view);
                 }
                 catch (Exception exception)
                 {
@@ -317,9 +396,12 @@ namespace InfinityCode.UltimateEditorEnhancer.SceneTools
                 }
                 GUILayout.EndArea();
 
-                DrawCollapseArea(minIntend, maxIntend);
+                DrawCollapseArea(view, minIntend, maxIntend);
+                DrawTooltip(view);
 
                 Handles.EndGUI();
+
+                if (e.type == EventType.MouseMove && areaRect.Contains(e.mousePosition)) view.Repaint();
             }
             catch
             {
@@ -330,6 +412,12 @@ namespace InfinityCode.UltimateEditorEnhancer.SceneTools
         private static bool OnValidateOpenContextMenu()
         {
             return !visible || Event.current.mousePosition.x > width;
+        }
+
+        public static void SetTooltip(string text, Rect buttonRect)
+        {
+            tooltipRect = buttonRect;
+            tooltip = text;
         }
 
         private static void ShowContextMenu()

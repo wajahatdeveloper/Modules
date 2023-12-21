@@ -19,10 +19,7 @@ namespace InfinityCode.UltimateEditorEnhancer
         public static Func<bool> OnValidateOpenContextMenu;
 
         private static Vector2 _lastMousePosition;
-        private static GameObject _lastGameObjectUnderCursor;
-        private static Vector3 _lastNormal;
-        private static Vector3 _lastWorldPosition;
-        private static Ray _screenRay;
+
         private static bool beforeInvoked = false;
         private static double lastUpdateLate = 0;
         private static List<Listener> lateListeners;
@@ -31,40 +28,17 @@ namespace InfinityCode.UltimateEditorEnhancer
         private static Dictionary<int, VisualElement> rectElements;
 
         private static bool waitOpenMenu;
-        private static Plane zeroPlane;
-
-        public static GameObject lastGameObjectUnderCursor
-        {
-            get { return _lastGameObjectUnderCursor; }
-        }
-
-        public static Vector2 lastMousePosition
-        {
-            get { return _lastMousePosition; }
-        }
-
-        public static Ray lastScreenRay
-        {
-            get { return _screenRay; }
-        }
-
-        public static Vector3 lastWorldPosition
-        {
-            get { return _lastWorldPosition; }
-        }
-
-        public static Vector3 lastNormal
-        {
-            get { return _lastNormal; }
-        }
+        private static Plane plane2D;
+        private static Plane plane3D;
 
         static SceneViewManager()
         {
             rectElements = new Dictionary<int, VisualElement>();
-            
+
             SceneView.beforeSceneGui += SceneGUI;
 
-            zeroPlane = new Plane(Vector3.up, Vector3.zero);
+            plane3D = new Plane(Vector3.up, Vector3.zero);
+            plane2D = new Plane(Vector3.back, Vector3.zero);
         }
 
         public static void AddListener(Action<SceneView> invoke, float weight = 0, bool late = false)
@@ -117,6 +91,80 @@ namespace InfinityCode.UltimateEditorEnhancer
 #endif
         }
 
+        public static void GetWorldPosition(out Vector3 worldPosition, GameObject[] ignore = null)
+        {
+            GetWorldPositionAndNormal(SceneView.lastActiveSceneView, out worldPosition, out Vector3 _, ignore);
+        }
+
+        public static void GetWorldPosition(SceneView view, out Vector3 worldPosition, GameObject[] ignore = null)
+        {
+            Vector3 normal;
+            GetWorldPositionAndNormal(view, out worldPosition, out normal, ignore);
+        }
+
+        public static void GetWorldPositionAndNormal(out Vector3 worldPosition, out Vector3 normal, GameObject[] ignore = null)
+        {
+            GetWorldPositionAndNormal(SceneView.lastActiveSceneView, out worldPosition, out normal, ignore);
+        }
+
+        public static void GetWorldPositionAndNormal(SceneView view, out Vector3 worldPosition, out Vector3 normal, GameObject[] ignore = null)
+        {
+            worldPosition = Vector3.zero;
+            normal = Vector3.up;
+
+            if (view == null) view = SceneView.lastActiveSceneView;
+            if (view == null) return;
+
+            Camera camera = view.camera;
+            if (camera == null || camera.pixelWidth == 0 || camera.pixelHeight == 0) return;
+
+            GameObject go = HandleUtility.PickGameObject(_lastMousePosition, false, ignore);
+
+            Vector2 pixelCoordinate = HandleUtility.GUIPointToScreenPixelCoordinate(Event.current.mousePosition);
+            Ray screenRay = camera.ScreenPointToRay(pixelCoordinate);
+
+            if (go != null && !view.in2DMode)
+            {
+                MeshFilter meshFilter = go.GetComponent<MeshFilter>();
+                RaycastHit hit;
+
+                if (meshFilter != null && meshFilter.sharedMesh != null && HandleUtilityRef.IntersectRayMesh(screenRay, meshFilter.sharedMesh, meshFilter.transform.localToWorldMatrix, out hit))
+                {
+                    worldPosition = hit.point;
+                    normal = hit.normal;
+                }
+                else
+                {
+                    Collider collider = go.GetComponentInParent<Collider>();
+                    if (collider != null)
+                    {
+                        if (collider.Raycast(screenRay, out hit, float.MaxValue))
+                        {
+                            worldPosition = hit.point;
+                            normal = hit.normal;
+                        }
+                    }
+                    else
+                    {
+                        RectTransform rectTransform = go.GetComponent<RectTransform>();
+                        if (rectTransform != null)
+                        {
+                            RectTransformUtility.ScreenPointToWorldPointInRectangle(rectTransform, pixelCoordinate, view.camera, out worldPosition);
+                            normal = Vector3.forward;
+                        }
+                    }
+                }
+            }
+            else
+            {
+                float distance;
+                Plane plane = view.in2DMode ? plane2D : plane3D;
+                if (plane.Raycast(screenRay, out distance)) worldPosition = screenRay.GetPoint(distance);
+                else worldPosition = Vector3.zero;
+                normal = Vector3.up;
+            }
+        }
+
         private static void InvokeSceneGUI(SceneView sceneview)
         {
             if (listeners == null) return;
@@ -166,7 +214,7 @@ namespace InfinityCode.UltimateEditorEnhancer
             if ((e.mousePosition - pressPoint).sqrMagnitude > 100) waitOpenMenu = false;
         }
 
-        private static void OnMouseUp(Event e) 
+        private static void OnMouseUp(Event e)
         {
             if (e.button != 1 || !waitOpenMenu) return;
 
@@ -235,7 +283,7 @@ namespace InfinityCode.UltimateEditorEnhancer
 
             if (e.type == EventType.MouseMove || e.type == EventType.DragUpdated)
             {
-                UpdateLastItems(view);
+                _lastMousePosition = e.mousePosition;
             }
 
             InvokeSceneGUI(view);
@@ -255,58 +303,6 @@ namespace InfinityCode.UltimateEditorEnhancer
             if (!beforeInvoked) SceneGUI(view);
             InvokeSceneGUILate(view);
             beforeInvoked = false;
-        }
-
-        public static void UpdateLastItems(SceneView view)
-        {
-            Camera camera = SceneView.lastActiveSceneView.camera;
-            if (camera == null || camera.pixelWidth == 0 || camera.pixelHeight == 0) return;
-
-            _lastMousePosition = Event.current.mousePosition;
-            Vector2 pixelCoordinate = HandleUtility.GUIPointToScreenPixelCoordinate(_lastMousePosition);
-
-            _screenRay = camera.ScreenPointToRay(pixelCoordinate);
-            _lastGameObjectUnderCursor = HandleUtility.PickGameObject(_lastMousePosition, false);
-
-            if (_lastGameObjectUnderCursor != null)
-            {
-                MeshFilter meshFilter = _lastGameObjectUnderCursor.GetComponent<MeshFilter>();
-                RaycastHit hit;
-
-                if (meshFilter != null && meshFilter.sharedMesh != null && HandleUtilityRef.IntersectRayMesh(_screenRay, meshFilter.sharedMesh, meshFilter.transform.localToWorldMatrix, out hit))
-                {
-                    _lastWorldPosition = hit.point;
-                    _lastNormal = hit.normal;
-                }
-                else
-                {
-                    Collider collider = _lastGameObjectUnderCursor.GetComponentInParent<Collider>();
-                    if (collider != null)
-                    {
-                        if (collider.Raycast(_screenRay, out hit, float.MaxValue))
-                        {
-                            _lastWorldPosition = hit.point;
-                            _lastNormal = hit.normal;
-                        }
-                    }
-                    else
-                    {
-                        RectTransform rectTransform = _lastGameObjectUnderCursor.GetComponent<RectTransform>();
-                        if (rectTransform != null)
-                        {
-                            RectTransformUtility.ScreenPointToWorldPointInRectangle(rectTransform, pixelCoordinate, view.camera, out _lastWorldPosition);
-                            _lastNormal = Vector3.forward;
-                        }
-                    }
-                }
-            }
-            else
-            {
-                float distance;
-                if (zeroPlane.Raycast(_screenRay, out distance)) _lastWorldPosition = _screenRay.GetPoint(distance);
-                else _lastWorldPosition = Vector3.zero;
-                _lastNormal = Vector3.up;
-            }
         }
 
         private static void UpdateSceneGUILate()

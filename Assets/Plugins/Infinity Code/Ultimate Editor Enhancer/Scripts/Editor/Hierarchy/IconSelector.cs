@@ -12,7 +12,7 @@ namespace InfinityCode.UltimateEditorEnhancer.HierarchyTools
     {
         static IconSelector()
         {
-            HierarchyItemDrawer.Register("IconSelector", OnHierarchyGUI);
+            HierarchyItemDrawer.Register("IconSelector", OnHierarchyGUI, HierarchyToolOrder.ICON_SELECTOR);
         }
 
         private static void OnHierarchyGUI(HierarchyItem item)
@@ -20,7 +20,7 @@ namespace InfinityCode.UltimateEditorEnhancer.HierarchyTools
             if (item.gameObject == null || !item.hovered) return;
 
             Event e = Event.current;
-            if (e.type != EventType.MouseUp || e.button != 1) return;
+            if (e.type != EventType.ContextClick || e.button != 1) return;
 
             Rect r = new Rect(item.rect.x, item.rect.y, 16, 16);
             if (!r.Contains(e.mousePosition)) return;

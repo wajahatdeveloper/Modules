@@ -8,8 +8,18 @@ namespace InfinityCode.UltimateEditorEnhancer.UnityTypes
 {
     public static class TreeViewControllerRef
     {
+        private static PropertyInfo _dataProp;
         private static PropertyInfo _guiProp;
         private static Type _type;
+
+        private static PropertyInfo dataProp
+        {
+            get
+            {
+                if (_dataProp == null) _dataProp = type.GetProperty("data", Reflection.InstanceLookup);
+                return _dataProp;
+            }
+        }
 
         private static PropertyInfo guiProp
         {
@@ -27,6 +37,11 @@ namespace InfinityCode.UltimateEditorEnhancer.UnityTypes
                 if (_type == null) _type = Reflection.GetEditorType("IMGUI.Controls.TreeViewController");
                 return _type;
             }
+        }
+
+        public static object GetData(object instance)
+        {
+            return dataProp.GetValue(instance);
         }
 
         public static object GetGUI(object instance)

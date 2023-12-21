@@ -14,11 +14,11 @@ namespace InfinityCode.UltimateEditorEnhancer
         public static Action<SceneReferences> OnCreate;
         public static Action OnUpdateInstances;
 
-        public static List<SceneReferences> instances;
+        public static List<SceneReferences> instances = new List<SceneReferences>();
 
         public List<SceneBookmark> bookmarks = new List<SceneBookmark>();
         public List<HierarchyBackground> hierarchyBackgrounds = new List<HierarchyBackground>();
-        
+
         public static SceneReferences Get(Scene scene, bool createIfMissed = true)
         {
             if (instances == null) return null;

@@ -106,7 +106,9 @@ namespace InfinityCode.UltimateEditorEnhancer.Behaviors
             GameObject instance = PrefabUtility.InstantiatePrefab(go) as GameObject;
             Undo.RegisterCreatedObjectUndo(instance, "Drag Instance");
             instance.transform.SetParent(parent, false);
-            instance.transform.position = SceneViewManager.lastWorldPosition;
+            Vector3 pos;
+            SceneViewManager.GetWorldPosition(out pos);
+            instance.transform.position = pos;
             e.Use();
 
         }

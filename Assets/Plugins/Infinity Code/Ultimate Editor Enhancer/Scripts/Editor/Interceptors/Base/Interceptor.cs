@@ -15,7 +15,17 @@ namespace InfinityCode.UltimateEditorEnhancer.Interceptors
     public abstract class Interceptor
     {
         protected static Harmony harmony;
+        private static int _isAppleM1;
         protected MethodInfo patch;
+
+        private static bool isAppleM1
+        {
+            get
+            {
+                if (_isAppleM1 == 0) _isAppleM1 = SystemInfo.processorType.Contains("Apple M1") ? 1 : -1;
+                return _isAppleM1 == 1;
+            }
+        }
 
         protected virtual InitType initType
         {
@@ -88,26 +98,34 @@ namespace InfinityCode.UltimateEditorEnhancer.Interceptors
 
         protected virtual void Patch()
         {
-            if (patch != null || originalMethod == null) return; 
+            if (!Prefs.unsafeFeatures) return;
+            if (isAppleM1) return;
+
+            if (patch != null) return;
+
+            MethodInfo original = originalMethod;
+            if (original == null) return;
 
             try
             {
                 HarmonyMethod prefix = null;
                 HarmonyMethod postfix = null;
 
-                if (!string.IsNullOrEmpty(prefixMethodName))
+                string _prefixName = prefixMethodName;
+                if (!string.IsNullOrEmpty(_prefixName))
                 {
-                    MethodInfo prefixMethod = AccessTools.Method(GetType(), prefixMethodName);
+                    MethodInfo prefixMethod = AccessTools.Method(GetType(), _prefixName);
                     if (prefixMethod != null) prefix = new HarmonyMethod(prefixMethod);
                 }
 
-                if (!string.IsNullOrEmpty(postfixMethodName))
+                string _postfixName = postfixMethodName;
+                if (!string.IsNullOrEmpty(_postfixName))
                 {
-                    MethodInfo postfixMethod = AccessTools.Method(GetType(), postfixMethodName);
+                    MethodInfo postfixMethod = AccessTools.Method(GetType(), _postfixName);
                     if (postfixMethod != null) postfix = new HarmonyMethod(postfixMethod);
                 }
 
-                patch = harmony.Patch(originalMethod, prefix, postfix);
+                patch = harmony.Patch(original, prefix, postfix);
             }
             catch (Exception e)
             {

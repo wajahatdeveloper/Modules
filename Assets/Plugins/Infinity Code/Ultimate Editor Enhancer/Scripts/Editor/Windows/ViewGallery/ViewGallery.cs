@@ -22,13 +22,16 @@ namespace InfinityCode.UltimateEditorEnhancer.Windows
         public delegate void DrawCamerasDelegate(ViewGallery gallery, float rowHeight, float maxLabelWidth, ref int offsetY, ref int row);
 
         public static Action<GenericMenuEx> OnPrepareViewStatesMenu;
+        
         public static bool closeOnSelect = false;
-
-        private static GUIStyle selectedStyle;
         public static bool isDirty = true;
 
-        public CameraStateItem[] cameras;
-        private ViewStateItem[] views;
+        private static GUIStyle selectedStyle;
+        private static GUIContent refreshContent;
+        private static GUIContent settingsContent;
+
+        public static CameraStateItem[] cameras;
+        private static ViewStateItem[] views;
         private ViewItem[] filteredItems;
 
         public int countCols;
@@ -45,7 +48,7 @@ namespace InfinityCode.UltimateEditorEnhancer.Windows
         {
             KeyManager.KeyBinding binding = KeyManager.AddBinding();
             binding.OnValidate += OnValidate;
-            binding.OnInvoke += OnInvoke;
+            binding.OnPress += OnInvoke;
         }
 
         private void CacheItems()
@@ -83,7 +86,7 @@ namespace InfinityCode.UltimateEditorEnhancer.Windows
                 }
                 else
                 {
-                    countCols = cameras.Length + views.Length - 1;
+                    countCols = cameras.Length + views.Length;
                     countRows = 1;
                 }
             }
@@ -183,6 +186,7 @@ namespace InfinityCode.UltimateEditorEnhancer.Windows
 
                 go.transform.SetParent(container.transform, true);
                 EditorMenu.Close();
+                RepaintAll();
             });
         }
 
@@ -275,7 +279,7 @@ namespace InfinityCode.UltimateEditorEnhancer.Windows
             float rowHeight = itemHeight + 25;
             float maxLabelWidth = lastSize.x / countCols - 10;
             int index = 0;
-            int totalItems = cameras.Length + views.Length - 1;
+            int totalItems = cameras.Length + views.Length;
 
             for (int i = 0; i < cameras.Length; i++)
             {
@@ -296,7 +300,7 @@ namespace InfinityCode.UltimateEditorEnhancer.Windows
                 index++;
             }
 
-            for (int i = 1; i < views.Length; i++)
+            for (int i = 0; i < views.Length; i++)
             {
                 int col = index % countCols;
 
@@ -364,8 +368,27 @@ namespace InfinityCode.UltimateEditorEnhancer.Windows
             _filter = GUILayoutUtils.ToolbarSearchField(_filter);
             if (EditorGUI.EndChangeCheck()) UpdateFilteredItems();
 
-            if (GUILayoutUtils.ToolbarButton("Refresh")) isDirty = true;
-            if (GUILayoutUtils.ToolbarButton("?")) Links.OpenDocumentation("view-gallery");
+            if (GUILayoutUtils.ToolbarButton(refreshContent)) isDirty = true;
+            if (GUILayoutUtils.ToolbarButton(settingsContent))
+            {
+                GenericMenuEx menu = GenericMenuEx.Start();
+                menu.Add("Scene View State", Prefs.viewGallerySceneViewState, () =>
+                {
+                    Prefs.viewGallerySceneViewState = !Prefs.viewGallerySceneViewState;
+                    Prefs.Save();
+                    isDirty = true;
+                });
+                menu.Add("UI State", Prefs.viewGalleryUIState, () =>
+                {
+                    Prefs.viewGalleryUIState = !Prefs.viewGalleryUIState;
+                    Prefs.Save();
+                    isDirty = true;
+                });
+                menu.AddSeparator();
+                menu.Add("Settings", Settings.OpenViewsSettings);
+                menu.Show();
+            }
+            if (GUILayoutUtils.ToolbarButton(TempContent.Get("?", "Help"))) Links.OpenDocumentation("view-gallery");
             EditorGUILayout.EndHorizontal();
         }
 
@@ -402,47 +425,57 @@ namespace InfinityCode.UltimateEditorEnhancer.Windows
             int sceneCount = sceneViews.Count;
             countAutoViews = 0;
             List<ViewStateItem> tempViews = new List<ViewStateItem>();
-            for (int i = 0; i < sceneCount; i++)
+
+            if (Prefs.viewGallerySceneViewState)
             {
-                SceneView sceneView = sceneViews[i] as SceneView;
-                string t = "Scene View";
-                if (sceneCount > 1) t += " " + (i + 1);
-                countAutoViews++;
-                tempViews.Add(new ViewStateItem
+                for (int i = 0; i < sceneCount; i++)
                 {
-                    title = t,
-                    pivot = sceneView.pivot,
-                    size = sceneView.size,
-                    rotation = sceneView.rotation,
-                    is2D = sceneView.in2DMode,
-                    view = sceneView
-                });
-            }
-
-            Canvas[] canvases = FindObjectsOfType<Canvas>().Where(c => c.renderMode == RenderMode.ScreenSpaceOverlay).ToArray();
-            if (canvases.Length > 0)
-            {
-                Bounds bounds = new Bounds();
-
-                Vector3[] fourCorners = new Vector3[4];
-                for (int i = 0; i < canvases.Length; i++)
-                {
-                    RectTransform rt = canvases[i].GetComponent<RectTransform>();
-                    rt.GetWorldCorners(fourCorners);
-
-                    if (i == 0) bounds = new Bounds(fourCorners[0], Vector3.zero);
-                    for (int k = 0; k < 4; k++) bounds.Encapsulate(fourCorners[k]);
+                    SceneView sceneView = sceneViews[i] as SceneView;
+                    string t = "Scene View";
+                    if (sceneCount > 1) t += " " + (i + 1);
+                    countAutoViews++;
+                    tempViews.Add(new ViewStateItem
+                    {
+                        title = t,
+                        pivot = sceneView.pivot,
+                        size = sceneView.size,
+                        rotation = sceneView.rotation,
+                        is2D = sceneView.in2DMode,
+                        view = sceneView
+                    });
                 }
-
-                tempViews.Add(new ViewStateItem()
-                {
-                    title = "UI",
-                    is2D = true,
-                    renderUI = true,
-                    pivot = bounds.center,
-                    size = bounds.extents.magnitude
-                });
             }
+
+            if (Prefs.viewGalleryUIState)
+            {
+                Canvas[] canvases = FindObjectsOfType<Canvas>().Where(c => c.renderMode == RenderMode.ScreenSpaceOverlay).ToArray();
+                if (canvases.Length > 0)
+                {
+                    Bounds bounds = new Bounds();
+
+                    Vector3[] fourCorners = new Vector3[4];
+                    for (int i = 0; i < canvases.Length; i++)
+                    {
+                        RectTransform rt = canvases[i].GetComponent<RectTransform>();
+                        rt.GetWorldCorners(fourCorners);
+
+                        if (i == 0) bounds = new Bounds(fourCorners[0], Vector3.zero);
+                        for (int k = 0; k < 4; k++) bounds.Encapsulate(fourCorners[k]);
+                    }
+
+                    tempViews.Add(new ViewStateItem
+                    {
+                        title = "UI",
+                        is2D = true,
+                        renderUI = true,
+                        pivot = bounds.center,
+                        size = bounds.extents.magnitude
+                    });
+
+                    countAutoViews++;
+                }
+            }
+            
 
             tempViews.AddRange(viewStates.Select(t => new ViewStateItem(t)));
             views = tempViews.ToArray();
@@ -460,6 +493,10 @@ namespace InfinityCode.UltimateEditorEnhancer.Windows
         private void OnEnable()
         {
             isDirty = true;
+            if (!wantsMouseMove) wantsMouseMove = true;
+
+            if (refreshContent == null) refreshContent = new GUIContent(EditorIconContents.refresh.image, "Refresh");
+            if (settingsContent == null) settingsContent = new GUIContent(EditorIconContents.settings.image, "Settings");
         }
 
         private void OnFocus()
@@ -489,14 +526,6 @@ namespace InfinityCode.UltimateEditorEnhancer.Windows
                 else DrawFlatItems();
             }
             else DrawFilteredItems();
-
-
-            GUI.changed = true;
-        }
-
-        private void OnHierarchyChange()
-        {
-            isDirty = true;
         }
 
         private static void OnInvoke()
@@ -517,7 +546,7 @@ namespace InfinityCode.UltimateEditorEnhancer.Windows
         [MenuItem(WindowsHelper.MenuPath + "View Gallery", false, 102)]
         public static void OpenWindow()
         {
-            GetWindow<ViewGallery>(false, "View Gallery", true);
+            GetWindow<ViewGallery>(false, "View Gallery", true).wantsMouseMove = true;
         }
 
         private void RemoveAllTemporaryCameras()
@@ -652,8 +681,9 @@ namespace InfinityCode.UltimateEditorEnhancer.Windows
                     if (item.texture != null) DestroyImmediate(item.texture);
                 }
 
-                SceneView sceneView = views[0].view;
+                SceneView sceneView = SceneView.lastActiveSceneView;
                 Camera cam = sceneView.camera;
+                ViewStateItem defaultView = new ViewStateItem(sceneView);
                 lastAT = cam.activeTexture;
                 clearFlags = cam.clearFlags;
                 float nearClipPlane = cam.nearClipPlane;
@@ -700,7 +730,7 @@ namespace InfinityCode.UltimateEditorEnhancer.Windows
                     item.texture = texture;
                 }
 
-                views[0].SetView(sceneView);
+                defaultView.SetView(sceneView);
 
                 cam.targetTexture = lastAT;
                 cam.clearFlags = clearFlags;
@@ -710,9 +740,9 @@ namespace InfinityCode.UltimateEditorEnhancer.Windows
                 renderTexture.Release();
                 DestroyImmediate(renderTexture);
             }
-            catch
+            catch (Exception ex)
             {
-                
+                Debug.LogException(ex);
             }
 
             foreach (Canvas canvas in modifiedCanvases)
@@ -720,6 +750,17 @@ namespace InfinityCode.UltimateEditorEnhancer.Windows
                 canvas.renderMode = RenderMode.ScreenSpaceOverlay;
                 canvas.worldCamera = null;
                 canvas.scaleFactor = 1;
+            }
+        }
+
+        public static void RepaintAll()
+        {
+            isDirty = true;
+            ViewGallery[] galleries = UnityEngine.Resources.FindObjectsOfTypeAll<ViewGallery>();
+            Debug.Log(galleries.Length);
+            foreach (ViewGallery gallery in galleries)
+            {
+                gallery.Repaint();
             }
         }
 
@@ -757,7 +798,7 @@ namespace InfinityCode.UltimateEditorEnhancer.Windows
 
             string pattern = SearchableItem.GetPattern(_filter);
 
-            filteredItems = cameras.Select(c => c as ViewItem).Concat(views).Where(i => i.UpdateAccuracy(pattern) > 0).OrderByDescending(i => i.accuracy).ToArray();
+            filteredItems = cameras.Select(c => c as ViewItem).Concat(views).Where(i => i.Match(pattern)).ToArray();
 
             CalcItemSize();
             RenderItems();

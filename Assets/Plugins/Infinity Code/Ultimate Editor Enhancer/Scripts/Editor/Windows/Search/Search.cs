@@ -45,15 +45,17 @@ namespace InfinityCode.UltimateEditorEnhancer.Windows
 
         public static Search instance { get; private set; }
 
+        private static Action OnNextRepaint;
+
         static Search()
         {
             KeyManager.KeyBinding binding = KeyManager.AddBinding();
             binding.OnValidate += OnValidate;
-            binding.OnInvoke += OnInvoke;
+            binding.OnPress += OnInvoke;
 
             binding = KeyManager.AddBinding();
             binding.OnValidate += OnValidateScript;
-            binding.OnInvoke += OnInvokeScript;
+            binding.OnPress += OnInvokeScript;
         }
 
         private static void CachePrefabWithComponents(Dictionary<int, Record> tempRecords, GameObject go)
@@ -340,6 +342,44 @@ namespace InfinityCode.UltimateEditorEnhancer.Windows
             if (selectedIndex != -1) SelectRecord(selectedIndex, selectedState);
         }
 
+        private void DrawHeader()
+        {
+            GUI.Box(new Rect(0, 0, position.width, position.height), GUIContent.none, EditorStyles.toolbar);
+
+            EditorGUILayout.BeginHorizontal(GUILayout.Height(20));
+
+            if (Prefs.searchByProject)
+            {
+                GUILayout.Space(100);
+
+                EditorGUI.BeginChangeCheck();
+                searchMode = GUILayout.Toolbar(searchMode, searchModeLabels, EditorStyles.toolbarButton);
+                if (EditorGUI.EndChangeCheck())
+                {
+                    needUpdateBestRecords = true;
+                    focusOnTextField = true;
+                }
+
+                GUILayout.Space(80);
+            }
+            else
+            {
+                GUILayout.Label("Search", Styles.centeredLabel, GUILayout.Height(20));
+            }
+
+            if (GUILayoutUtils.ToolbarButton(TempContent.Get(EditorIconContents.settings.image, "Settings")))
+            {
+                Settings.OpenSearchSettings();
+            }
+
+            if (GUILayoutUtils.ToolbarButton("?"))
+            {
+                Links.OpenDocumentation("smart-search");
+            }
+
+            EditorGUILayout.EndHorizontal();
+        }
+
         private void DrawHint()
         {
             GUI.Label(new Rect(0, 15, position.width, position.height), "Enter the name of the object you are looking for.\nSupports fuzzy search, and you can enter a query in part.\nTo search by object type, enter \"query:type\".\n\nUse Tab to quickly switch between searching\neverywhere, in the hierarchy, and in the project.", Styles.centeredLabel);
@@ -395,35 +435,7 @@ namespace InfinityCode.UltimateEditorEnhancer.Windows
 
             if (!ProcessEvents()) return;
 
-            GUI.Box(new Rect(0, 0, position.width, position.height), GUIContent.none, EditorStyles.toolbar);
-
-            if (Prefs.searchByProject)
-            {
-                EditorGUILayout.BeginHorizontal(GUILayout.Height(20));
-
-                GUILayout.Space(100);
-
-                EditorGUI.BeginChangeCheck();
-                searchMode = GUILayout.Toolbar(searchMode, searchModeLabels, EditorStyles.toolbarButton);
-                if (EditorGUI.EndChangeCheck())
-                {
-                    needUpdateBestRecords = true;
-                    focusOnTextField = true;
-                }
-
-                GUILayout.Space(80);
-
-                if (GUILayoutUtils.ToolbarButton("?"))
-                {
-                    Links.OpenDocumentation("smart-search");
-                }
-
-                EditorGUILayout.EndHorizontal();
-            }
-            else
-            {
-                GUILayout.Label("Search", Styles.centeredLabel, GUILayout.Height(20));
-            }
+            DrawHeader();
 
             GUI.SetNextControlName("UEESearchTextField");
             EditorGUI.BeginChangeCheck();
@@ -434,22 +446,28 @@ namespace InfinityCode.UltimateEditorEnhancer.Windows
             {
                 if (resetSelection)
                 {
-                    TextEditor recycledEditor = EditorGUIRef.GetRecycledEditor() as TextEditor;
+                    TextEditor recycledEditor = GUIUtility.GetStateObject(typeof(TextEditor), GUIUtility.keyboardControl) as TextEditor;
                     if (recycledEditor != null)
                     {
                         if (setSelectionIndex == -1)
                         {
-                            recycledEditor.MoveTextEnd();
+                            recycledEditor.SelectNone();
+                            recycledEditor.cursorIndex = searchText.Length;
                         }
                         else
                         {
-                            recycledEditor.MoveTextStart();
-                            setSelectionIndex = -1;
+                            recycledEditor.SelectNone();
+                            recycledEditor.cursorIndex = 0;
                         }
                     }
                     
                     resetSelection = false;
-                    Repaint();
+                }
+
+                if (OnNextRepaint != null)
+                {
+                    OnNextRepaint();
+                    OnNextRepaint = null;
                 }
             }
 
@@ -457,7 +475,10 @@ namespace InfinityCode.UltimateEditorEnhancer.Windows
             {
                 GUI.FocusControl("UEESearchTextField");
                 focusOnTextField = false;
-                if (!string.IsNullOrEmpty(searchText)) resetSelection = true;
+                if (!string.IsNullOrEmpty(searchText))
+                {
+                    resetSelection = true;
+                }
             }
 
             if (changed || needUpdateBestRecords) UpdateBestRecords();
@@ -490,6 +511,7 @@ namespace InfinityCode.UltimateEditorEnhancer.Windows
             OnInvoke();
             instance.searchText = ":script";
             instance.setSelectionIndex = 0;
+            instance.resetSelection = true;
             searchMode = 2;
         }
 
@@ -586,6 +608,7 @@ namespace InfinityCode.UltimateEditorEnhancer.Windows
 
             instance = CreateInstance<Search>();
             instance.position = rect;
+            instance.setSelectionIndex = -1;
             instance.ShowPopup();
             instance.Focus();
             focusOnTextField = true;
@@ -600,54 +623,13 @@ namespace InfinityCode.UltimateEditorEnhancer.Windows
 
         private int TakeBestRecords(IEnumerable<KeyValuePair<int, Record>> tempBestRecords)
         {
-            int count = 0;
-            float minAccuracy = float.MaxValue;
+            bestRecords = tempBestRecords.Take(maxRecords)
+                .Select(r => r.Value)
+                //.OrderBy(r => r.label.Length)
+                //.ThenBy(r => r.label)
+                .ToArray();
 
-            foreach (var pair in tempBestRecords)
-            {
-                Record v = pair.Value;
-                float a = v.accuracy;
-
-                if (count < maxRecords)
-                {
-                    bestRecords[count] = v;
-                    count++;
-                    if (minAccuracy > a) minAccuracy = a;
-                    continue;
-                }
-
-                if (a <= minAccuracy) continue;
-
-                float newMin = float.MaxValue;
-                bool needReplace = true;
-
-                for (int i = 0; i < maxRecords; i++)
-                {
-                    Record v1 = bestRecords[i];
-                    float a1 = v1.accuracy;
-                    if (needReplace && a1 == minAccuracy)
-                    {
-                        bestRecords[i] = v;
-                        needReplace = false;
-                        if (newMin > v.accuracy) newMin = v.accuracy;
-                    }
-                    else if (newMin > a1) newMin = a1;
-                }
-
-                minAccuracy = newMin;
-            }
-
-            if (count > 1)
-            {
-                Record[] sortedRecords = bestRecords.Take(count)
-                    .OrderByDescending(r => r.accuracy)
-                    .ThenBy(r => r.label.Length)
-                    .ThenBy(r => r.label).ToArray();
-
-                for (int i = 0; i < sortedRecords.Length; i++) bestRecords[i] = sortedRecords[i];
-            }
-
-            return count;
+            return bestRecords.Length;
         }
 
         private void UpdateBestRecords()
@@ -677,14 +659,14 @@ namespace InfinityCode.UltimateEditorEnhancer.Windows
 
                 if (currentMode != 0) search = search.Substring(1);
 
-                if (Prefs.searchByWindow && currentMode == 0) tempBestRecords = tempBestRecords.Concat(windowRecords.Where(r => r.Value.Update(search, assetType) > 0));
-                if (currentMode == 0 || currentMode == 1) tempBestRecords = tempBestRecords.Concat(sceneRecords.Where(r => r.Value.Update(search, assetType) > 0));
-                if (Prefs.searchByProject && currentMode == 0 || currentMode == 2) tempBestRecords = tempBestRecords.Concat(projectRecords.Where(r => r.Value.Update(search, assetType) > 0));
+                if (Prefs.searchByWindow && currentMode == 0) tempBestRecords = tempBestRecords.Concat(windowRecords.Where(r => r.Value.Update(search, assetType)));
+                if (currentMode == 0 || currentMode == 1) tempBestRecords = tempBestRecords.Concat(sceneRecords.Where(r => r.Value.Update(search, assetType)));
+                if (Prefs.searchByProject && currentMode == 0 || currentMode == 2) tempBestRecords = tempBestRecords.Concat(projectRecords.Where(r => r.Value.Update(search, assetType)));
             }
             else
             {
                 tempBestRecords = searchMode == 1? sceneRecords: projectRecords;
-                tempBestRecords = tempBestRecords.Where(r => r.Value.Update(search, assetType) > 0);
+                tempBestRecords = tempBestRecords.Where(r => r.Value.Update(search, assetType));
             }
 
             countBestRecords = TakeBestRecords(tempBestRecords);

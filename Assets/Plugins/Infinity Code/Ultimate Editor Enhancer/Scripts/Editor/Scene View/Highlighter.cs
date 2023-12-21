@@ -25,7 +25,7 @@ namespace InfinityCode.UltimateEditorEnhancer.SceneTools
         static Highlighter()
         {
             SceneViewManager.AddListener(OnSceneGUI, SceneViewOrder.normal, true);
-            HierarchyItemDrawer.Register("Highlighter", DrawHierarchyItem);
+            HierarchyItemDrawer.Register("Highlighter", DrawHierarchyItem, HierarchyToolOrder.HIGHLIGHTER);
             EditorApplication.modifierKeysChanged += RepaintAllHierarchies;
             EditorApplication.update += EditorUpdate;
             viewDict = new Dictionary<SceneView, SceneViewOutline>();
@@ -73,7 +73,7 @@ namespace InfinityCode.UltimateEditorEnhancer.SceneTools
         {
             bool state = false;
             HighlightUI(go, ref state);
-            HighlightRenderers(go, ref state);
+            if (GraphicsSettings.renderPipelineAsset == null) HighlightRenderers(go, ref state);
             HighlightWithoutRenderer(go, ref state);
 
             if (state) SceneView.RepaintAll();
@@ -96,7 +96,7 @@ namespace InfinityCode.UltimateEditorEnhancer.SceneTools
                     GameObject go = item.gameObject;
                     if (go == null) break;
                     bool contains = item.rect.Contains(e.mousePosition);
-                    if (contains && e.modifiers == EventModifiers.Control)
+                    if (contains && e.modifiers == Prefs.highlightOnHierarchyModifiers)
                     {
                         if (hoveredGO != go)
                         {

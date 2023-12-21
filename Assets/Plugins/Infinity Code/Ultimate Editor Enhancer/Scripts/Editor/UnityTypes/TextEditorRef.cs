@@ -10,7 +10,7 @@ namespace InfinityCode.UltimateEditorEnhancer.UnityTypes
     {
         public static Type type
         {
-            get { return typeof(TextEditor); }
+            get => typeof(TextEditor);
         }
 
         public static void SetText(string text)

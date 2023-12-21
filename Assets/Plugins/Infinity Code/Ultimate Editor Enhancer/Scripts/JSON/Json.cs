@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace InfinityCode.UltimateEditorEnhancer.JSON
 {
@@ -164,11 +165,79 @@ namespace InfinityCode.UltimateEditorEnhancer.JSON
             return v;
         }
 
+        public static void DeserializeTo(string json, Object target)
+        {
+            if (target == null) return;
+
+            object obj = ParseDirect(json);
+            Dictionary<string, object> table = obj as Dictionary<string, object>;
+            Type type = target.GetType();
+
+            IEnumerable<MemberInfo> members = Reflection.GetMembers(type, BindingFlags.Instance | BindingFlags.Public);
+
+            foreach (MemberInfo member in members)
+            {
+#if !NETFX_CORE
+                MemberTypes memberType = member.MemberType;
+                if (memberType != MemberTypes.Field && memberType != MemberTypes.Property) continue;
+#else
+                MemberTypes memberType;
+                if (member is PropertyInfo) memberType = MemberTypes.Property;
+                else if (member is FieldInfo) memberType = MemberTypes.Field;
+                else continue;
+#endif
+
+                if (memberType == MemberTypes.Property && !((PropertyInfo)member).CanWrite) continue;
+                object item;
+
+#if !NETFX_CORE
+                object[] attributes = member.GetCustomAttributes(typeof(AliasAttribute), true);
+                AliasAttribute alias = attributes.Length > 0 ? attributes[0] as AliasAttribute : null;
+#else
+                IEnumerable<Attribute> attributes = member.GetCustomAttributes(typeof(AliasAttribute), true);
+                AliasAttribute alias = null;
+                foreach (Attribute a in attributes)
+                {
+                    alias = a as AliasAttribute;
+                    break;
+                }
+#endif
+                if (alias == null || !alias.ignoreFieldName)
+                {
+                    if (table.TryGetValue(member.Name, out item))
+                    {
+                        DeserializeValue(memberType, member, item, target);
+                        continue;
+                    }
+                }
+
+                if (alias != null)
+                {
+                    for (int j = 0; j < alias.aliases.Length; j++)
+                    {
+                        if (table.TryGetValue(alias.aliases[j], out item))
+                        {
+                            DeserializeValue(memberType, member, item, target);
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
         private static void DeserializeValue(MemberTypes memberType, MemberInfo member, object item, object v)
         {
             object cv;
             Type t = memberType == MemberTypes.Field ? ((FieldInfo) member).FieldType : ((PropertyInfo) member).PropertyType;
             if (t == typeof(System.Object)) cv = item;
+#if UNITY_EDITOR
+            else if (t.IsSubclassOf(typeof(UnityEngine.Object)))
+            {
+                int id = (int)(long)item;
+                if (id != 0) cv = UnityEditor.EditorUtility.InstanceIDToObject(id);
+                else cv = null;
+            }
+#endif
             else if (t.IsEnum) cv = Enum.Parse(t, item as string);
             else if (item is IDictionary) cv = DeserializeObject(t, item as Dictionary<string, object>);
             else if (item is IList) cv = DeserializeArray(t, item as List<object>);
@@ -673,13 +742,19 @@ namespace InfinityCode.UltimateEditorEnhancer.JSON
             throw new Exception("Unrecognized token at index" + index);
         }
 
+        public static JsonItem Serialize(object obj, BindingFlags bindingFlags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
+        {
+            return Serialize(obj, false, bindingFlags);
+        }
+
         /// <summary>
         /// Serializes an object to JSON.
         /// </summary>
         /// <param name="obj">Object</param>
+        /// <param name="includeChildren"></param>
         /// <param name="bindingFlags">A bitmask comprised of one or more BindingFlags that specify how the search is conducted.</param>
         /// <returns>JSON</returns>
-        public static JsonItem Serialize(object obj, BindingFlags bindingFlags = BindingFlags.Instance | BindingFlags.Public)
+        public static JsonItem Serialize(object obj, bool includeChildren, BindingFlags bindingFlags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
         {
 #if !UNITY_WP_8_1 || UNITY_EDITOR
             if (obj == null || obj is DBNull) return new JsonValue(obj, JsonValue.ValueType.NULL);
@@ -688,9 +763,9 @@ namespace InfinityCode.UltimateEditorEnhancer.JSON
 #endif
             if (obj is string || obj is bool || obj is int || obj is long || obj is short || obj is float || obj is double) return new JsonValue(obj);
             if (obj.GetType().IsEnum) return new JsonValue(Enum.GetName(obj.GetType(), obj));
-            if (obj is UnityEngine.Object)
+            if (obj is Object)
             {
-                if (!(obj is Component || obj is ScriptableObject)) return new JsonValue((obj as UnityEngine.Object).GetInstanceID());
+                if (!includeChildren || !(obj is Component || obj is ScriptableObject)) return new JsonValue((obj as Object).GetInstanceID());
             }
 
             if (obj is IDictionary)
@@ -723,11 +798,11 @@ namespace InfinityCode.UltimateEditorEnhancer.JSON
             JsonObject o = new JsonObject();
             Type type = obj.GetType();
 
-            if (Reflection.CheckIfAnonymousType(type)) bindingFlags |= BindingFlags.NonPublic;
             IEnumerable<FieldInfo> fields = Reflection.GetFields(type, bindingFlags);
             foreach (FieldInfo field in fields)
             {
                 string fieldName = field.Name;
+                if (field.IsDefined(typeof(NonSerializedAttribute), true)) continue;
                 if (field.Attributes == (FieldAttributes.Private | FieldAttributes.InitOnly))
                 {
                     int startIndex = fieldName.IndexOf('<') + 1;

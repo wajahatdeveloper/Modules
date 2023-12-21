@@ -26,7 +26,7 @@ namespace InfinityCode.UltimateEditorEnhancer.UnityTypes
 
         public static Type type
         {
-            get { return typeof(GUISkin); }
+            get => typeof(GUISkin);
         }
 
         public static GUISkin GetCurrent()

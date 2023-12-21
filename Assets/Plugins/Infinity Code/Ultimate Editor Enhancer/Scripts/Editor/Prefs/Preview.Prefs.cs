@@ -12,12 +12,7 @@ namespace InfinityCode.UltimateEditorEnhancer
         public static bool preview = true;
 
         public static KeyCode previewKeyCode = KeyCode.Q;
-
-#if !UNITY_EDITOR_OSX
         public static EventModifiers previewModifiers = EventModifiers.Control | EventModifiers.Shift;
-#else
-        public static EventModifiers previewModifiers = EventModifiers.Command | EventModifiers.Shift;
-#endif
 
         public class PreviewManager : StandalonePrefManager<PreviewManager>, IHasShortcutPref
         {
@@ -51,6 +46,11 @@ namespace InfinityCode.UltimateEditorEnhancer
                     new Shortcut("Preview of Cameras", "Scene View", previewModifiers, previewKeyCode),
                     new Shortcut("Set View", "Preview of Cameras", "F"),
                 };
+            }
+
+            public static void SetState(bool state)
+            {
+                preview = state;
             }
         }
     }

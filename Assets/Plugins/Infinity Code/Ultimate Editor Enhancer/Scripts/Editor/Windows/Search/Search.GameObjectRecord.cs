@@ -14,12 +14,12 @@ namespace InfinityCode.UltimateEditorEnhancer.Windows
 
             public GameObject gameObject
             {
-                get { return _gameObject; }
+                get => _gameObject;
             }
 
             public override Object target
             {
-                get { return _gameObject; }
+                get => _gameObject;
             }
 
             public override string tooltip
@@ -33,7 +33,7 @@ namespace InfinityCode.UltimateEditorEnhancer.Windows
 
             public override string type
             {
-                get { return "gameobject"; }
+                get => "gameobject";
             }
 
             public GameObjectRecord(GameObject gameObject)

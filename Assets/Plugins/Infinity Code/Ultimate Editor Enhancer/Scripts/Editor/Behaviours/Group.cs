@@ -41,7 +41,7 @@ namespace InfinityCode.UltimateEditorEnhancer.Behaviors
         {
             KeyManager.KeyBinding binding = KeyManager.AddBinding();
             binding.OnValidate += () => Selection.gameObjects.Length > 0;
-            binding.OnInvoke += OnInvoke;
+            binding.OnPress += OnInvoke;
 
             EventManager.AddBinding(EventManager.ClosePopupEvent).OnInvoke += OnClosePopups;
         }
@@ -214,9 +214,9 @@ namespace InfinityCode.UltimateEditorEnhancer.Behaviors
             {
                 parent = EditorGUILayout.ObjectField("Parent", parent, typeof(Transform), true) as Transform;
             }
-            catch (ExitGUIException)
+            catch (ExitGUIException e)
             {
-                
+                throw e;
             }
 
             align = EditorGUILayout.IntPopup(align, alignContents, alignValues);

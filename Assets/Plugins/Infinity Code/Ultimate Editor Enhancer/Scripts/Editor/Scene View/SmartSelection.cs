@@ -3,6 +3,8 @@
 
 using System;
 using System.Collections.Generic;
+using System.Text;
+using InfinityCode.UltimateEditorEnhancer.EditorMenus;
 using InfinityCode.UltimateEditorEnhancer.Tools;
 using InfinityCode.UltimateEditorEnhancer.UnityTypes;
 using UnityEditor;
@@ -17,6 +19,7 @@ namespace InfinityCode.UltimateEditorEnhancer.SceneTools
         private static GameObject highlightGO;
         private static GameObject lastHighlightGO;
         private static Rect screenRect;
+        private static KeyManager.KeyBinding binding;
 
         private static GUIStyle areaStyle
         {
@@ -38,13 +41,22 @@ namespace InfinityCode.UltimateEditorEnhancer.SceneTools
 
         static SmartSelection()
         {
-            KeyManager.KeyBinding binding = KeyManager.AddBinding();
-            binding.OnValidate += () => Prefs.waila && Prefs.wailaSmartSelection;
-            binding.OnInvoke += OnInvoke;
+            var b = KeyManager.AddBinding();
+            b.OnValidate += () => Prefs.wailaSmartSelection && Event.current.keyCode == Prefs.wailaSmartSelectionKeyCode && Event.current.modifiers == Prefs.wailaSmartSelectionModifiers;
+            b.OnPress += OnInvoke;
 
             Waila.OnClose += OnClose;
             Waila.OnDrawModeExternal += OnDrawModeExternal;
             Waila.OnUpdateTooltipsExternal += OnUpdateTooltipsExternal;
+        }
+
+        private static void Close()
+        {
+            KeyManager.RemoveBinding(binding);
+            binding = null;
+
+            Waila.Close();
+            UnityEditor.Tools.hidden = false;
         }
 
         private static void DrawButton(ref Rect r, Transform t, bool addSlash, ref bool state)
@@ -61,24 +73,49 @@ namespace InfinityCode.UltimateEditorEnhancer.SceneTools
 
             r.xMin += r2.width;
 
-            ButtonEvent e = GUILayoutUtils.Button(r2, content, style);
+            ButtonEvent buttonEvent = GUILayoutUtils.Button(r2, content, style);
+            Event e = Event.current;
 
-            if (e == ButtonEvent.click)
+            if (buttonEvent == ButtonEvent.click)
             {
-                if (Event.current.control || Event.current.shift) SelectionRef.Add(t.gameObject);
-                else Selection.activeGameObject = t.gameObject;
-                state = true;
+                EditorMenu.OnValidateOpen -= OnValidateOpenEditorMenu;
+                
+                if (e.button == 0)
+                {
+                    if (e.control || e.shift) SelectionRef.Add(t.gameObject);
+                    else Selection.activeGameObject = t.gameObject;
+                    state = true;
+                }
+                else if (e.button == 1)
+                {
+                    GameObjectUtils.ShowContextMenu(false, t.gameObject);
+                    e.Use();
+                }
+                else if (e.button == 2)
+                {
+                    Undo.RecordObject(t.gameObject, "Toggle Active");
+                    t.gameObject.SetActive(!t.gameObject.activeSelf);
+                    e.Use();
+                }
             }
-            else if (e == ButtonEvent.drag)
+            else if (buttonEvent == ButtonEvent.press)
+            {
+                if (e.button == 1)
+                {
+                    EditorMenu.OnValidateOpen -= OnValidateOpenEditorMenu;
+                    EditorMenu.OnValidateOpen += OnValidateOpenEditorMenu;
+                }
+            }
+            else if (buttonEvent == ButtonEvent.drag)
             {
                 DragAndDrop.PrepareStartDrag();
                 DragAndDrop.objectReferences = new[] { t.gameObject };
                 DragAndDrop.StartDrag("Drag " + t.gameObject.name);
-                Event.current.Use();
+                e.Use();
                 state = true;
             }
 
-            if (r2.Contains(Event.current.mousePosition))
+            if (r2.Contains(e.mousePosition))
             {
                 highlightGO = t.gameObject;
             }
@@ -93,7 +130,7 @@ namespace InfinityCode.UltimateEditorEnhancer.SceneTools
             }
         }
 
-        private static void DrawBubbleSmartSelection()
+        private static void DrawBubbleSmartSelection(Waila.SceneViewItem sceneViewItem)
         {
             if (!UnityEditor.Tools.hidden) UnityEditor.Tools.hidden = true;
 
@@ -126,11 +163,11 @@ namespace InfinityCode.UltimateEditorEnhancer.SceneTools
                 {
                     bool state = false;
 
-                    for (int i = 0; i < Waila.targets.Count; i++)
+                    for (int i = 0; i < sceneViewItem.targets.Count; i++)
                     {
                         Rect r2 = new Rect(r);
                         r2.y += i * (style.lineHeight + margin.vertical + padding.vertical);
-                        Transform t = Waila.targets[i].transform;
+                        Transform t = sceneViewItem.targets[i].transform;
                         try
                         {
                             DrawButton(ref r2, t, false, ref state);
@@ -140,11 +177,7 @@ namespace InfinityCode.UltimateEditorEnhancer.SceneTools
                         }
                     }
 
-                    if (state)
-                    {
-                        Waila.mode = 0;
-                        UnityEditor.Tools.hidden = false;
-                    }
+                    if (state) Close();
                 }
                 catch (Exception ex)
                 {
@@ -159,14 +192,17 @@ namespace InfinityCode.UltimateEditorEnhancer.SceneTools
 
                 if (type == EventType.MouseUp)
                 {
-                    Waila.mode = 0;
-                    UnityEditor.Tools.hidden = false;
+                    if (e.button == 0)
+                    {
+                        sceneViewItem.mode = 0;
+                        UnityEditor.Tools.hidden = false;    
+                    }
                 }
                 else if (type == EventType.KeyDown)
                 {
-                    if (e.keyCode != KeyCode.LeftShift && e.keyCode != KeyCode.RightShift && e.keyCode != KeyCode.LeftControl && e.keyCode != KeyCode.RightControl)
+                    if (e.keyCode != KeyCode.None && !KeyManager.IsModifier(e.keyCode) && e.keyCode != Prefs.wailaSmartSelectionKeyCode)
                     {
-                        Waila.mode = 0;
+                        sceneViewItem.mode = 0;
                         UnityEditor.Tools.hidden = false;
                     }
                 }
@@ -178,46 +214,66 @@ namespace InfinityCode.UltimateEditorEnhancer.SceneTools
             }
         }
 
-        private static void DrawSmartSelection()
+        private static void DrawSmartSelection(Waila.SceneViewItem sceneViewItem)
         {
-            if (Prefs.wailaSmartSelectionStyle == SmartSelectionStyle.bubble) DrawBubbleSmartSelection();
+            if (Prefs.wailaSmartSelectionStyle == SmartSelectionStyle.bubble) DrawBubbleSmartSelection(sceneViewItem);
         }
 
         private static void OnClose()
         {
+            EditorMenu.OnValidateOpen -= OnValidateOpenEditorMenu;
+            
             Waila.Highlight(null);
+            if (binding != null)
+            {
+                KeyManager.RemoveBinding(binding);
+                binding = null;
+            }
         }
 
-        private static void OnDrawModeExternal()
+        private static void OnDrawModeExternal(Waila.SceneViewItem sceneViewItem)
         {
-            if (Waila.mode != 1) return;
+            if (sceneViewItem.mode != 1) return;
 
-            DrawSmartSelection();
+            DrawSmartSelection(sceneViewItem);
         }
 
         private static void OnInvoke()
         {
-            if (Waila.mode != 0) return;
+            SceneView view = EditorWindow.mouseOverWindow as SceneView;
+            if (view == null) return;
+
+            Waila.SceneViewItem sceneViewItem = Waila.GetSceneViewItem(view);
+            if (sceneViewItem == null) return;
+
+            if (sceneViewItem.mode != 0) return;
 
             Event e = Event.current;
 
-            if (e.type == EventType.KeyDown &&
-                e.keyCode == Prefs.wailaSmartSelectionKeyCode &&
+            if (e.keyCode == Prefs.wailaSmartSelectionKeyCode &&
                 e.modifiers == Prefs.wailaSmartSelectionModifiers)
             {
-                ShowSmartSelection();
+                SceneViewManager.OnNextGUI += () =>
+                {
+                    ShowSmartSelection(sceneViewItem);
+                };
                 e.Use();
             }
         }
 
-        private static bool OnUpdateTooltipsExternal()
+        private static bool OnUpdateTooltipsExternal(Waila.SceneViewItem sceneViewItem)
         {
             if (Prefs.wailaShowAllNamesUnderCursor && Event.current.modifiers == Prefs.wailaShowAllNamesUnderCursorModifiers)
             {
-                UpdateAllTooltips();
+                UpdateAllTooltips(sceneViewItem);
                 return true;
             }
 
+            return false;
+        }
+
+        private static bool OnValidateOpenEditorMenu()
+        {
             return false;
         }
 
@@ -261,85 +317,99 @@ namespace InfinityCode.UltimateEditorEnhancer.SceneTools
 
             Vector2 size = new Vector2(width + 12, height + 32);
             Vector2 position = Event.current.mousePosition - new Vector2(size.x / 2, size.y * 1.5f);
+            SceneView view = SceneView.lastActiveSceneView;
 
             if (position.x < 5) position.x = 5;
-            else if (position.x + size.x > EditorWindow.focusedWindow.position.width - 5) position.x = EditorWindow.focusedWindow.position.width - size.x - 5;
+            else if (position.x + size.x > view.position.width - 5) position.x = view.position.width - size.x - 5;
 
             if (position.y < 5) position.y = 5;
-            else if (position.y + size.y > EditorWindow.focusedWindow.position.height - 5) position.y = EditorWindow.focusedWindow.position.height - size.y - 5;
+            else if (position.y + size.y > view.position.height - 5) position.y = view.position.height - size.y - 5;
 
             screenRect = new Rect(position, size);
             return true;
         }
 
-        private static void ShowSmartSelection()
+        public static void ShowSmartSelection(Waila.SceneViewItem sceneViewItem)
         {
-            if (!(EditorWindow.mouseOverWindow is SceneView)) return;
+            if (EditorWindow.mouseOverWindow != null && !(EditorWindow.mouseOverWindow is SceneView)) return;
 
-            List<GameObject> targets = Waila.targets;
+            List<GameObject> targets = sceneViewItem.targets;
 
-            if (!Prefs.wailaShowAllNamesUnderCursor) UpdateAllTooltips();
-
+            if (!Prefs.wailaShowAllNamesUnderCursor || targets == null || targets.Count == 0)
+            {
+                UpdateAllTooltips(sceneViewItem);
+            }
             if (targets == null || targets.Count == 0) return;
 
-            GUIStyle style = Waila.labelStyle;
-            RectOffset margin = style.margin;
-            RectOffset padding = style.padding;
-
-            float width = style.CalcSize(new GUIContent("Select GameObject")).x + margin.horizontal + 10;
-
-            int rightMargin = margin.right;
-            Vector2 slashSize = style.CalcSize(new GUIContent("/"));
-
-            float height = margin.top;
-
-            if (Prefs.wailaSmartSelectionStyle == SmartSelectionStyle.bubble)
+            if (Prefs.wailaSmartSelectionStyle != SmartSelectionStyle.bubble) FlatSmartSelectionWindow.Show(sceneViewItem);
+            else
             {
-                if (!PrepareBubble(targets, style, margin, height, padding, slashSize, rightMargin, width))
+                GUIStyle style = Waila.labelStyle;
+                RectOffset margin = style.margin;
+                RectOffset padding = style.padding;
+
+                float width = style.CalcSize(new GUIContent("Select GameObject")).x + margin.horizontal + 10;
+
+                int rightMargin = margin.right;
+                Vector2 slashSize = style.CalcSize(new GUIContent("/"));
+
+                float height = margin.top;
+
+                try
                 {
-                    return;
+                    if (!PrepareBubble(targets, style, margin, height, padding, slashSize, rightMargin, width))
+                    {
+                        return;
+                    }
+                }
+                catch (Exception e)
+                {
+                    Debug.LogException(e);
+                    throw e;
                 }
             }
-            else FlatSmartSelectionWindow.Show();
 
-            Waila.mode = 1;
-            Waila.tooltip = null;
+            sceneViewItem.mode = 1;
+            sceneViewItem.tooltip = null;
+
+            binding = KeyManager.AddBinding(KeyCode.Escape);
+            binding.OnPress += Close;
         }
 
-        private static void UpdateAllTooltips()
+        private static void UpdateAllTooltips(Waila.SceneViewItem sceneViewItem)
         {
-            Waila.tooltip = null;
+            sceneViewItem.tooltip = null;
 
             int count = 0;
 
-            StaticStringBuilder.Clear();
+            StringBuilder builder = StaticStringBuilder.Start();
 
-            Waila.targets.Clear();
+            sceneViewItem.targets.Clear();
 
             while (count < 20)
             {
-                GameObject go = HandleUtility.PickGameObject(Event.current.mousePosition, false, Waila.targets.ToArray());
+                GameObject go = HandleUtility.PickGameObject(Event.current.mousePosition, false, sceneViewItem.targets.ToArray());
                 if (go == null) break;
 
-                Waila.targets.Add(go);
-                if (count > 0) StaticStringBuilder.Append("\n");
-                int length = StaticStringBuilder.Length;
+                sceneViewItem.targets.Add(go);
+                if (count > 0) builder.Append("\n");
+                int length = builder.Length;
                 Transform t = go.transform;
-                StaticStringBuilder.Append(t.gameObject.name);
+                builder.Append(t.gameObject.name);
                 while (t.parent != null)
                 {
                     t = t.parent;
-                    StaticStringBuilder.Insert(length, " / ");
-                    StaticStringBuilder.Insert(length, t.gameObject.name);
+                    builder.Insert(length, " / ");
+                    builder.Insert(length, t.gameObject.name);
                 }
 
                 count++;
             }
 
-            if (Waila.targets.Count > 0) Waila.Highlight(Waila.targets[0]);
+            if (sceneViewItem.targets.Count > 0) Waila.Highlight(sceneViewItem.targets[0]);
             else Waila.Highlight(null);
 
-            if (count > 0) Waila.tooltip = new GUIContent(StaticStringBuilder.GetString(true));
+            if (count > 0) sceneViewItem.tooltip = new GUIContent(builder.ToString());
         }
     }
 }

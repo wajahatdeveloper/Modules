@@ -22,12 +22,12 @@ namespace InfinityCode.UltimateEditorEnhancer.Windows
 
             public GameObject gameObject
             {
-                get { return component.gameObject; }
+                get => component.gameObject;
             }
 
             public override Object target
             {
-                get { return component; }
+                get => component;
             }
 
             public override string tooltip
@@ -46,7 +46,7 @@ namespace InfinityCode.UltimateEditorEnhancer.Windows
 
             public override string type
             {
-                get { return _type; }
+                get => _type;
             }
 
             public ComponentRecord(Component component)

@@ -35,7 +35,7 @@ namespace InfinityCode.UltimateEditorEnhancer.Interceptors
 
         protected override string postfixMethodName
         {
-            get => "SearchFieldGUI";
+            get => nameof(SearchFieldGUI);
         }
 
         private static void SearchFieldGUI(EditorWindow __instance)

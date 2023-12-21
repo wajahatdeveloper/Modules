@@ -22,6 +22,9 @@ namespace InfinityCode.UltimateEditorEnhancer.ComponentHeader
             if (!Validate(target)) return false;
             if (!inited) Init();
 
+            rectangle.x -= 4;
+            rectangle.y -= 4;
+            
             if (GUI.Button(rectangle, content, style))
             {
                 UpdateBounds(targets[0] as BoxCollider);

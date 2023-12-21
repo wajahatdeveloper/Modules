@@ -231,6 +231,7 @@ namespace InfinityCode.UltimateEditorEnhancer.Windows
 
             wnd = GetWindow<Welcome>(true, "Welcome to Ultimate Editor Enhancer", true);
             wnd.maxSize = wnd.minSize = new Vector2(500, 440);
+            wnd.Focus();
         }
 
         [MenuItem(WindowsHelper.MenuPath + "Rate and Review", false, 125)]

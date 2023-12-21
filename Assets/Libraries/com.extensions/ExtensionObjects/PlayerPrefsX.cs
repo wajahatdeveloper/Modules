@@ -5,18 +5,91 @@ using System.Collections.Generic;
 
 public class PlayerPrefsX
 {
-	static private int endianDiff1;
-	static private int endianDiff2;
-	static private int idx;
-	static private byte[] byteBlock;
+	private static int endianDiff1;
+	private static int endianDiff2;
+	private static int idx;
+	private static byte[] byteBlock;
 
 	enum ArrayType { Float, Int32, Bool, String, Vector2, Vector3, Quaternion, Color }
+
+	public static bool SetInt(string name, int value)
+	{
+		try
+		{
+			PlayerPrefs.SetInt(name, value);
+			PlayerPrefs.Save();
+		}
+		catch
+		{
+			return false;
+		}
+		return true;
+	}
+
+	public static int GetInt(string name)
+	{
+		return PlayerPrefs.GetInt(name);
+	}
+
+	public static int GetInt(string name, int defaultValue)
+	{
+		return PlayerPrefs.GetInt(name, defaultValue);
+	}
+
+	public static bool SetFloat(string name, float value)
+	{
+		try
+		{
+			PlayerPrefs.SetFloat(name, value);
+			PlayerPrefs.Save();
+		}
+		catch
+		{
+			return false;
+		}
+		return true;
+	}
+
+	public static float GetFloat(string name)
+	{
+		return PlayerPrefs.GetFloat(name);
+	}
+
+	public static float GetFloat(string name, float defaultValue)
+	{
+		return PlayerPrefs.GetFloat(name, defaultValue);
+	}
+
+	public static bool SetString(string name, string value)
+	{
+		try
+		{
+			PlayerPrefs.SetString(name, value);
+			PlayerPrefs.Save();
+		}
+		catch
+		{
+			return false;
+		}
+		return true;
+	}
+
+	public static string GetString(string name)
+	{
+		return PlayerPrefs.GetString(name);
+	}
+
+	public static string GetString(string name, string defaultValue)
+	{
+		return PlayerPrefs.GetString(name, defaultValue);
+	}
 
 	public static bool SetBool( String name, bool value )
 	{
 		try
 		{
 			PlayerPrefs.SetInt( name, value ? 1 : 0 );
+			PlayerPrefs.Save();
 		}
 		catch
 		{
@@ -72,6 +145,7 @@ public class PlayerPrefsX
 		SplitLong( value, out lowBits, out highBits );
 		PlayerPrefs.SetInt( key + "_lowBits", lowBits );
 		PlayerPrefs.SetInt( key + "_highBits", highBits );
+		PlayerPrefs.Save();
 	}
 
 	public static bool SetVector2( String key, Vector2 vector )
@@ -254,6 +328,7 @@ public class PlayerPrefsX
 		try
 		{
 			PlayerPrefs.SetString( key, System.Convert.ToBase64String( bytes ) + "|" + String.Join( "", stringArray ) );
+			PlayerPrefs.Save();
 		}
 		catch
 		{
@@ -613,6 +688,7 @@ public class PlayerPrefsX
 		try
 		{
 			PlayerPrefs.SetString( key, System.Convert.ToBase64String( bytes ) );
+			PlayerPrefs.Save();
 		}
 		catch
 		{
@@ -661,5 +737,15 @@ public class PlayerPrefsX
 		byteBlock[2 - endianDiff2] = bytes[idx + 2];
 		byteBlock[3 - endianDiff1] = bytes[idx + 3];
 		idx += 4;
+	}
+
+	public static void DeleteKey(string key)
+	{
+		PlayerPrefs.DeleteKey(key);
+	}
+
+	public static void DeleteAll()
+	{
+		PlayerPrefs.DeleteAll();
 	}
 }

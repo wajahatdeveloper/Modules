@@ -19,7 +19,7 @@ namespace InfinityCode.UltimateEditorEnhancer.Interceptors
 
         protected override string prefixMethodName
         {
-            get => "HelpIconButtonPrefix";
+            get => nameof(HelpIconButtonPrefix);
         }
 
         protected override InitType initType

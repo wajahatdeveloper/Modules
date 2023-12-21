@@ -12,12 +12,9 @@ namespace InfinityCode.UltimateEditorEnhancer
         public static bool switcher = true;
 
         public static bool switcherWindows = true;
+        public static bool switchToGameViewOnPlay = true;
         public static KeyCode switcherWindowsKeyCode = KeyCode.Tab;
-#if !UNITY_EDITOR_OSX
         public static EventModifiers switcherWindowsModifiers = EventModifiers.Control | EventModifiers.Shift;
-#else
-        public static EventModifiers switcherWindowsModifiers = EventModifiers.Command | EventModifiers.Shift;
-#endif
         public static bool switcherWindowsPause = true;
 
         private class SwitcherManager : PrefManager, IHasShortcutPref
@@ -29,7 +26,8 @@ namespace InfinityCode.UltimateEditorEnhancer
                     return new[]
                     {
                         "Switcher",
-                        "Game View <-> Scene View",
+                        "Game View",
+                        "Scene View",
                         "Pause When Switching"
                     };
                 }
@@ -49,6 +47,7 @@ namespace InfinityCode.UltimateEditorEnhancer
 
                 DrawFieldWithHotKey("Game View <-> Scene View", ref switcherWindows, ref switcherWindowsKeyCode, ref switcherWindowsModifiers);
                 switcherWindowsPause = EditorGUILayout.ToggleLeft("Pause When Switching", switcherWindowsPause);
+                switchToGameViewOnPlay = EditorGUILayout.ToggleLeft("Switch To Game View When Entering Play Mode", switchToGameViewOnPlay);
 
                 EditorGUI.indentLevel--;
 

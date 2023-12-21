@@ -22,7 +22,7 @@ namespace InfinityCode.UltimateEditorEnhancer.UnityTypes
 
         public static Type type
         {
-            get { return typeof(IMGUIContainer); }
+            get => typeof(IMGUIContainer);
         }
 
         public static Action GetGUIHandler(IMGUIContainer container)

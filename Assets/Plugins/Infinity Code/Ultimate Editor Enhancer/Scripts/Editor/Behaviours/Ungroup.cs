@@ -14,13 +14,18 @@ namespace InfinityCode.UltimateEditorEnhancer.Behaviors
         {
             KeyManager.KeyBinding binding = KeyManager.AddBinding();
             binding.OnValidate += () => Selection.gameObjects.Length > 0;
-            binding.OnInvoke += OnInvoke;
+            binding.OnPress += OnInvoke;
         }
 
         private static void OnInvoke()
         {
             Event e = Event.current;
-            if (e.keyCode == Prefs.ungroupKeyCode && e.modifiers == Prefs.ungroupModifiers) UngroupSelection();
+            if (e.keyCode != Prefs.ungroupKeyCode || e.modifiers != Prefs.ungroupModifiers) return;
+
+            if (EditorUtility.DisplayDialog("Ungroup", "Ungroup selected GameObjects?", "Yes", "Cancel"))
+            {
+                UngroupSelection();
+            }
         }
 
         [MenuItem("Edit/Ungroup", false, 120)]
@@ -33,7 +38,7 @@ namespace InfinityCode.UltimateEditorEnhancer.Behaviors
 
         public static void UngroupTargets(params GameObject[] targets)
         {
-            Undo.SetCurrentGroupName("Group GameObjects");
+            Undo.SetCurrentGroupName("Ungroup GameObjects");
             int group = Undo.GetCurrentGroup();
 
             List<GameObject> newSelection = new List<GameObject>();
@@ -43,6 +48,14 @@ namespace InfinityCode.UltimateEditorEnhancer.Behaviors
             for (int i = 0; i < selections.Length; i++)
             {
                 GameObject go = selections[i];
+                bool isPartOfPrefab = PrefabUtility.IsPartOfAnyPrefab(go);
+                if (isPartOfPrefab)
+                {
+                    GameObject root = PrefabUtility.GetOutermostPrefabInstanceRoot(go);
+                    PrefabUtility.UnpackPrefabInstance(root, PrefabUnpackMode.Completely, InteractionMode.UserAction);
+                    go = selections[i];
+                }
+
                 Transform t = go.transform;
                 while (t.childCount != 0)
                 {

@@ -39,6 +39,7 @@ namespace InfinityCode.UltimateEditorEnhancer.Windows
         private bool isTooBig;
         private GUIContent labelContent;
         private Vector2 lastMousePosition;
+        private float prevBottom = 0;
 
         [NonSerialized]
         private GUIStyle _contentAreaStyle;
@@ -166,15 +167,22 @@ namespace InfinityCode.UltimateEditorEnhancer.Windows
             if (drawTitle) DrawTitle();
 
             scrollPosition = EditorGUILayout.BeginScrollView(scrollPosition);
+            GUILayoutUtils.nestedEditorMargin = 14;
             try
             {
-                GUILayoutUtils.nestedEditorMargin = 14;
                 OnContentGUI();
-                GUILayoutUtils.nestedEditorMargin = 0;
+            }
+            catch (ExitGUIException e)
+            {
+                throw e;
             }
             catch (Exception e)
             {
                 Log.Add(e);
+            }
+            finally
+            {
+                GUILayoutUtils.nestedEditorMargin = 0;
             }
 
             if (adjustHeight != AutoSize.ignore)
@@ -185,7 +193,12 @@ namespace InfinityCode.UltimateEditorEnhancer.Windows
                 {
                     float bottom = b + 5;
                     if (drawTitle) bottom += 20;
-                    if (Mathf.Abs(bottom - position.height) > 1) AdjustHeight(bottom);
+
+                    if (Mathf.Abs(bottom - position.height) > 1 && Math.Abs(prevBottom - bottom) > float.Epsilon)
+                    {
+                        AdjustHeight(bottom);
+                        prevBottom = bottom;
+                    }
                 }
             }
             EditorGUILayout.EndScrollView();

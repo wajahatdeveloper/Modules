@@ -58,7 +58,11 @@ public class ScrollableList : MonoBehaviour
         ScrollableListItem itemComp = newItem.GetComponent<ScrollableListItem>();
         itemComp.title.text = title;
         itemComp.subtitle.text = subtitle;
-        itemComp.image.sprite = sprite;
+
+        if (sprite != null)
+        {
+            itemComp.image.sprite = sprite;
+        }
 
         if (onClick != null)
         {

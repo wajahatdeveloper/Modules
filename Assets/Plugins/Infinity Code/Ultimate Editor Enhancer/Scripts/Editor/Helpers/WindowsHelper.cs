@@ -67,6 +67,21 @@ namespace InfinityCode.UltimateEditorEnhancer
             Debug.unityLogger.logEnabled = logState;
         }
 
+        public static void SetRect(EditorWindow window, Rect rect)
+        {
+            window.position = rect;
+            Rect r = window.position;
+            if (Math.Abs(r.width - rect.width) < 1 && Math.Abs(r.height - rect.height) < 1) return;
+
+            var parent = EditorWindowRef.GetParent(window);
+            r = HostViewRef.GetPosition(parent);
+            r.width = rect.width;
+            r.height = rect.height;
+
+            ViewRef.SetMinMaxSizes(parent, Vector2.zero, new Vector2(4000, 4000));
+            HostViewRef.SetPosition(parent, r);
+        }
+
         public static void ToggleMaximized(EditorWindow window)
         {
             SetMaximizedOrFullscreen(window, !IsMaximized(window));

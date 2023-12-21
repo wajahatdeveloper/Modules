@@ -46,7 +46,7 @@ namespace InfinityCode.UltimateEditorEnhancer.SceneTools
                 if (Event.current.modifiers != Prefs.previewModifiers) return false;
                 return true;
             };
-            binding.OnInvoke += StartPreview;
+            binding.OnPress += StartPreview;
 
             SceneViewManager.AddListener(OnSceneGUI, SceneViewOrder.quickPreview, true);
         }

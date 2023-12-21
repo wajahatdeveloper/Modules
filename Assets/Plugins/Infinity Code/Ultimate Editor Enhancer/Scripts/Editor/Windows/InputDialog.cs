@@ -85,6 +85,10 @@ namespace InfinityCode.UltimateEditorEnhancer.Windows
                 {
                     OnDrawExtra(this);
                 }
+                catch (ExitGUIException ex)
+                {
+                    throw ex;
+                }
                 catch (Exception ex)
                 {
                     Log.Add(ex);

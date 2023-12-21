@@ -23,7 +23,7 @@ namespace InfinityCode.UltimateEditorEnhancer.Interceptors
             get => Prefs.animatorInspectorClips;
         }
 
-        protected override string postfixMethodName { get => "OnInspectorGUIPostfix"; }
+        protected override string postfixMethodName { get => nameof(OnInspectorGUIPostfix); }
 
         private static void OnInspectorGUIPostfix(Editor __instance)
         {

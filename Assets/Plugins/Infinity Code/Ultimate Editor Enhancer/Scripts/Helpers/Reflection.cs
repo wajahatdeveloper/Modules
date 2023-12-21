@@ -269,6 +269,20 @@ namespace InfinityCode.UltimateEditorEnhancer
 #endif
         }
 
+        public static PropertyInfo GetProperty(Type type, string name, bool searchInParents, BindingFlags bindingAttr = InstanceLookup)
+        {
+            if (type == null) return null;
+
+            PropertyInfo[] properties = type.GetProperties(bindingAttr);
+            for (int i = 0; i < properties.Length; i++)
+            {
+                if (properties[i].Name == name) return properties[i];
+            }
+
+            if (searchInParents) return GetProperty(type.BaseType, name, true, bindingAttr);
+            return null;
+        }
+
         public static T GetPropertyValue<T>(object obj, string propertyName, BindingFlags bindingAttr = InstanceLookup)
         {
             PropertyInfo field = obj.GetType().GetProperty(propertyName, bindingAttr);

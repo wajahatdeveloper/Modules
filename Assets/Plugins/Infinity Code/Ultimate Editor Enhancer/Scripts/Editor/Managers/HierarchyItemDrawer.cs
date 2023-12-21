@@ -70,8 +70,8 @@ namespace InfinityCode.UltimateEditorEnhancer
         public static void Register(string id, Action<HierarchyItem> action, float order = 0)
         {
             if (string.IsNullOrEmpty(id)) throw new Exception("ID cannot be empty");
-
             if (listeners == null) listeners = new List<Listener>();
+
             int hash = id.GetHashCode();
             foreach (Listener listener in listeners)
             {

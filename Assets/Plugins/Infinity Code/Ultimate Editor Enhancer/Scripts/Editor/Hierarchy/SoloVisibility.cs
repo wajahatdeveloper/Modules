@@ -14,7 +14,7 @@ namespace InfinityCode.UltimateEditorEnhancer.HierarchyTools
 
         static SoloVisibility()
         {
-            HierarchyItemDrawer.Register("SoloVisibility", WaitRightClickOnEye);
+            HierarchyItemDrawer.Register("SoloVisibility", WaitRightClickOnEye, HierarchyToolOrder.SOLO_VISIBILITY);
         }
 
         private static bool GetSoloVisibilityState(GameObject go)

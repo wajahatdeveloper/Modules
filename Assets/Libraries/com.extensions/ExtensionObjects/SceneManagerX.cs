@@ -5,17 +5,17 @@ using UnityEngine.SceneManagement;
 
 public static class SceneManagerX
 {
-    private static string LogClassName = "SceneManagerX";
+    private const string LogClassName = "SceneManagerX";
 
     public static void LoadNextScene()
     {
         if (SceneManager.GetActiveScene().buildIndex + 2 > SceneManager.sceneCountInBuildSettings)
         {
-            Debug.LogWarning("Scene Manager: No Next Scene Available to Load");
+            DebugX.Log($"{LogClassName} : No Next Scene Available to Load.",Color.magenta, "", null);
         }
         else
         {
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+            LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
         }
     }
     
@@ -29,16 +29,16 @@ public static class SceneManagerX
     {
         if (SceneManager.GetActiveScene().buildIndex - 1 < 0)
         {
-            Debug.LogWarning("Scene Manager: No Previous Scene Available to Load");
+            DebugX.Log($"{LogClassName} : No Previous Scene Available to Load.",Color.magenta, "", null);
         }
         else
         {
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex - 1);
+            LoadScene(SceneManager.GetActiveScene().buildIndex - 1);
         }
     }
 
     public static void RestartCurrentScene()
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 }

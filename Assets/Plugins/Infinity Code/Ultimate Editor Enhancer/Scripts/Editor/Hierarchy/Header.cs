@@ -1,6 +1,8 @@
 ﻿/*           INFINITY CODE          */
 /*     https://infinity-code.com    */
 
+using System.Collections.Generic;
+using InfinityCode.UltimateEditorEnhancer.JSON;
 using UnityEditor;
 using UnityEngine;
 
@@ -9,55 +11,34 @@ namespace InfinityCode.UltimateEditorEnhancer.HierarchyTools
     [InitializeOnLoad]
     public static class Header
     {
-        private static GUIStyle _headerStyle;
-        private static char[] _trimChars;
-
-        private static GUIStyle headerStyle
-        {
-            get
-            {
-                if (_headerStyle == null)
-                {
-                    _headerStyle = new GUIStyle();
-                    Color color = Prefs.hierarchyHeaderBackground;
-                    color.a = 1;
-                    _headerStyle.normal.background = Resources.CreateSinglePixelTexture(color);
-                    _headerStyle.normal.textColor = Prefs.hierarchyHeaderTextColor;
-
-                    if (Prefs.hierarchyHeaderTextAlign == TextAlignment.Center) _headerStyle.alignment = TextAnchor.MiddleCenter;
-                    else if (Prefs.hierarchyHeaderTextAlign == TextAlignment.Left) _headerStyle.alignment = TextAnchor.MiddleLeft;
-                    else _headerStyle.alignment = TextAnchor.MiddleRight;
-
-                    _headerStyle.fontStyle = Prefs.hierarchyHeaderTextStyle;
-                    _headerStyle.padding = new RectOffset(8, 8, 0, 0);
-                }
-                else if (_headerStyle.normal.background == null)
-                {
-                    Color color = Prefs.hierarchyHeaderBackground;
-                    color.a = 1;
-                    _headerStyle.normal.background = Resources.CreateSinglePixelTexture(color);
-                }
-
-                return _headerStyle;
-            }
-        }
-
-        private static char[] trimChars
-        {
-            get
-            {
-                if (_trimChars == null)
-                {
-                    _trimChars = Prefs.hierarchyHeaderTrimChars.ToCharArray();
-                }
-
-                return _trimChars;
-            }
-        }
-
         static Header()
         {
-            HierarchyItemDrawer.Register("Header", OnHierarchyItem, -10000);
+            HierarchyItemDrawer.Register("Header", OnHierarchyItem, HierarchyToolOrder.HEADER);
+        }
+
+        public static JsonArray json
+        {
+            get
+            {
+                JsonArray jArr = new JsonArray();
+                for (int i = 0; i < ReferenceManager.headerRules.Count; i++)
+                {
+                    jArr.Add(ReferenceManager.headerRules[i].json);
+                }
+
+                return jArr;
+            }
+            set
+            {
+                if (ReferenceManager.headerRules.Count > 0)
+                {
+                    if (!EditorUtility.DisplayDialog("Import Hierarchy Headers", "Hierarchy Headers already contain items", "Replace", "Ignore")) return;
+                }
+
+                List<HeaderRule> items = value.Deserialize<List<HeaderRule>>();
+                ReferenceManager.headerRules.Clear();
+                ReferenceManager.headerRules.AddRange(items);
+            }
         }
 
         [MenuItem("GameObject/Create Header", priority = 1)]
@@ -83,69 +64,40 @@ namespace InfinityCode.UltimateEditorEnhancer.HierarchyTools
             GameObject go = item.gameObject;
             if (go == null) return;
 
-            string name = go.name;
-            string prefix = Prefs.hierarchyHeaderPrefix;
+            List<HeaderRule> rules = ReferenceManager.headerRules;
+            HeaderRule rule = null;
 
-            if (name.Length < prefix.Length) return;
-            for (int i = 0; i < prefix.Length; i++)
+            for (int i = 0; i < rules.Count; i++)
             {
-                if (name[i] != prefix[i]) return;
+                if (rules[i].Validate(go))
+                {
+                    rule = rules[i];
+                    break;
+                }
             }
+
+            if (rule == null) return;
 
             if (Event.current.type == EventType.Repaint)
             {
-                Rect rect = item.rect;
-                Rect r = new Rect(32, rect.y, rect.xMax - 16, rect.height);
+                int textPadding = 8;
 
-                int start = prefix.Length;
-                int end = name.Length;
+                bool hasChildren = item.gameObject.transform.childCount > 0;
+                if (hasChildren) textPadding = (int)item.rect.x - 30;
 
-                for (int i = start; i < name.Length; i++)
+                rule.Draw(item, textPadding);
+
+                if (hasChildren)
                 {
-                    char c = name[i];
-                    int j;
-                    for (j = 0; j < trimChars.Length; j++)
-                    {
-                        if (trimChars[j] == c)
-                        {
-                            start++;
-                            break;
-                        }
-                    }
-                    if (j == trimChars.Length) break;
+                    bool isExpanded = HierarchyHelper.IsExpanded(item.id);
+                    Rect r = new Rect(item.rect);
+                    r.width = 16;
+                    r.x -= 14;
+                    EditorStyles.foldout.Draw(r, GUIContent.none, -1, isExpanded);
                 }
-
-                for (int i = end - 1; i > start; i--)
-                {
-                    char c = name[i];
-                    int j;
-                    for (j = 0; j < trimChars.Length; j++)
-                    {
-                        if (trimChars[j] == c)
-                        {
-                            end--;
-                            break;
-                        }
-                    }
-                    if (j == trimChars.Length) break;
-                }
-
-                name = name.Substring(start, end - start);
-
-                headerStyle.Draw(r, TempContent.Get(name), 0, false, false);
             }
 
             HierarchyItemDrawer.StopCurrentRowGUI();
-        }
-
-        public static void ResetStyle()
-        {
-            _headerStyle = null;
-        }
-
-        public static void ResetTrimChars()
-        {
-            _trimChars = null;
         }
     }
 }

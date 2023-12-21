@@ -11,6 +11,7 @@ using UnityEditor.Experimental.SceneManagement;
 using System;
 using System.Linq;
 using System.Reflection;
+using System.Text;
 using InfinityCode.UltimateEditorEnhancer.Interceptors;
 using InfinityCode.UltimateEditorEnhancer.Windows;
 using UnityEditor;
@@ -43,6 +44,7 @@ namespace InfinityCode.UltimateEditorEnhancer.InspectorTools
             GUIStyle style)
         {
             if (!Prefs.objectFieldSelector) return;
+            if (property == null) return;
 
             Event e = Event.current;
             if (e.type == EventType.MouseUp && blockMouseUp)
@@ -67,20 +69,22 @@ namespace InfinityCode.UltimateEditorEnhancer.InspectorTools
             FieldInfo field = Reflection.GetField(type, property.propertyPath, true);
             if (field == null) return;
 
+            Type fieldType = field.FieldType;
+
             Object[] objects = null;
             GUIContent[] contents = null;
 
-            if (field.FieldType.IsSubclassOf(typeof(Component)))
+            if (fieldType.IsSubclassOf(typeof(Component)))
             {
                 PrefabStage prefabStage = PrefabStageUtility.GetCurrentPrefabStage();
                 if (prefabStage != null)
                 {
-                    objects = prefabStage.prefabContentsRoot.GetComponentsInChildren(field.FieldType, true);
+                    objects = prefabStage.prefabContentsRoot.GetComponentsInChildren(fieldType, true);
                 }
                 else
                 {
 #if UNITY_2020_3_OR_NEWER
-                    objects = Object.FindObjectsOfType(field.FieldType, true);
+                    objects = Object.FindObjectsOfType(fieldType, true);
 #else
                     objects = Object.FindObjectsOfType(field.FieldType);
 #endif
@@ -98,24 +102,26 @@ namespace InfinityCode.UltimateEditorEnhancer.InspectorTools
                     contents = new GUIContent[objects.Length];
 
                     contents[0] = new GUIContent("None");
+                    
+                    StringBuilder builder = StaticStringBuilder.Start();
 
                     for (int i = 1; i < objects.Length; i++)
                     {
                         Component component = objects[i] as Component;
-                        StaticStringBuilder.Clear();
-                        StaticStringBuilder.Append(component.name)
+                        builder.Clear();
+                        builder.Append(component.name)
                             .Append(" (")
                             .Append(component.GetType().Name)
                             .Append(")");
 
-                        contents[i] = new GUIContent(StaticStringBuilder.GetString(true), GameObjectUtils.GetGameObjectPath(component.gameObject).ToString());
+                        contents[i] = new GUIContent(builder.ToString(), GameObjectUtils.GetGameObjectPath(component.gameObject).ToString());
                     }
                 }
             }
-            else if (field.FieldType.IsSubclassOf(typeof(ScriptableObject)))
+            else if (fieldType.IsSubclassOf(typeof(ScriptableObject)))
             {
-                objects = UnityEngine.Resources.FindObjectsOfTypeAll(field.FieldType);
-                if (objects.Length == 1)
+                objects = UnityEngine.Resources.FindObjectsOfTypeAll(fieldType);
+                if (objects.Length == 1 && property.objectReferenceValue == null)
                 {
                     Undo.RecordObjects(targets, "Modified Property");
                     property.objectReferenceValue = objects[0];
@@ -135,7 +141,25 @@ namespace InfinityCode.UltimateEditorEnhancer.InspectorTools
                     }
                 }
             }
-            else return;
+            else if (fieldType == typeof(GameObject))
+            {
+                objects = Object.FindObjectsOfType<GameObject>();
+                contents = new GUIContent[objects.Length];
+                for (int i = 0; i < objects.Length; i++)
+                {
+                    contents[i] = new GUIContent(objects[i].name);
+                }
+            }
+            else
+            {
+                Debug.Log(fieldType);
+                objects = UnityEngine.Resources.FindObjectsOfTypeAll(fieldType);
+                contents = new GUIContent[objects.Length];
+                for (int i = 0; i < objects.Length; i++)
+                {
+                    contents[i] = new GUIContent(objects[i].name, AssetDatabase.GetAssetPath(objects[i]));
+                }
+            }
 
             blockMouseUp = true;
             e.Use();

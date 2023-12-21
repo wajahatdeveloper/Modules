@@ -47,8 +47,9 @@ namespace InfinityCode.UltimateEditorEnhancer
                 {
                     instance.Draw();
                 }
-                catch (ExitGUIException)
+                catch (ExitGUIException e)
                 {
+                    throw e;
                 }
                 catch (Exception e) 
                 {

@@ -26,7 +26,6 @@ namespace InfinityCode.UltimateEditorEnhancer
         public static bool contextMenuOnHotKey = true;
         public static bool contextMenuDisableInPlayMode = false;
         public static bool contextMenuPauseInPlayMode = false;
-        public static Vector2Int defaultWindowSize = new Vector2Int(400, 300);
 
         public class ContextMenuMainManager : StandalonePrefManager<ContextMenuMainManager>, IHasShortcutPref
         {
@@ -59,7 +58,6 @@ namespace InfinityCode.UltimateEditorEnhancer
 
                 contextMenuDisableInPlayMode = EditorGUILayout.ToggleLeft("Disable Context Menu In Play Mode", contextMenuDisableInPlayMode);
                 contextMenuPauseInPlayMode = EditorGUILayout.ToggleLeft("Pause In Play Mode", contextMenuPauseInPlayMode);
-                defaultWindowSize = EditorGUILayout.Vector2IntField("Window Size", defaultWindowSize);
             }
 
             private static void DrawRightClickContent()
@@ -107,6 +105,13 @@ namespace InfinityCode.UltimateEditorEnhancer
                 shortcuts.Add(new Shortcut("Close Context Menu", "Everywhere", "LMB or RMB"));
 
                 return shortcuts;
+            }
+
+
+            public static void SetState(bool state)
+            {
+                contextMenuOnRightClick = state;
+                contextMenuOnHotKey = state;
             }
         }
     }

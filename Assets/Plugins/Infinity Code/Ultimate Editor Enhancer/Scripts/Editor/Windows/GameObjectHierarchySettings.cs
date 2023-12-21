@@ -78,9 +78,9 @@ namespace InfinityCode.UltimateEditorEnhancer.Windows
             {
                 selectedColor = EditorGUILayout.ColorField("Color", selectedColor);
             }
-            catch (ExitGUIException)
+            catch (ExitGUIException e)
             {
-
+                throw e;
             }
 
             if (EditorGUI.EndChangeCheck())
@@ -353,6 +353,7 @@ namespace InfinityCode.UltimateEditorEnhancer.Windows
             wnd.adjustHeight = AutoSize.ignore;
             wnd.closeOnCompileOrPlay = true;
             wnd.ShowPopup();
+            wnd.Focus();
 
             SceneReferences sceneReferences = SceneReferences.Get(first.scene, false);
             if (sceneReferences != null)

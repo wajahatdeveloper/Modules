@@ -24,6 +24,30 @@ namespace InfinityCode.UltimateEditorEnhancer.Windows
         private Dictionary<string, GUIContent> displayItems;
         private Vector2 scrollPosition;
 
+        private void DrawToolbar()
+        {
+            EditorGUILayout.BeginHorizontal(EditorStyles.toolbar);
+
+            EditorGUI.BeginChangeCheck();
+            GUI.SetNextControlName("UEEBookmarkSearchTextField");
+            _filter = GUILayoutUtils.ToolbarSearchField(_filter);
+
+            if (focusOnSearch && Event.current.type == EventType.Repaint)
+            {
+                GUI.FocusControl("UEEBookmarkSearchTextField");
+                focusOnSearch = false;
+            }
+
+            if (GUILayoutUtils.ToolbarButton(TempContent.Get("?", "Help")))
+            {
+                Links.OpenDocumentation("editor-icon-browser");
+            }
+
+            if (EditorGUI.EndChangeCheck()) UpdateFilteredItems();
+
+            EditorGUILayout.EndHorizontal();
+        }
+
         private void ExportIcon(object data)
         {
             string icon = data as string;
@@ -62,23 +86,7 @@ namespace InfinityCode.UltimateEditorEnhancer.Windows
             if (hoverImage == null) hoverImage = Resources.CreateSinglePixelTexture(0, 0.2f);
             Event e = Event.current;
 
-            EditorGUILayout.BeginHorizontal(EditorStyles.toolbar);
-
-            EditorGUI.BeginChangeCheck();
-            GUI.SetNextControlName("UEEBookmarkSearchTextField");
-            _filter = GUILayoutUtils.ToolbarSearchField(_filter);
-
-            if (focusOnSearch && Event.current.type == EventType.Repaint)
-            {
-                GUI.FocusControl("UEEBookmarkSearchTextField");
-                focusOnSearch = false;
-            }
-
-            if (GUILayoutUtils.ToolbarButton("?")) Links.OpenDocumentation("editor-icon-browser");
-
-            if (EditorGUI.EndChangeCheck()) UpdateFilteredItems();
-
-            EditorGUILayout.EndHorizontal();
+            DrawToolbar();
 
             string selectedKey = null;
 
@@ -125,6 +133,12 @@ namespace InfinityCode.UltimateEditorEnhancer.Windows
             Repaint();
         }
 
+        [MenuItem(WindowsHelper.MenuPath + "Editor Icon Browser", false, 102)]
+        public static EditorIconsBrowser OpenWindow()
+        {
+            return GetWindow<EditorIconsBrowser>("Editor Icon Browser");
+        }
+
         private void UpdateFilteredItems()
         {
             if (string.IsNullOrEmpty(_filter)) displayItems = items;
@@ -133,12 +147,6 @@ namespace InfinityCode.UltimateEditorEnhancer.Windows
                 string f = _filter.ToUpperInvariant();
                 displayItems = items.Where(i => i.Key.ToUpperInvariant().Contains(f)).ToDictionary(k => k.Key, v => v.Value);
             }
-        }
-
-        [MenuItem(WindowsHelper.MenuPath + "Editor Icon Browser", false, 102)]
-        public static EditorIconsBrowser OpenWindow()
-        {
-            return GetWindow<EditorIconsBrowser>("Editor Icon Browser");
         }
 
         // https://github.com/nukadelic/UnityEditorIcons

@@ -12,26 +12,39 @@ namespace InfinityCode.UltimateEditorEnhancer
     public static partial class Prefs
     {
         public static bool _changeNumberFieldValueByArrow = true;
+        public static bool _expandLongTextFields = true;
         public static bool _hierarchyTypeFilter = true;
+        public static bool _improveCurveEditor = true;
         public static bool _searchInEnumFields = true;
         public static bool _unsafeFeatures = true;
-        public static int searchInEnumFieldsMinValues = 6;
+        public static int searchInEnumFieldsMinValues = 10;
+        public static bool longTextFieldsInVisualScripting = false;
 
         private static int hasUnsafeBlock = -1; // -1 - unknown, 0 - no block, 1 - has block
 
         public static bool changeNumberFieldValueByArrow
         {
-            get { return _changeNumberFieldValueByArrow && unsafeFeatures; }
+            get => _changeNumberFieldValueByArrow && unsafeFeatures;
+        }
+
+        public static bool expandLongTextFields
+        {
+            get => _expandLongTextFields && unsafeFeatures;
         }
 
         public static bool hierarchyTypeFilter
         {
-            get { return _hierarchyTypeFilter && unsafeFeatures; }
+            get => _hierarchyTypeFilter && unsafeFeatures;
+        }
+
+        public static bool improveCurveEditor
+        {
+            get => _improveCurveEditor && unsafeFeatures;
         }
 
         public static bool searchInEnumFields
         {
-            get { return _searchInEnumFields && unsafeFeatures; }
+            get => _searchInEnumFields && unsafeFeatures;
         }
 
         public static bool unsafeFeatures
@@ -46,7 +59,7 @@ namespace InfinityCode.UltimateEditorEnhancer
             }
         }
 
-        public class UnsafeManager: StandalonePrefManager<UnsafeManager>
+        public class UnsafeManager: StandalonePrefManager<UnsafeManager>, IStateablePref
         {
             public override IEnumerable<string> keywords
             {
@@ -55,6 +68,10 @@ namespace InfinityCode.UltimateEditorEnhancer
                     return new[]
                     {
                         "Unsafe",
+                        "Change Number Fields Value By Arrows",
+                        "Hierarchy Type Filter",
+                        "Improve Curve Editor",
+                        "Search In Enum Fields"
                     };
                 }
             }
@@ -63,10 +80,7 @@ namespace InfinityCode.UltimateEditorEnhancer
             {
                 EditorGUI.BeginChangeCheck();
                 value = EditorGUILayout.ToggleLeft(label, value);
-                if (EditorGUI.EndChangeCheck())
-                {
-                    if (OnChange != null) OnChange();
-                }
+                if (EditorGUI.EndChangeCheck() && OnChange != null) OnChange();
             }
 
             public override void Draw()
@@ -75,17 +89,20 @@ namespace InfinityCode.UltimateEditorEnhancer
 
                 _unsafeFeatures = EditorGUILayout.ToggleLeft("Unsafe Features", _unsafeFeatures);
 
-                if (EditorGUI.EndChangeCheck())
-                {
-                    EnumPopupInterceptor.Refresh();
-                    HierarchyToolbarInterceptor.Refresh();
-                    NumberFieldInterceptor.Refresh();
-                }
+                if (EditorGUI.EndChangeCheck()) RefreshFeatures();
 
                 EditorGUI.BeginDisabledGroup(!_unsafeFeatures);
 
                 DrawToggleField("Change Number Fields Value By Arrows", ref _changeNumberFieldValueByArrow, NumberFieldInterceptor.Refresh);
+                
+                _expandLongTextFields = EditorGUILayout.ToggleLeft("Expand Long Text Fields", _expandLongTextFields);
+                EditorGUI.indentLevel++;
+                longTextFieldsInVisualScripting = EditorGUILayout.ToggleLeft("Long Text Fields In Visual Scripting", longTextFieldsInVisualScripting);
+                EditorGUI.indentLevel--;
+
+
                 DrawToggleField("Hierarchy Type Filter", ref _hierarchyTypeFilter, HierarchyToolbarInterceptor.Refresh);
+                _improveCurveEditor = EditorGUILayout.ToggleLeft("Improve Curve Editor", _improveCurveEditor);
                 DrawToggleField("Search In Enum Fields", ref _searchInEnumFields, EnumPopupInterceptor.Refresh);
 
                 if (_searchInEnumFields)
@@ -96,6 +113,24 @@ namespace InfinityCode.UltimateEditorEnhancer
                 }
 
                 EditorGUI.EndDisabledGroup();
+            }
+
+            public string GetMenuName()
+            {
+                return "Unsafe";
+            }
+
+            private static void RefreshFeatures()
+            {
+                EnumPopupInterceptor.Refresh();
+                HierarchyToolbarInterceptor.Refresh();
+                NumberFieldInterceptor.Refresh();
+            }
+
+            public void SetState(bool state)
+            {
+                _unsafeFeatures = state;
+                RefreshFeatures();
             }
         }
     }

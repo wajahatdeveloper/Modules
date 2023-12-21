@@ -34,7 +34,7 @@ namespace InfinityCode.UltimateEditorEnhancer.UnityTypes
 
         public static Type type
         {
-            get { return typeof(EditorUtility); }
+            get => typeof(EditorUtility);
         }
 
         public static void DisplayObjectContextMenu(Rect position, Object context, int contextUserData)

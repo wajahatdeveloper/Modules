@@ -71,7 +71,7 @@ namespace InfinityCode.UltimateEditorEnhancer.Windows
 
             public override Object target
             {
-                get { return asset; }
+                get => asset;
             }
 
             public override string type

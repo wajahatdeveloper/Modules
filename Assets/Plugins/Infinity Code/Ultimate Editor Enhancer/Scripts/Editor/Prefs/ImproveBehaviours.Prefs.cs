@@ -13,6 +13,7 @@ namespace InfinityCode.UltimateEditorEnhancer
         public static bool improveAddComponentBehaviour = true;
         public static bool improveDragAndDropBehaviour = true;
         public static bool improveMaximizeGameViewBehaviour = true;
+        
 
         private class ImproveBehavioursManager : PrefManager, IHasShortcutPref
         {
@@ -26,7 +27,8 @@ namespace InfinityCode.UltimateEditorEnhancer
                         "Add Component By Shortcut",
                         "Drag And Drop To Canvas",
                         "Maximize Game View By Shortcut (SHIFT + Space)",
-                        "Number Fields"
+                        "Number Fields",
+                        "Curve Editor",
                     };
                 }
             }
@@ -44,6 +46,7 @@ namespace InfinityCode.UltimateEditorEnhancer
 
                 improveAddComponentBehaviour = EditorGUILayout.ToggleLeft("Add Component By Shortcut", improveAddComponentBehaviour);
                 improveDragAndDropBehaviour = EditorGUILayout.ToggleLeft("Drag And Drop To Canvas", improveDragAndDropBehaviour);
+                _improveCurveEditor = EditorGUILayout.ToggleLeft("Improve Curve Editor", _improveCurveEditor);
                 improveMaximizeGameViewBehaviour = EditorGUILayout.ToggleLeft("Maximize Game View By Shortcut (SHIFT + Space)", improveMaximizeGameViewBehaviour);
 
                 EditorGUI.indentLevel--;

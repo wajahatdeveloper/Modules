@@ -10,22 +10,22 @@ namespace InfinityCode.UltimateEditorEnhancer.Interceptors
     {
         protected override InitType initType
         {
-            get { return InitType.gui; }
+            get => InitType.gui;
         }
 
         protected override MethodInfo originalMethod
         {
-            get { return PresetSelectorRef.drawPresetButtonMethod; }
+            get => PresetSelectorRef.drawPresetButtonMethod;
         }
 
         protected override string prefixMethodName
         {
-            get { return "DrawPresetButtonPrefix"; }
+            get => nameof(DrawPresetButtonPrefix);
         }
 
         public override bool state
         {
-            get { return Prefs.hidePresetButton; }
+            get => Prefs.hidePresetButton;
         }
 
         private static bool DrawPresetButtonPrefix()

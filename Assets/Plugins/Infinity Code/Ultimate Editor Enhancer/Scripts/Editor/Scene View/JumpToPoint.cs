@@ -10,9 +10,6 @@ namespace InfinityCode.UltimateEditorEnhancer.SceneTools
     [InitializeOnLoad]
     public static class JumpToPoint
     {
-        public static double lastShiftPressed;
-        public const double MAX_SHIFT_DELAY = 0.3;
-
         static JumpToPoint()
         {
             SceneViewManager.AddListener(OnSceneGUI);
@@ -59,13 +56,8 @@ namespace InfinityCode.UltimateEditorEnhancer.SceneTools
 
             if (!isJump && Prefs.alternativeJumpShortcut && EditorWindow.mouseOverWindow is SceneView)
             {
-                bool isAlternativeShortcut = e.type == EventType.KeyUp && !e.control && !e.command && (e.keyCode == KeyCode.LeftShift || e.keyCode == KeyCode.RightShift);
-                if (isAlternativeShortcut)
-                {
-                    double timeDelta = EditorApplication.timeSinceStartup - lastShiftPressed;
-                    isJump = timeDelta < MAX_SHIFT_DELAY;
-                    lastShiftPressed = isJump ? 0 : EditorApplication.timeSinceStartup;
-                }
+                bool isAlternativeShortcut = e.type == EventType.MouseUp && e.button == 1 && e.alt && !e.shift && !e.control && !e.command;
+                isJump = isAlternativeShortcut;
             }
 
             if (!isJump) return;

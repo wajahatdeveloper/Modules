@@ -2,6 +2,7 @@
 /*     https://infinity-code.com    */
 
 using System;
+using System.Text;
 using InfinityCode.UltimateEditorEnhancer.Windows;
 using UnityEditor;
 using UnityEngine;
@@ -15,6 +16,7 @@ namespace InfinityCode.UltimateEditorEnhancer.SceneTools
         private static Vector3 lastWorldPosition;
         private static GameObject parent;
         private static Vector3 lastNormal;
+        private static bool in2DMode;
 
         static ObjectPlacer()
         {
@@ -31,8 +33,10 @@ namespace InfinityCode.UltimateEditorEnhancer.SceneTools
 
             string alternativeMessage = GetMessage(Prefs.createBrowserAlternativeTarget);
 
-            string helpMessage = $"Hold {rootKey} to create an object {alternativeMessage}.\nHold SHIFT to create an object without alignment.";
-            return helpMessage;
+            StringBuilder builder = StaticStringBuilder.Start();
+            builder.Append($"Hold {rootKey} to create an object {alternativeMessage}.");
+            if (!in2DMode) builder.Append("\nHold SHIFT to create an object without alignment.");
+            return builder.ToString();
         }
 
         private static string GetMessage(CreateBrowserTarget target)
@@ -50,15 +54,16 @@ namespace InfinityCode.UltimateEditorEnhancer.SceneTools
             if (e.button != 1) return;
             if (e.modifiers != Prefs.objectPlacerModifiers) return;
 
+            in2DMode = sceneView.in2DMode;
+
             Waila.Close();
             CreateBrowser wnd = CreateBrowser.OpenWindow();
             wnd.OnClose += OnCreateBrowserClose;
             wnd.OnSelectCreate += OnSelectCreate;
             wnd.OnSelectPrefab += OnBrowserPrefab;
             wnd.helpMessage = GetHelpMessage();
-            lastWorldPosition = SceneViewManager.lastWorldPosition;
-            lastNormal = SceneViewManager.lastNormal;
-            parent = SceneViewManager.lastGameObjectUnderCursor;
+            SceneViewManager.GetWorldPositionAndNormal(out lastWorldPosition, out lastNormal);
+            parent = HandleUtility.PickGameObject(e.mousePosition, false);
 
             e.Use();
         }
@@ -102,7 +107,7 @@ namespace InfinityCode.UltimateEditorEnhancer.SceneTools
             Event e = Event.current;
 
             RectTransform rectTransform = go.GetComponent<RectTransform>();
-            Vector2 sizeDelta = rectTransform != null? rectTransform.sizeDelta: Vector2.zero;
+            Vector2 sizeDelta = rectTransform != null ? rectTransform.sizeDelta : Vector2.zero;
             bool isDefaultTarget = (e.modifiers & EventModifiers.Control) == 0 && (e.modifiers & EventModifiers.Command) == 0;
             CreateBrowserTarget target = isDefaultTarget ? Prefs.createBrowserDefaultTarget : Prefs.createBrowserAlternativeTarget;
 
@@ -127,7 +132,7 @@ namespace InfinityCode.UltimateEditorEnhancer.SceneTools
             bool useCanvas = parent != null && parent.GetComponent<RectTransform>() != null;
             bool hasRectTransform = rectTransform != null;
 
-            if (useCanvas || hasRectTransform) allowDown = false;
+            if (useCanvas || hasRectTransform || in2DMode) allowDown = false;
 
             go.transform.position = lastWorldPosition;
             if (allowDown && (e.modifiers & EventModifiers.Shift) == 0)
@@ -140,7 +145,6 @@ namespace InfinityCode.UltimateEditorEnhancer.SceneTools
                     if (extents != Vector3.zero)
                     {
                         extents.Scale(cubeSide);
-                        //Vector3 v = extents - c.bounds.center;
                         go.transform.Translate(extents.x, extents.y, extents.z, Space.World);
                     }
                 }

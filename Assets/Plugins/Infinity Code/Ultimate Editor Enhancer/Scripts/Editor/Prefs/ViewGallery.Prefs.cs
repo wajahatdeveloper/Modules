@@ -10,6 +10,8 @@ namespace InfinityCode.UltimateEditorEnhancer
     public static partial class Prefs
     {
         public static bool viewGalleryHotKey = true;
+        public static bool viewGalleryUIState = true;
+        public static bool viewGallerySceneViewState = true;
         public static bool createViewStateFromSelection = true;
         public static bool restoreViewStateFromSelection = true;
         public static bool showViewStateInScene = true;
@@ -28,7 +30,7 @@ namespace InfinityCode.UltimateEditorEnhancer
         public static EventModifiers restoreViewStateFromSelectionModifiers = EventModifiers.Command | EventModifiers.Shift;
 #endif
 
-        public class ViewGalleryManager : StandalonePrefManager<ViewGalleryManager>, IHasShortcutPref
+        public class ViewGalleryManager : StandalonePrefManager<ViewGalleryManager>, IHasShortcutPref, IStateablePref
         {
             public override IEnumerable<string> keywords
             {
@@ -51,9 +53,21 @@ namespace InfinityCode.UltimateEditorEnhancer
             public override void Draw()
             {
                 DrawFieldWithHotKey("View Gallery", ref viewGalleryHotKey, ref viewGalleryKeyCode, ref viewGalleryModifiers, EditorStyles.label, 17);
+                EditorGUI.indentLevel++;
+
+                viewGallerySceneViewState = EditorGUILayout.ToggleLeft("Scene View State", viewGallerySceneViewState);
+                viewGalleryUIState = EditorGUILayout.ToggleLeft("UI State", viewGalleryUIState);
+
+                EditorGUI.indentLevel--;
+
                 DrawFieldWithHotKey("Create View State For Selection", ref createViewStateFromSelection, ref createViewStateFromSelectionKeyCode, ref createViewStateFromSelectionModifiers, EditorStyles.label, 17);
                 DrawFieldWithHotKey("Restore View State For Selection", ref restoreViewStateFromSelection, ref restoreViewStateFromSelectionKeyCode, ref restoreViewStateFromSelectionModifiers, EditorStyles.label, 17);
                 showViewStateInScene = EditorGUILayout.ToggleLeft("Show View State In SceneView (Hot Key - ALT)", showViewStateInScene);
+            }
+
+            public string GetMenuName()
+            {
+                return "View Gallery";
             }
 
             public IEnumerable<Shortcut> GetShortcuts()
@@ -67,6 +81,14 @@ namespace InfinityCode.UltimateEditorEnhancer
                     new Shortcut("Restore View State For Selection", "Everywhere", restoreViewStateFromSelectionModifiers, restoreViewStateFromSelectionKeyCode),
                     new Shortcut("Show ViewState In SceneView", "Scene View", EventModifiers.Alt),
                 };
+            }
+
+            public void SetState(bool state)
+            {
+                viewGalleryHotKey = state;
+                createViewStateFromSelection = state;
+                restoreViewStateFromSelection = state;
+                showViewStateInScene = state;
             }
         }
     }

@@ -47,6 +47,14 @@ namespace InfinityCode.UltimateEditorEnhancer.Windows
 
             }
 
+            public ViewStateItem(SceneView view)
+            {
+                pivot = view.pivot;
+                size = view.size;
+                rotation = view.rotation;
+                is2D = view.in2DMode;
+            }
+
             public ViewStateItem(ViewState viewState)
             {
                 this.viewState = viewState;
@@ -71,9 +79,8 @@ namespace InfinityCode.UltimateEditorEnhancer.Windows
                 if (viewState == null) menu.Add("Create View State", CreateViewState, this);
             }
 
-            public void SetView(SceneView view)
+            public void SetView(Camera camera)
             {
-                Camera camera = view.camera;
                 Transform t = camera.transform;
 
                 if (!is2D)
@@ -90,6 +97,11 @@ namespace InfinityCode.UltimateEditorEnhancer.Windows
                     t.position = pivot - Vector3.forward * size;
                     t.rotation = Quaternion.identity;
                 }
+            }
+
+            public void SetView(SceneView view)
+            {
+                SetView(view.camera);
             }
 
             public override void Set(SceneView view)

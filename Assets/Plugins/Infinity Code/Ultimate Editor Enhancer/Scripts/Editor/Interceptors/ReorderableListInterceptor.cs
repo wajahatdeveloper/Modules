@@ -29,12 +29,12 @@ namespace InfinityCode.UltimateEditorEnhancer.Interceptors
 
         protected override string prefixMethodName
         {
-            get => "DoListElementsPrefix";
+            get => nameof(DoListElementsPrefix);
         }
 
         protected override string postfixMethodName
         {
-            get => "DoListElementsPostfix";
+            get => nameof(DoListElementsPostfix);
         }
 
         private static void DoListElementsPrefix()

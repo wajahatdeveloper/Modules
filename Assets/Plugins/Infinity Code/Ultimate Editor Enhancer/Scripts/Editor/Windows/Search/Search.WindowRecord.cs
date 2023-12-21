@@ -23,20 +23,17 @@ namespace InfinityCode.UltimateEditorEnhancer.Windows
 
             public override Object target
             {
-                get { return null; }
+                get => null;
             }
 
             public override string tooltip
             {
-                get
-                {
-                    return _tooltip;
-                }
+                get => _tooltip;
             }
 
             public override string type
             {
-                get { return "window"; }
+                get => "window";
             }
 
             public WindowRecord(string submenu, string label)
@@ -56,14 +53,6 @@ namespace InfinityCode.UltimateEditorEnhancer.Windows
             public override void Select(int state)
             {
                 EditorApplication.ExecuteMenuItem(tooltip);
-            }
-
-            public override float UpdateAccuracy(string pattern)
-            {
-                float v = base.UpdateAccuracy(pattern);
-                v *= 1.01f;
-                _accuracy = v;
-                return v;
             }
         }
     }

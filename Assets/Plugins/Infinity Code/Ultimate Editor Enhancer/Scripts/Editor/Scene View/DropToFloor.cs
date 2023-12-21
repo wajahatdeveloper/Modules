@@ -17,7 +17,7 @@ namespace InfinityCode.UltimateEditorEnhancer.SceneTools
         static DropToFloor()
         {
             KeyManager.KeyBinding binding = KeyManager.AddBinding();
-            binding.OnInvoke += OnInvoke;
+            binding.OnPress += OnInvoke;
             binding.OnValidate += OnValidate;
         }
 

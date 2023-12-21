@@ -13,13 +13,16 @@ namespace InfinityCode.UltimateEditorEnhancer.UnityTypes
     {
         private static FieldInfo _activeEditorField;
         private static MethodInfo _doNumberFieldMethod;
+        private static MethodInfo _doObjectFoldoutMethod;
         private static MethodInfo _doPopupMethod;
         private static MethodInfo _doTextFieldMethod;
         private static MethodInfo _dragNumberValueMethod;
+        private static MethodInfo _getInspectorTitleBarObjectFoldoutRenderRectMethod;
         private static MethodInfo _hasKeyboardFocusMethod;
         private static MethodInfo _helpIconButtonMethod;
         private static MethodInfo _isEditingTextFieldMethod;
         private static FieldInfo _recycledEditorField;
+        private static MethodInfo _scrollableTextAreaInternalMethod;
 
         private static FieldInfo activeEditorField
         {
@@ -61,6 +64,22 @@ namespace InfinityCode.UltimateEditorEnhancer.UnityTypes
             }
         }
 
+        private static MethodInfo doObjectFoldoutMethod
+        {
+            get
+            {
+                if (_doObjectFoldoutMethod == null)
+                {
+                    _doObjectFoldoutMethod = Reflection.GetMethod(type, "DoObjectFoldout", new[]
+                    {
+                        typeof(bool), typeof(Rect), typeof(Rect), typeof(Object[]), typeof(int)
+                    }, Reflection.StaticLookup);
+                }
+
+                return _doObjectFoldoutMethod;
+            }
+        }
+
         public static MethodInfo doPopupMethod
         {
             get
@@ -82,7 +101,7 @@ namespace InfinityCode.UltimateEditorEnhancer.UnityTypes
             }
         }
 
-        private static MethodInfo doTextFieldMethod
+        public static MethodInfo doTextFieldMethod
         {
             get
             {
@@ -104,7 +123,11 @@ namespace InfinityCode.UltimateEditorEnhancer.UnityTypes
                             typeof(bool),
                             typeof(bool),
                             typeof(bool)
-                        }, 
+#if UNITY_2021_2_OR_NEWER
+                            , typeof(GUIStyle),
+                            typeof(bool)
+#endif
+                        },
                         null
                     );
                 }
@@ -130,11 +153,20 @@ namespace InfinityCode.UltimateEditorEnhancer.UnityTypes
                             typeof(double).MakeByRefType(),
                             typeof(long).MakeByRefType(),
                             typeof(double)
-                        }, 
+                        },
                         null
                     );
                 }
                 return _dragNumberValueMethod;
+            }
+        }
+
+        private static MethodInfo getInspectorTitleBarObjectFoldoutRenderRectMethod
+        {
+            get
+            {
+                if (_getInspectorTitleBarObjectFoldoutRenderRectMethod == null) _getInspectorTitleBarObjectFoldoutRenderRectMethod = type.GetMethod("GetInspectorTitleBarObjectFoldoutRenderRect", Reflection.StaticLookup, null, new[] { typeof(Rect), typeof(GUIStyle) }, null);
+                return _getInspectorTitleBarObjectFoldoutRenderRectMethod;
             }
         }
 
@@ -145,10 +177,10 @@ namespace InfinityCode.UltimateEditorEnhancer.UnityTypes
                 if (_hasKeyboardFocusMethod == null)
                 {
                     _hasKeyboardFocusMethod = type.GetMethod(
-                        "HasKeyboardFocus", 
+                        "HasKeyboardFocus",
                         Reflection.StaticLookup,
                         null,
-                        new []{typeof(int)},
+                        new[] { typeof(int) },
                         null);
                 }
                 return _hasKeyboardFocusMethod;
@@ -194,65 +226,28 @@ namespace InfinityCode.UltimateEditorEnhancer.UnityTypes
             }
         }
 
+        public static MethodInfo scrollableTextAreaInternalMethod
+        {
+            get
+            {
+                if (_scrollableTextAreaInternalMethod == null)
+                {
+                    _scrollableTextAreaInternalMethod = Reflection.GetMethod(type, "ScrollableTextAreaInternal", new[]
+                    {
+                        typeof(Rect), 
+                        typeof(string), 
+                        typeof(Vector2).MakeByRefType(), 
+                        typeof(GUIStyle)
+                    }, Reflection.StaticLookup);
+                }
+                
+                return _scrollableTextAreaInternalMethod;
+            }
+        }
+
         private static Type type
         {
-            get { return typeof(EditorGUI); }
-        }
-
-        public static string DoTextField(
-            object editor,
-            int id,
-            Rect position,
-            string text,
-            GUIStyle style,
-            string allowedletters,
-            out bool changed,
-            bool reset,
-            bool multiline,
-            bool passwordField)
-        {
-            object[] args = new object[]
-            {
-                editor,
-                id,
-                position,
-                text,
-                style,
-                allowedletters,
-                null,
-                reset,
-                multiline,
-                passwordField
-            };
-            string result = (string) doTextFieldMethod.Invoke(null, args);
-            changed = (bool)args[6];
-            return result;
-        }
-
-        public static void DragNumberValue(Rect dragHotZone,
-            int id,
-            bool isDouble,
-            ref double doubleVal,
-            ref long longVal,
-            double dragSensitivity)
-        {
-            object[] args = new object[]
-            {
-                dragHotZone,
-                id,
-                isDouble,
-                doubleVal,
-                longVal,
-                dragSensitivity
-            };
-            dragNumberValueMethod.Invoke(null, args);
-            doubleVal = (double)args[3];
-            longVal = (long)args[4];
-        }
-
-        public static object GetActiveEditor()
-        {
-            return activeEditorField.GetValue(null);
+            get => typeof(EditorGUI);
         }
 
         public static object GetRecycledEditor()
@@ -260,14 +255,21 @@ namespace InfinityCode.UltimateEditorEnhancer.UnityTypes
             return recycledEditorField.GetValue(null);
         }
 
-        public static bool HasKeyboardFocus(int id)
-        {
-            return (bool) hasKeyboardFocusMethod.Invoke(null, new object[] {id});
-        }
 
         public static bool IsEditingTextField()
         {
             return (bool)isEditingTextFieldMethod.Invoke(null, new object[0]);
+        }
+        
+        public static string ScrollableTextAreaInternal(Rect position, string text, ref Vector2 scrollPosition, GUIStyle style)
+        {
+            object[] parameters = new object[]
+            {
+                position, text, scrollPosition, style
+            };
+            string result = (string)scrollableTextAreaInternalMethod.Invoke(null, parameters);
+            scrollPosition = (Vector2) parameters[2];
+            return result;
         }
 
         public struct NumberFieldValue

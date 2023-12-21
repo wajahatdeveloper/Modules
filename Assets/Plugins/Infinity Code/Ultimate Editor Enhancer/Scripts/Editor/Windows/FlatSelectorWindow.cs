@@ -101,7 +101,11 @@ namespace InfinityCode.UltimateEditorEnhancer.Windows
             listView.selectionType = SelectionType.Single;
             listView.showAlternatingRowBackgrounds = AlternatingRowBackground.All;
 
+#if !UNITY_2022_2_OR_NEWER
             listView.onSelectionChange += objects =>
+#else
+            listView.selectionChanged += objects =>
+#endif
             {
                 if (ignoreItemSelect) return;
                 Event e = Event.current;
@@ -193,6 +197,7 @@ namespace InfinityCode.UltimateEditorEnhancer.Windows
             wnd.selected = selected;
             wnd.ShowPopup();
             wnd.Init();
+            wnd.Focus();
 
             return wnd;
         }
@@ -210,7 +215,7 @@ namespace InfinityCode.UltimateEditorEnhancer.Windows
 
                 for (int i = 0; i < contents.Length; i++)
                 {
-                    if (SearchableItem.GetAccuracy(pattern, contents[i].text) > 0)
+                    if (SearchableItem.Match(pattern, contents[i].text))
                     {
                         items.Add(i);
                     }

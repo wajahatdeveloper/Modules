@@ -23,7 +23,7 @@ namespace InfinityCode.UltimateEditorEnhancer.Interceptors
 
         protected override string postfixMethodName
         {
-            get { return "DrawEditorHeaderItemsPostfix"; }
+            get { return nameof(DrawEditorHeaderItemsPostfix); }
         }
 
         public override bool state

@@ -12,7 +12,6 @@ namespace InfinityCode.UltimateEditorEnhancer.UnityTypes
     public static class SelectionRef
     {
         private static MethodInfo _addMethod;
-        private static Type _type;
 
         private static MethodInfo addMethod
         {
@@ -25,11 +24,7 @@ namespace InfinityCode.UltimateEditorEnhancer.UnityTypes
 
         public static Type type
         {
-            get
-            {
-                if (_type == null) _type = typeof(Selection);
-                return _type;
-            }
+            get => typeof(Selection);
         }
 
         public static void Add(GameObject go)

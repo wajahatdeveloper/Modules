@@ -3,6 +3,7 @@
 
 using System.Collections.Generic;
 using System.Linq;
+using InfinityCode.UltimateEditorEnhancer.HierarchyTools;
 using InfinityCode.UltimateEditorEnhancer.SceneTools;
 using InfinityCode.UltimateEditorEnhancer.UnityTypes;
 using InfinityCode.UltimateEditorEnhancer.Windows;
@@ -14,6 +15,7 @@ namespace InfinityCode.UltimateEditorEnhancer.Tools
 {
     public class FlatSmartSelectionWindow : AutoSizePopupWindow
     {
+        private static Waila.SceneViewItem lastSceneViewItem;
         private static string filterText;
         private static bool resetSelection;
         private static List<FlatItem> activeItems;
@@ -66,7 +68,7 @@ namespace InfinityCode.UltimateEditorEnhancer.Tools
                 else
                 {
                     string pattern = SearchableItem.GetPattern(filterText);
-                    activeItems = flatItems.Where(p => p.UpdateAccuracy(pattern) > 0).OrderByDescending(p => p.accuracy).ToList();
+                    activeItems = flatItems.Where(p => p.Match(pattern)).ToList();
                 }
 
                 needReload = true;
@@ -120,7 +122,8 @@ namespace InfinityCode.UltimateEditorEnhancer.Tools
             foreach (FlatItem item in flatItems) item.Dispose();
             flatItems.Clear();
 
-            Waila.mode = 0;
+            lastSceneViewItem.mode = 0;
+            lastSceneViewItem = null;
             UnityEditor.Tools.hidden = false;
             filterText = null;
             activeItems = null;
@@ -155,12 +158,14 @@ namespace InfinityCode.UltimateEditorEnhancer.Tools
             Close();
         }
 
-        public new static FlatSmartSelectionWindow Show()
+        public static FlatSmartSelectionWindow Show(Waila.SceneViewItem sceneViewItem)
         {
+            lastSceneViewItem = sceneViewItem;
+
             if (flatItems == null) flatItems = new List<FlatItem>();
             else flatItems.Clear();
 
-            flatItems.AddRange(Waila.targets.Select(t => new FlatItem(t)));
+            flatItems.AddRange(sceneViewItem.targets.Select(t => new FlatItem(t)));
             if (flatItems.Count == 0) return null;
 
             Vector2 size = Prefs.defaultWindowSize;
@@ -205,7 +210,7 @@ namespace InfinityCode.UltimateEditorEnhancer.Tools
                 for (int i = 0; i < activeItems.Count; i++)
                 {
                     FlatItem flatItem = activeItems[i];
-                    TreeViewItem item = new TreeViewItem {id = nextID++, depth = 0, displayName = flatItem.name};
+                    TreeViewItem item = new TreeViewItem {id = nextID++, depth = 0, displayName = flatItem.name, icon = BestIconDrawer.GetGameObjectIcon(flatItem.target) as Texture2D };
                     allItems.Add(item);
                     items.Add(flatItem.target);
 
@@ -213,7 +218,7 @@ namespace InfinityCode.UltimateEditorEnhancer.Tools
                     while (parent != null)
                     {
                         GameObject go = parent.gameObject;
-                        item = new TreeViewItem { id = nextID++, depth = 1, displayName = go.name };
+                        item = new TreeViewItem { id = nextID++, depth = 1, displayName = go.name, icon = BestIconDrawer.GetGameObjectIcon(go) as Texture2D};
                         items.Add(go);
                         allItems.Add(item);
                         parent = parent.parent;
@@ -232,11 +237,32 @@ namespace InfinityCode.UltimateEditorEnhancer.Tools
 
             protected override void RowGUI(RowGUIArgs args)
             {
-                if (args.rowRect.Contains(Event.current.mousePosition))
+                Event e = Event.current;
+                
+                if (args.rowRect.Contains(e.mousePosition))
                 {
-                    instance.highlightGO = instance.Get(args.row);
-                    GUI.DrawTexture(args.rowRect, Styles.selectedRowTexture, ScaleMode.StretchToFill);
+                    GameObject go = instance.highlightGO = instance.Get(args.item.id);
+                    
+                    if (e.type == EventType.Repaint)
+                    {
+                        GUI.DrawTexture(args.rowRect, Styles.selectedRowTexture, ScaleMode.StretchToFill);
+                    }
+                    else if (e.type == EventType.MouseDown)
+                    {
+                        if (e.button == 1)
+                        {
+                            GameObjectUtils.ShowContextMenu(false, go);
+                            e.Use();
+                        }
+                        else if (e.button == 2)
+                        {
+                            Undo.RecordObject(go, "Toggle Active");
+                            go.SetActive(!go.activeSelf);
+                            e.Use();
+                        }
+                    }
                 }
+
                 base.RowGUI(args);
             }
 

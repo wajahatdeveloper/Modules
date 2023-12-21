@@ -8,7 +8,7 @@ namespace InfinityCode.UltimateEditorEnhancer
 {
     public static partial class Prefs
     {
-        public static bool hideDuplicateToolTemp = true;
+        public static int duplicateToolMaxCopies = 1000;
 
         public class DuplicateToolManager : PrefManager
         {
@@ -19,12 +19,23 @@ namespace InfinityCode.UltimateEditorEnhancer
 
             public override float order
             {
-                get { return (Order.sceneReferences + Order.improveBehaviors) / 2f; }
+                get { return Order.duplicateTool; }
             }
 
             public override void Draw()
             {
-                hideDuplicateToolTemp = EditorGUILayout.ToggleLeft("Hide Temporary Objects of Duplicate Tool", hideDuplicateToolTemp);
+                EditorGUILayout.LabelField("Duplicate Tool");
+
+                EditorGUI.indentLevel++;
+                
+                EditorGUI.BeginChangeCheck();
+                duplicateToolMaxCopies = EditorGUILayout.IntField("Max Copies", duplicateToolMaxCopies);
+                if (EditorGUI.EndChangeCheck())
+                {
+                    if (duplicateToolMaxCopies < 1) duplicateToolMaxCopies = 1;
+                }
+                
+                EditorGUI.indentLevel--;
             }
         }
     }

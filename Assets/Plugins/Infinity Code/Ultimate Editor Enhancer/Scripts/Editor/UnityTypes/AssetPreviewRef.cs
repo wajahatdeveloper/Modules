@@ -15,7 +15,7 @@ namespace InfinityCode.UltimateEditorEnhancer.UnityTypes
 
         public static Type type
         {
-            get { return typeof(AssetPreview); }
+            get => typeof(AssetPreview);
         }
 
         private static MethodInfo getMiniTypeThumbnailFromClassIDMethod

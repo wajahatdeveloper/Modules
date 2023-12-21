@@ -17,7 +17,7 @@ namespace InfinityCode.UltimateEditorEnhancer.Behaviors
         {
             KeyManager.KeyBinding binding = KeyManager.AddBinding();
             binding.OnValidate = OnValidate;
-            binding.OnInvoke = OnInvoke;
+            binding.OnPress = OnInvoke;
 
             GameObjectUtils.OnPrepareGameObjectMenu += OnPrepareGameObjectMenu;
         }

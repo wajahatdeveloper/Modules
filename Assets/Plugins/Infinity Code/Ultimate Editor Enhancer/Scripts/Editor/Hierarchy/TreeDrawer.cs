@@ -44,7 +44,7 @@ namespace InfinityCode.UltimateEditorEnhancer.HierarchyTools
 
         static TreeDrawer()
         {
-            HierarchyItemDrawer.Register("TreeDrawer", DrawTree);
+            HierarchyItemDrawer.Register("TreeDrawer", DrawTree, HierarchyToolOrder.TREE);
         }
 
         private static void DrawTree(HierarchyItem item)

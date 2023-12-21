@@ -13,7 +13,7 @@ namespace InfinityCode.UltimateEditorEnhancer.SceneTools
         {
             KeyManager.KeyBinding binding = KeyManager.AddBinding();
             binding.OnValidate += OnValidate;
-            binding.OnInvoke += OnInvoke;
+            binding.OnPress += OnInvoke;
         }
 
         private static void OnInvoke()

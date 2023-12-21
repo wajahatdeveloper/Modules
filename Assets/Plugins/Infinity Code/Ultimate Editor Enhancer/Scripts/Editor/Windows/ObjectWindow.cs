@@ -65,7 +65,6 @@ namespace InfinityCode.UltimateEditorEnhancer.Windows
             if (targets.Length == 0) return null;
 
             ObjectWindow wnd = CreateInstance<ObjectWindow>();
-
             wnd.titleContent = new GUIContent(targets[0].name);
             wnd.targets = targets;
             wnd.minSize = Vector2.one;

@@ -10,41 +10,65 @@ public static class DebugX
 
 	public static void Log(string inLog,string inFilterName, GameObject inContext)
 	{
+		if (inLog.StartsWith("0_"))
+		{
+			return;
+		}
+
 #if CONSOLE_PRO
-        ConsoleProDebug.LogToFilter(inLog,inFilterName,inContext);
+		if (inFilterName == "")
+		{
+			Debug.Log(inLog, inContext);
+		}
+		else
+		{
+			ConsoleProDebug.LogToFilter(inLog,inFilterName,inContext);
+		}
 #else
-		Debug.Log(inFilterName + " : " + inLog, inContext);
+        Debug.Log(inFilterName + " : " + inLog, inContext);
 #endif
 	}
 
 	public static void Log(string inLog, Color color, string inFilterName, GameObject inContext)
 	{
+		if (inLog.StartsWith("0_"))
+		{
+			return;
+		}
+
 #if CONSOLE_PRO
-        ConsoleProDebug.LogToFilter($"<color={color.ColorToHex()}{inLog}</color>",inFilterName,inContext);
+		if (inFilterName == "")
+		{
+			Debug.Log($"<color=#{color.ColorToHex()}> {inLog}</color>", inContext);
+		}
+		else
+		{
+			ConsoleProDebug.LogToFilter($"<color=\"{color.ColorToHex()}\"> {inLog}</color>",inFilterName,inContext);
+		}
 #else
-		Debug.Log($"<color={color.ColorToHex()}{inFilterName} : {inLog}</color>", inContext);
+		Debug.Log($"<color=#{color.ColorToHex()}> {inFilterName} : {inLog}</color>", inContext);
 #endif
 	}
 
-
 	#endregion
+
 	#region Log Error
 
-    	public static void LogError(string inLog,string inFilterName, GameObject inContext)
-    	{
-    #if CONSOLE_PRO
-    		if (inFilterName == "")
-    		{
-    			Debug.LogError(inLog, inContext);
-    		}
-    		else
-    		{
-    			ConsoleProDebug.LogToFilter(inLog.Colored(StringExtensions.UnityConsoleColors.red).Bold(),inFilterName,inContext);
-    		}
-    #else
-            Debug.LogError(inFilterName + " : " + inLog, inContext);
-    #endif
-    	}
+	public static void LogError(string inLog,string inFilterName, GameObject inContext)
+	{
+#if CONSOLE_PRO
+		if (inFilterName == "")
+		{
+			Debug.LogError(inLog, inContext);
+		}
+		else
+		{
+			ConsoleProDebug.LogToFilter(inLog.Colored(StringExtensions.UnityConsoleColors.red).Bold(),inFilterName,inContext);
+		}
+#else
+        Debug.LogError(inFilterName + " : " + inLog, inContext);
+#endif
+	}
 
     	#endregion
 

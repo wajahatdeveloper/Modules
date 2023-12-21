@@ -12,13 +12,17 @@ namespace InfinityCode.UltimateEditorEnhancer.InspectorTools
     {
         private static bool showClips = false;
         private static bool inited;
+        private static GUIContent pauseContent;
         private static GUIContent playContent;
-        private static GUIContent stopContent;
+        private static GUIContent resumeContent;
         private static GUIContent selectContent;
+        private static GUIContent stopContent;
         private static int playIndex = -1;
         private static Animator animator;
         private static AnimationClip clip;
         private static double startTime;
+        private static int frame;
+        private static bool isPaused;
 
         static AnimatorInspectorClips()
         {
@@ -27,13 +31,26 @@ namespace InfinityCode.UltimateEditorEnhancer.InspectorTools
 
         private static void EditorUpdate()
         {
-            clip.SampleAnimation(animator.gameObject, (float)(EditorApplication.timeSinceStartup - startTime) % clip.length);
+            float current;
+            if (!isPaused)
+            {
+                current = (float) (EditorApplication.timeSinceStartup - startTime) % clip.length;
+                frame = Mathf.RoundToInt(current * clip.frameRate);
+            }
+            else
+            {
+                startTime = EditorApplication.timeSinceStartup - frame / clip.frameRate;
+                current = frame / clip.frameRate;
+            }
+            clip.SampleAnimation(animator.gameObject, current);
         }
 
         private static void Init()
         {
             inited = true;
+            pauseContent = new GUIContent(EditorIconContents.pauseButtonOn.image, "Pause");
             playContent = new GUIContent(EditorIconContents.playButtonOn.image, "Play");
+            resumeContent = new GUIContent(EditorIconContents.playButtonOn.image, "Resume");
             stopContent = new GUIContent(Resources.LoadIcon("Stop"), "Stop");
             selectContent = new GUIContent(EditorIconContents.rectTransformBlueprint.image, "Select");
         }
@@ -91,6 +108,27 @@ namespace InfinityCode.UltimateEditorEnhancer.InspectorTools
                 EditorGUILayout.LabelField(clip.name, EditorStyles.textField);
 
                 EditorGUILayout.EndHorizontal();
+
+                if (isPlayed)
+                {
+                    EditorGUILayout.BeginHorizontal();
+
+                    GUIContent content = isPaused ? resumeContent : pauseContent;
+
+                    if (GUILayout.Button(content, GUILayout.Width(30), GUILayout.Height(20)))
+                    {
+                        isPaused = !isPaused;
+                    }
+
+                    int total = Mathf.RoundToInt(clip.length * clip.frameRate);
+                    EditorGUI.BeginChangeCheck();
+                    frame = EditorGUILayout.IntSlider("Frame (" + frame + "/" + total + ")", frame, 0, total);
+                    if (EditorGUI.EndChangeCheck())
+                    {
+                        isPaused = true;
+                    }
+                    EditorGUILayout.EndHorizontal();
+                }
             }
 
             EditorGUILayout.EndVertical();
@@ -108,6 +146,8 @@ namespace InfinityCode.UltimateEditorEnhancer.InspectorTools
             clip = _clip;
 
             startTime = EditorApplication.timeSinceStartup;
+            frame = 0;
+            isPaused = false;
 
             EditorApplication.update -= EditorUpdate;
             EditorApplication.update += EditorUpdate;
@@ -128,6 +168,7 @@ namespace InfinityCode.UltimateEditorEnhancer.InspectorTools
             playIndex = -1;
             clip = null;
             animator = null;
+            isPaused = false;
 
             Selection.selectionChanged -= Stop;
             EditorApplication.update -= EditorUpdate;

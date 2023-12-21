@@ -1,7 +1,6 @@
 ﻿/*           INFINITY CODE          */
 /*     https://infinity-code.com    */
 
-using System;
 using UnityEngine;
 
 namespace InfinityCode.UltimateEditorEnhancer
@@ -9,6 +8,7 @@ namespace InfinityCode.UltimateEditorEnhancer
     public static class Icons
     {
         private static Texture _addComponent;
+        private static Texture _addFolder;
         private static Texture _align;
         private static Texture _alignDark;
         private static Texture _anchor;
@@ -24,6 +24,8 @@ namespace InfinityCode.UltimateEditorEnhancer
         private static Texture _collapse;
         private static Texture _collection;
         private static Texture _createObject;
+        private static Texture _customPivotRotationTool;
+        private static Texture _customPivotRotationToolActive;
         private static Texture _debug;
         private static Texture _debugOn;
         private static Texture _duplicate;
@@ -32,6 +34,9 @@ namespace InfinityCode.UltimateEditorEnhancer
         private static Texture _expand;
         private static Texture _focus;
         private static Texture _focusToolbar;
+        private static Texture _folder;
+        private static Texture _folderEmpty;
+        private static Texture _folderOpen;
         private static Texture _grayBullet;
         private static Texture _grid;
         private static Texture _gridPro;
@@ -41,6 +46,8 @@ namespace InfinityCode.UltimateEditorEnhancer
         private static Texture _history;
         private static Texture _maximize;
         private static Texture _minimize;
+        private static Texture _note;
+        private static Texture _noteEmpty;
         private static Texture _open;
         private static Texture _openNewBlack;
         private static Texture _openNewWhite;
@@ -51,11 +58,13 @@ namespace InfinityCode.UltimateEditorEnhancer
         private static Texture _replace;
         private static Texture _save;
         private static Texture _saveActive;
+        private static Texture _search;
         private static Texture _settings;
         private static Texture _starBlack;
         private static Texture _starWhite;
         private static Texture _starYellow;
         private static Texture _timer;
+        private static Texture _upDown;
         private static Texture _updateAvailable;
         private static Texture _windows;
 
@@ -65,6 +74,15 @@ namespace InfinityCode.UltimateEditorEnhancer
             {
                 if (_addComponent == null) _addComponent = ResourcesCache.GetIcon("Add-Component");
                 return _addComponent;
+            }
+        }
+
+        public static Texture addFolder
+        {
+            get
+            {
+                if (_addFolder == null) _addFolder = ResourcesCache.GetIcon("Add-Folder");
+                return _addFolder;
             }
         }
 
@@ -203,6 +221,24 @@ namespace InfinityCode.UltimateEditorEnhancer
                 return _createObject;
             }
         }
+        
+        public static Texture customPivotRotationTool
+        {
+            get
+            {
+                if (_customPivotRotationTool == null) _customPivotRotationTool = ResourcesCache.GetIcon(Styles.isProSkin ? "Custom-Pivot-Rotation-Tool-Active" : "Custom-Pivot-Rotation-Tool");
+                return _customPivotRotationTool;
+            }
+        }
+
+        public static Texture customPivotRotationToolActive
+        {
+            get
+            {
+                if (_customPivotRotationToolActive == null) _customPivotRotationToolActive = ResourcesCache.GetIcon("Custom-Pivot-Rotation-Tool-Active");
+                return _customPivotRotationToolActive;
+            }
+        }
 
         public static Texture debug
         {
@@ -273,6 +309,33 @@ namespace InfinityCode.UltimateEditorEnhancer
             {
                 if (_focusToolbar == null) _focusToolbar = ResourcesCache.GetIcon(Styles.isProSkin ? "FocusToolbarPro" : "FocusToolbar");
                 return _focusToolbar;
+            }
+        }
+
+        public static Texture folder
+        {
+            get
+            {
+                if (_folder == null) _folder = ResourcesCache.GetIcon("Folder");
+                return _folder;
+            }
+        }
+
+        public static Texture folderEmpty
+        {
+            get
+            {
+                if (_folderEmpty == null) _folderEmpty = ResourcesCache.GetIcon("FolderEmpty");
+                return _folderEmpty;
+            }
+        }
+
+        public static Texture folderOpen
+        {
+            get
+            {
+                if (_folderOpen == null) _folderOpen = ResourcesCache.GetIcon("FolderOpened");
+                return _folderOpen;
             }
         }
 
@@ -354,6 +417,24 @@ namespace InfinityCode.UltimateEditorEnhancer
             {
                 if (_minimize == null) _minimize = ResourcesCache.GetIcon("Minimize");
                 return _minimize;
+            }
+        }
+
+        public static Texture note
+        {
+            get
+            {
+                if (_note == null) _note = ResourcesCache.GetIcon("Note");
+                return _note;
+            }
+        }
+
+        public static Texture noteEmpty
+        {
+            get
+            {
+                if (_noteEmpty == null) _noteEmpty = ResourcesCache.GetIcon("Note-Empty");
+                return _noteEmpty;
             }
         }
 
@@ -491,6 +572,15 @@ namespace InfinityCode.UltimateEditorEnhancer
             }
         }
 
+        public static Texture upDown
+        {
+            get
+            {
+                if (_upDown == null) _upDown = ResourcesCache.GetIcon(Styles.isProSkin ? "Up-Down-White": "Up-Down-Black");
+                return _upDown;
+            }
+        }
+
         public static Texture updateAvailable
         {
             get
@@ -506,6 +596,15 @@ namespace InfinityCode.UltimateEditorEnhancer
             {
                 if (_windows == null) _windows = ResourcesCache.GetIcon(Styles.isProSkin? "Windows": "Windows-Black");
                 return _windows;
+            }
+        }
+
+        public static Texture search
+        {
+            get
+            {
+                if (_search == null) _search = ResourcesCache.GetIcon("Search");
+                return _search;
             }
         }
     }

@@ -14,16 +14,15 @@ namespace InfinityCode.UltimateEditorEnhancer.SceneTools
         public const string StyleID = "sv_label_4";
 
         public static Action OnClose;
-        public static Action OnDrawModeExternal;
+        public static Action<SceneViewItem> OnDrawModeExternal;
         public static Func<GameObject, string, string> OnPrepareTooltip;
-        public static Func<bool> OnUpdateTooltipsExternal;
+        public static Func<SceneViewItem, bool> OnUpdateTooltipsExternal;
 
-        public static List<GameObject> targets;
-        public static int mode; // 0 - tooltip, 1 - smart selection
-
-        public static GUIContent tooltip;
         private static GUIStyle _labelStyle;
         private static GUIStyle tooltipStyle;
+
+        private static Dictionary<int, SceneViewItem> sceneViewItems = new Dictionary<int, SceneViewItem>();
+        private static SceneViewItem restoreItem;
 
 
         public static GUIStyle labelStyle
@@ -48,18 +47,19 @@ namespace InfinityCode.UltimateEditorEnhancer.SceneTools
         static Waila()
         {
             SceneViewManager.AddListener(OnSceneGUI, SceneViewOrder.waila, true);
-            targets = new List<GameObject>();
         }
 
         public static void Close()
         {
-            mode = 0;
-            tooltip = null;
+            foreach (KeyValuePair<int, SceneViewItem> pair in sceneViewItems)
+            {
+                pair.Value.Close();
+            }
 
             if (OnClose != null) OnClose();
         }
 
-        private static void DrawTooltip()
+        private static void DrawTooltip(SceneViewItem sceneViewItem)
         {
             if (tooltipStyle == null)
             {
@@ -72,13 +72,21 @@ namespace InfinityCode.UltimateEditorEnhancer.SceneTools
                 tooltipStyle.padding = new RectOffset(8, 8, 8, 8);
                 tooltipStyle.alignment = TextAnchor.MiddleLeft;
             }
-            Vector2 size = tooltipStyle.CalcSize(tooltip);
+            Vector2 size = tooltipStyle.CalcSize(sceneViewItem.tooltip);
             Vector2 position = Event.current.mousePosition - new Vector2(size.x / 2, size.y + 10);
             Rect rect = new Rect(position, size + new Vector2(4, 0));
 
             Handles.BeginGUI();
-            GUI.Label(rect, tooltip, tooltipStyle);
+            GUI.Label(rect, sceneViewItem.tooltip, tooltipStyle);
             Handles.EndGUI();
+        }
+
+        public static SceneViewItem GetSceneViewItem(SceneView view)
+        {
+            if (view == null) return null;
+            
+            SceneViewItem r;
+            return sceneViewItems.TryGetValue(view.GetInstanceID(), out r) ? r : null;
         }
 
         public static void Highlight(GameObject go)
@@ -105,100 +113,168 @@ namespace InfinityCode.UltimateEditorEnhancer.SceneTools
             }
         }
 
-        private static void OnSceneGUI(SceneView sceneview)
+        private static void OnSceneGUI(SceneView view)
         {
-            if (EditorWindow.mouseOverWindow != sceneview)
+            SceneViewItem sceneViewItem = null;
+            sceneViewItems.TryGetValue(view.GetInstanceID(), out sceneViewItem);
+
+            if (sceneViewItem != null && EditorWindow.mouseOverWindow != view)
             {
-                if (mode == 0)
+                if (sceneViewItem.mode == 0)
                 {
-                    tooltip = null;
-                    Highlight(null);
+                    if (sceneViewItem.tooltip != null)
+                    {
+                        sceneViewItem.tooltip = null;
+                        Highlight(null);
+                    }
                     return;
                 }
             }
             if (!Prefs.waila) return;
 
+            if (sceneViewItem == null)
+            {
+                sceneViewItem = new SceneViewItem();
+                sceneViewItems.Add(view.GetInstanceID(), sceneViewItem);
+            }
+
             Event e = Event.current;
 
-            if (Preview.isActive ||
-                InputManager.GetAnyMouseButton() && tooltip == null)
+            if (Preview.isActive || InputManager.GetAnyMouseButton() && sceneViewItem.tooltip == null)
             {
-                if (mode == 0)
+                if (sceneViewItem.mode == 0)
                 {
-                    tooltip = null;
-                    targets.Clear();
-                    Highlight(null);
+                    if (sceneViewItem.tooltip != null)
+                    {
+                        sceneViewItem.tooltip = null;
+                        sceneViewItem.targets.Clear();
+                        Highlight(null);
+                    }
                     return;
                 }
             }
 
-            if (mode == 0)
+            if (sceneViewItem.mode == 0)
             {
                 if (e.type == EventType.MouseMove || e.type == EventType.KeyUp || e.type == EventType.KeyDown)
                 {
-                    if (OnUpdateTooltipsExternal != null && OnUpdateTooltipsExternal()) { }
-                    else if (Prefs.wailaShowNameUnderCursor && e.modifiers == Prefs.wailaShowNameUnderCursorModifiers) UpdateTooltip();
-                    else
-                    {
-                        tooltip = null;
-                        targets.Clear();
-                        Highlight(null);
-                    }
+                    UpdateTarget(sceneViewItem);
                 }
 
-                if (tooltip != null)
+                if (sceneViewItem.tooltip != null)
                 {
-                    DrawTooltip();
+                    DrawTooltip(sceneViewItem);
 
                     if (e.type == EventType.MouseDown && e.modifiers == Prefs.wailaShowNameUnderCursorModifiers && GUIUtility.hotControl != 0)
                     {
-                        Selection.activeGameObject = targets[0];
+                        Selection.activeGameObject = sceneViewItem.targets[0];
+                        restoreItem = sceneViewItem;
                         SceneViewManager.AddListener(RestoreSelection);
                         e.Use();
                     }
                 }
             }
-            else if (OnDrawModeExternal != null) OnDrawModeExternal();
+            else if (OnDrawModeExternal != null) OnDrawModeExternal(sceneViewItem);
         }
 
         private static void RestoreSelection(SceneView view)
         {
-            if (targets == null || targets.Count == 0)
+            if (restoreItem == null) return;
+
+            if (restoreItem.targets == null || restoreItem.targets.Count == 0)
             {
                 SceneViewManager.RemoveListener(RestoreSelection);
                 return;
             }
 
-            if (Selection.gameObjects.Length != 1 || Selection.gameObjects[0] != targets[0])
+            if (Selection.gameObjects.Length != 1 || Selection.gameObjects[0] != restoreItem.targets[0])
             {
                 SceneViewManager.RemoveListener(RestoreSelection);
-                Selection.activeGameObject = targets[0];
+                Selection.activeGameObject = restoreItem.targets[0];
             }
         }
 
-        private static void UpdateTooltip()
+        private static void UpdateTarget(SceneViewItem sceneViewItem)
         {
-            GameObject go = HandleUtility.PickGameObject(Event.current.mousePosition, false, null);
+            if (OnUpdateTooltipsExternal != null && OnUpdateTooltipsExternal(sceneViewItem))
+            {
+            }
+            else if (Prefs.wailaShowNameUnderCursor && Event.current.modifiers == Prefs.wailaShowNameUnderCursorModifiers)
+            {
+                UpdateTooltip(sceneViewItem);
+            }
+            else
+            {
+                sceneViewItem.tooltip = null;
+                sceneViewItem.targets.Clear();
+                Highlight(null);
+            }
+        }
+
+        private static void UpdateTooltip(SceneViewItem sceneViewItem)
+        {
+            Vector2 mousePosition = Event.current.mousePosition;
+
+            GameObject go = HandleUtility.PickGameObject(mousePosition, false, null);
             if (go == null)
             {
                 Highlight(null);
-                tooltip = null;
-                targets.Clear();
+                sceneViewItem.tooltip = null;
+                sceneViewItem.targets.Clear();
                 return;
+            }
+
+            if (go.GetComponent<Canvas>() != null || go.GetComponent<CanvasRenderer>() != null)
+            {
+                List<GameObject> found = new List<GameObject>(20) {go};
+
+                while (found.Count < 20)
+                {
+                    go = HandleUtility.PickGameObject(mousePosition, false, found.ToArray());
+                    if (go == null) break;
+                    bool isInsert = false;
+                    
+                    Transform t = go.transform;
+
+                    for (int i = 0; i < found.Count; i++)
+                    {
+                        Transform ft = found[i].transform;
+
+                        if (ft.parent == t)
+                        {
+                            found.Insert(i, go);
+                            isInsert = true;
+                            break;
+                        }
+                        
+                        if (ft.parent == t.parent)
+                        {
+                            if (ft.GetSiblingIndex() > t.GetSiblingIndex())
+                            {
+                                found.Insert(i, go);
+                                isInsert = true;
+                                break;
+                            }
+                        }
+                    }
+                    if (!isInsert) found.Add(go);
+                }
+
+                go = found[found.Count - 1];
             }
 
             if (PrefabUtility.IsPartOfAnyPrefab(go)) go = PrefabUtility.GetNearestPrefabInstanceRoot(go);
 
             Highlight(go);
 
-            if (targets.Count != 1 || targets[0] != go)
+            if (sceneViewItem.targets.Count != 1 || sceneViewItem.targets[0] != go)
             {
-                targets.Clear();
-                targets.Add(go);
+                sceneViewItem.targets.Clear();
+                sceneViewItem.targets.Add(go);
             }
 
             string tooltipText = go.name;
-            TerrainCollider terrainCollider = targets[0].GetComponent<TerrainCollider>();
+            TerrainCollider terrainCollider = sceneViewItem.targets[0].GetComponent<TerrainCollider>();
 
             if (terrainCollider != null) InsertTerrainHeight(terrainCollider, ref tooltipText);
 
@@ -207,7 +283,25 @@ namespace InfinityCode.UltimateEditorEnhancer.SceneTools
                 tooltipText = OnPrepareTooltip(go, tooltipText);
             }
 
-            tooltip = new GUIContent(tooltipText);
+            sceneViewItem.tooltip = new GUIContent(tooltipText);
+        }
+
+        public class SceneViewItem
+        {
+            public List<GameObject> targets;
+            public int mode; // 0 - tooltip, 1 - smart selection
+            public GUIContent tooltip;
+
+            public SceneViewItem()
+            {
+                targets = new List<GameObject>();
+            }
+
+            public void Close()
+            {
+                mode = 0;
+                tooltip = null;
+            }
         }
     }
 }

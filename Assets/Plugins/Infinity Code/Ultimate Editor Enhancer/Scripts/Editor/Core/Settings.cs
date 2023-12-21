@@ -7,22 +7,29 @@ namespace InfinityCode.UltimateEditorEnhancer
 {
     public static class Settings
     {
+        // First level
         private const string UEE_SETTINGS_PATH = "Project/Ultimate Editor Enhancer";
         private const string CONTEXT_MENU_SETTINGS_PATH = UEE_SETTINGS_PATH + "/Context Menu";
         private const string CREATE_BROWSER_SETTINGS_PATH = UEE_SETTINGS_PATH + "/Create Browser";
         private const string FAVORITE_WINDOWS_SETTINGS_PATH = UEE_SETTINGS_PATH + "/Favorite Windows";
         private const string GAMEOBJECT_SETTINGS_PATH = UEE_SETTINGS_PATH + "/GameObject";
         private const string HIERARCHY_SETTINGS_PATH = UEE_SETTINGS_PATH + "/Hierarchy";
-        private const string HIGHLIGHT_SETTINGS_PATH = UEE_SETTINGS_PATH + "/Scene View/Highlight";
         private const string INSPECTOR_SETTINGS_PATH = UEE_SETTINGS_PATH + "/Inspector";
-        private const string NAVIGATION_SETTINGS_PATH = UEE_SETTINGS_PATH + "/Scene View/Navigation";
-        private const string QUICK_ACCESS_SETTINGS_PATH = UEE_SETTINGS_PATH + "/Scene View/Quick Access Bar";
+        private const string PROJECT_SETTINGS_PATH = UEE_SETTINGS_PATH + "/Project";
         private const string SCENEVIEW_SETTINGS_PATH = UEE_SETTINGS_PATH + "/Scene View";
         private const string SEARCH_WINDOWS_SETTINGS_PATH = UEE_SETTINGS_PATH + "/Search";
         private const string TOOLBAR_SETTINGS_PATH = UEE_SETTINGS_PATH + "/Toolbar";
         private const string UNSAFE_SETTINGS_PATH = UEE_SETTINGS_PATH + "/Unsafe";
         private const string VIEWS_SETTINGS_PATH = UEE_SETTINGS_PATH + "/Views";
-        private const string WAILA_SETTINGS_PATH = UEE_SETTINGS_PATH + "/Scene View/WAILA";
+
+        // Second level
+        private const string EMPTY_INSPECTOR_SETTINGS_PATH = INSPECTOR_SETTINGS_PATH + "/Empty Inspector";
+        private const string HEADERS_SETTINGS_PATH = HIERARCHY_SETTINGS_PATH + "/Headers";
+        private const string HIGHLIGHT_SETTINGS_PATH = SCENEVIEW_SETTINGS_PATH + "/Highlight";
+        private const string NAVIGATION_SETTINGS_PATH = SCENEVIEW_SETTINGS_PATH + "/Navigation";
+        private const string QUICK_ACCESS_SETTINGS_PATH = SCENEVIEW_SETTINGS_PATH + "/Quick Access Bar";
+        private const string PROJECT_FOLDER_ICONS_SETTINGS_PATH = PROJECT_SETTINGS_PATH + "/Folder Icons";
+        private const string WAILA_SETTINGS_PATH = SCENEVIEW_SETTINGS_PATH + "/WAILA";
 
         [SettingsProvider]
         public static SettingsProvider GetContextMenuSettingsProvider()
@@ -49,6 +56,18 @@ namespace InfinityCode.UltimateEditorEnhancer
         }
 
         [SettingsProvider]
+        public static SettingsProvider GetEmptyInspectorSettingsProvider()
+        {
+            SettingsProvider provider = new SettingsProvider(EMPTY_INSPECTOR_SETTINGS_PATH, SettingsScope.Project)
+            {
+                label = "Empty Inspector",
+                guiHandler = Prefs.EmptyInspectorManager.DrawWithToolbar,
+                keywords = Prefs.EmptyInspectorManager.GetKeywords()
+            };
+            return provider;
+        }
+
+        [SettingsProvider]
         public static SettingsProvider GetFavoriteWindowsSettingsProvider()
         {
             SettingsProvider provider = new SettingsProvider(FAVORITE_WINDOWS_SETTINGS_PATH, SettingsScope.Project)
@@ -68,6 +87,18 @@ namespace InfinityCode.UltimateEditorEnhancer
                 label = "GameObjects",
                 guiHandler = Prefs.GameObjectManager.DrawWithToolbar,
                 keywords = Prefs.GameObjectManager.GetKeywords()
+            };
+            return provider;
+        }
+
+        [SettingsProvider]
+        public static SettingsProvider GetHeadersSettingsProvider()
+        {
+            SettingsProvider provider = new SettingsProvider(HEADERS_SETTINGS_PATH, SettingsScope.Project)
+            {
+                label = "Headers",
+                guiHandler = Prefs.HeadersManager.DrawWithToolbar,
+                keywords = Prefs.HeadersManager.GetKeywords()
             };
             return provider;
         }
@@ -128,6 +159,30 @@ namespace InfinityCode.UltimateEditorEnhancer
                 label = "Quick Access Bar",
                 guiHandler = Prefs.QuickAccessBarManager.DrawWithToolbar,
                 keywords = Prefs.QuickAccessBarManager.GetKeywords()
+            };
+            return provider;
+        }
+
+        [SettingsProvider]
+        public static SettingsProvider GetProjectSettingsProvider()
+        {
+            SettingsProvider provider = new SettingsProvider(PROJECT_SETTINGS_PATH, SettingsScope.Project)
+            {
+                label = "Project",
+                guiHandler = Prefs.ProjectManager.DrawWithToolbar,
+                keywords = Prefs.ProjectManager.GetKeywords()
+            };
+            return provider;
+        }
+
+        [SettingsProvider]
+        public static SettingsProvider GetProjectFolderIconsSettingsProvider()
+        {
+            SettingsProvider provider = new SettingsProvider(PROJECT_FOLDER_ICONS_SETTINGS_PATH, SettingsScope.Project)
+            {
+                label = "Folder Icons",
+                guiHandler = Prefs.ProjectFolderIconManager.DrawWithToolbar,
+                keywords = Prefs.ProjectFolderIconManager.GetKeywords()
             };
             return provider;
         }
@@ -216,6 +271,11 @@ namespace InfinityCode.UltimateEditorEnhancer
             return provider;
         }
 
+        public static void OpenEmptyInspectorSettings()
+        {
+            SettingsService.OpenProjectSettings(EMPTY_INSPECTOR_SETTINGS_PATH);
+        }
+
         public static void OpenFavoriteWindowsSettings()
         {
             SettingsService.OpenProjectSettings(FAVORITE_WINDOWS_SETTINGS_PATH);
@@ -224,6 +284,11 @@ namespace InfinityCode.UltimateEditorEnhancer
         public static void OpenQuickAccessSettings()
         {
             SettingsService.OpenProjectSettings(QUICK_ACCESS_SETTINGS_PATH);
+        }
+
+        public static void OpenSearchSettings()
+        {
+            SettingsService.OpenProjectSettings(SEARCH_WINDOWS_SETTINGS_PATH);
         }
 
         [MenuItem(WindowsHelper.MenuPath + "Settings", false, 122)]
@@ -235,6 +300,11 @@ namespace InfinityCode.UltimateEditorEnhancer
         public static void OpenToolbarSettings()
         {
             SettingsService.OpenProjectSettings(TOOLBAR_SETTINGS_PATH);
+        }
+
+        public static void OpenViewsSettings()
+        {
+            SettingsService.OpenProjectSettings(VIEWS_SETTINGS_PATH);
         }
     }
 }

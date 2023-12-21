@@ -15,8 +15,8 @@ namespace InfinityCode.UltimateEditorEnhancer
 
         static EventManager()
         {
-            KeyManager.AddBinding(KeyCode.Escape).OnInvoke += OnEscape;
-            KeyManager.AddBinding(KeyCode.Space, true, true).OnInvoke += OnToggle;
+            KeyManager.AddBinding(KeyCode.Escape).OnPress += OnEscape;
+            KeyManager.AddBinding(KeyCode.Space, true, true).OnPress += OnToggle;
 
             EditorApplication.wantsToQuit += OnQuitting;
         }

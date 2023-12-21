@@ -25,7 +25,7 @@ namespace InfinityCode.UltimateEditorEnhancer.UnityTypes
 
         private static Type type
         {
-            get { return typeof(SearchableEditorWindow); }
+            get => typeof(SearchableEditorWindow);
         }
     }
 }

@@ -20,8 +20,9 @@ namespace InfinityCode.UltimateEditorEnhancer
                 {
                     hooks[i].DynamicInvoke(args);
                 }
-                catch (ExitGUIException)
+                catch (ExitGUIException e)
                 {
+                    throw e;
                 }
                 catch (Exception e)
                 {

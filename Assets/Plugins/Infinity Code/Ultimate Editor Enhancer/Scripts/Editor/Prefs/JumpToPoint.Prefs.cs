@@ -38,7 +38,7 @@ namespace InfinityCode.UltimateEditorEnhancer
 #if UNITY_EDITOR_OSX
                 string alternativeLabel = "Alternative Jump Shortcuts (SHIFT + SHIFT, CMD + SHIFT + SHIFT)";
 #else
-                string alternativeLabel = "Alternative Jump Shortcuts (SHIFT + SHIFT, CTRL + SHIFT + SHIFT)";
+                string alternativeLabel = "Alternative Jump Shortcuts (ALT + RMB, SHIFT + ALT + RMB)";
 #endif
                 alternativeJumpShortcut = EditorGUILayout.ToggleLeft(alternativeLabel, alternativeJumpShortcut);
             }
@@ -50,22 +50,27 @@ namespace InfinityCode.UltimateEditorEnhancer
                 if (jumpToPoint)
                 {
                     shortcuts.Add(new Shortcut("Jump To Point", "Scene View", "SHIFT + MMB"));
-                    if (alternativeJumpShortcut) shortcuts.Add(new Shortcut("Jump To Point", "Scene View", "SHIFT + SHIFT"));
+                    if (alternativeJumpShortcut) shortcuts.Add(new Shortcut("Jump To Point", "Scene View", "ALT + RMB"));
                 }
 
                 if (highJumpToPoint)
                 {
 #if UNITY_EDITOR_OSX
                     string shortcut = "CMD + SHIFT + MMB";
-                    string shortcut2 = "CMD + SHIFT + SHIFT";
 #else
                     string shortcut = "CTRL + SHIFT + MMB";
-                    string shortcut2 = "CTRL + SHIFT + SHIFT";
 #endif
+                    string shortcut2 = "SHIFT + ALT + RMB";
                     shortcuts.Add(new Shortcut("High Jump To Point", "Scene View", shortcut));
                     if (alternativeJumpShortcut) shortcuts.Add(new Shortcut("High Jump To Point", "Scene View", shortcut2));
                 }
-                    return shortcuts;
+                return shortcuts;
+            }
+
+            public static void SetState(bool state)
+            {
+                jumpToPoint = state;
+                highJumpToPoint = state;
             }
         }
     }

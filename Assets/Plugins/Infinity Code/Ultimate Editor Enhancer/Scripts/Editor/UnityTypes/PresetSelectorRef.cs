@@ -32,7 +32,7 @@ namespace InfinityCode.UltimateEditorEnhancer.UnityTypes
 
         public static Type type
         {
-            get { return typeof(PresetSelector); }
+            get => typeof(PresetSelector);
         }
     }
 }

@@ -22,7 +22,7 @@ namespace InfinityCode.UltimateEditorEnhancer.Interceptors
             get => true;
         }
 
-        protected override string prefixMethodName { get => "Inspector3DPrefix"; }
+        protected override string prefixMethodName { get => nameof(Inspector3DPrefix); }
 
         private static bool Inspector3DPrefix(Editor __instance)
         {

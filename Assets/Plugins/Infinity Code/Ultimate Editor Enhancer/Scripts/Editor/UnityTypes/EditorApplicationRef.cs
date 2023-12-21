@@ -13,7 +13,7 @@ namespace InfinityCode.UltimateEditorEnhancer.UnityTypes
 
         public static Type type
         {
-            get { return typeof(EditorApplication); }
+            get => typeof(EditorApplication);
         }
 
         private static FieldInfo globalEventsField

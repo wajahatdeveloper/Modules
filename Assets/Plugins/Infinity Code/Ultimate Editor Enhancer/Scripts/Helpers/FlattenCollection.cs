@@ -5,6 +5,7 @@ using UnityEngine;
 
 namespace InfinityCode.UltimateEditorEnhancer
 {
+    [DefaultExecutionOrder(-30001)]
     public class FlattenCollection : MonoBehaviour
     {
         public bool flatten = false;

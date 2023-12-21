@@ -163,11 +163,25 @@ namespace InfinityCode.UltimateEditorEnhancer.EditorMenus.PopupWindows
                 else state = ButtonEvent.release;
             }
 
-            if (ComponentUtils.CanBeDisabled(component))
+            if (component.hideFlags == HideFlags.HideAndDontSave || component.hideFlags == HideFlags.HideInInspector)
+            {
+                if (GUI.Button(toggleRect, EditorIconContents.sceneVisibilityHiddenHover, Styles.transparentButton))
+                {
+                    Undo.RecordObject(component, "Modified Property in " + component.gameObject.name);
+                    component.hideFlags = HideFlags.None;
+                    EditorUtility.SetDirty(component);
+                }
+            }
+            else if (ComponentUtils.CanBeDisabled(component))
             {
                 EditorGUI.BeginChangeCheck();
                 bool value = GUI.Toggle(toggleRect, ComponentUtils.GetEnabled(component), GUIContent.none);
-                if (EditorGUI.EndChangeCheck()) ComponentUtils.SetEnabled(component, value);
+                if (EditorGUI.EndChangeCheck())
+                {
+                    Undo.RecordObject(component, "Modified Property in " + component.gameObject.name);
+                    ComponentUtils.SetEnabled(component, value);
+                    EditorUtility.SetDirty(component);
+                }
             }
 
             return state;

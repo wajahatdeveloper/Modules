@@ -13,7 +13,7 @@ namespace InfinityCode.UltimateEditorEnhancer.HierarchyTools
 
         static BackgroundDrawer()
         {
-            HierarchyItemDrawer.Register("BackgroundDrawer", OnDrawItem, -1);
+            HierarchyItemDrawer.Register("BackgroundDrawer", OnDrawItem, HierarchyToolOrder.BACKGROUND);
         }
 
         private static void InitTexture()

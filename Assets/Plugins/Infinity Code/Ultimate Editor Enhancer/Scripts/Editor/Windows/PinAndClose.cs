@@ -41,7 +41,7 @@ namespace InfinityCode.UltimateEditorEnhancer.Windows
         {
             get
             {
-                if (_tabContent == null) _tabContent = new GUIContent(Icons.pin, "To Tab Window"); 
+                if (_tabContent == null) _tabContent = new GUIContent(Icons.pin, "To Tab Window");
                 return _tabContent;
             }
         }
@@ -57,7 +57,7 @@ namespace InfinityCode.UltimateEditorEnhancer.Windows
             {
                 float maxWidth = position.width - 35;
                 if (OnPin != null) maxWidth -= 20;
-                
+
                 GUILayout.Label(labelContent, EditorStyles.whiteLabel, GUILayout.MaxWidth(maxWidth));
             }
             EditorGUILayout.Space();
@@ -81,7 +81,7 @@ namespace InfinityCode.UltimateEditorEnhancer.Windows
         protected void OnDestroy()
         {
             OnPin = null;
-            OnClose = null; 
+            OnClose = null;
 
             if (_targetWindow != null) _targetWindow.Close();
             _targetWindow = null;
@@ -127,8 +127,9 @@ namespace InfinityCode.UltimateEditorEnhancer.Windows
 
                 EditorGUILayout.EndHorizontal();
             }
-            catch (ExitGUIException)
+            catch (ExitGUIException e)
             {
+                throw e;
             }
             catch (Exception e)
             {
@@ -183,7 +184,7 @@ namespace InfinityCode.UltimateEditorEnhancer.Windows
 
                     Rect rect = position;
                     rect.position += delta;
-                    position = rect;
+                    WindowsHelper.SetRect(this, rect);
 
                     rect = _targetWindow.position;
                     rect.position += delta;
@@ -201,8 +202,9 @@ namespace InfinityCode.UltimateEditorEnhancer.Windows
         {
             targetRect = rect;
             Vector2 size = new Vector2(rect.width, HEIGHT);
-            Vector2 pos = rect.position - new Vector2(0, size.y);
-            position = new Rect(pos, size);
+            Vector2 pos = new Vector2(rect.x, rect.y) - new Vector2(0, HEIGHT);
+            Rect r = new Rect(pos, size);
+            WindowsHelper.SetRect(this, r);
         }
 
         public static PinAndClose Show(EditorWindow window, Rect inspectorRect, Action OnClose, string label)
@@ -213,20 +215,22 @@ namespace InfinityCode.UltimateEditorEnhancer.Windows
         public static PinAndClose Show(EditorWindow window, Rect inspectorRect, Action OnClose, Action OnLock = null, string label = null)
         {
             PinAndClose wnd = CreateInstance<PinAndClose>();
-            wnd.minSize = new Vector2(10, 10);
+            wnd.minSize = Vector2.zero;
             wnd._targetWindow = window;
             wnd.OnClose = OnClose;
             wnd.OnPin = OnLock;
-            wnd.SetRect(inspectorRect);
+
             if (!string.IsNullOrEmpty(label)) wnd.labelContent = new GUIContent(label);
             wnd.ShowPopup();
             wnd.Focus();
             window.Focus();
 
+            wnd.SetRect(inspectorRect);
+
             ComponentWindow cw = window as ComponentWindow;
             if (cw != null)
             {
-                cw.OnPositionChanged += wnd.OnTargetRectChanged; 
+                cw.OnPositionChanged += wnd.OnTargetRectChanged;
             }
 
             return wnd;
@@ -260,11 +264,11 @@ namespace InfinityCode.UltimateEditorEnhancer.Windows
         public void UpdatePosition(Rect rect)
         {
             Rect r = position;
-            Vector2 size = r.size;
+            Vector2 size = new Vector2(r.width, HEIGHT);
             Vector2 pos = rect.position + new Vector2(rect.width, 0) - size;
             r.position = pos;
             r.size = size;
-            position = r;
+            WindowsHelper.SetRect(this, r);
         }
     }
 }

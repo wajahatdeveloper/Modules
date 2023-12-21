@@ -28,7 +28,7 @@ namespace InfinityCode.UltimateEditorEnhancer.UnityTypes
 
         public static Type type
         {
-            get { return typeof(PrefabUtility); }
+            get => typeof(PrefabUtility);
         }
 
         public static GameObject GetOriginalSourceOrVariantRoot(Object instanceOrAsset)

@@ -32,6 +32,11 @@ namespace InfinityCode.UltimateEditorEnhancer.TransformEditorTools
 
             EditorGUILayout.BeginHorizontal();
 
+            Color color = GUI.color;
+            Color targetColor = Styles.isProSkin ? Color.white : Color.black;
+            float f = 0.8f;
+            GUI.color = Color.Lerp(Color.red, targetColor, f);
+
             GUILayout.Label("X", GUILayout.ExpandWidth(false));
             if (GUILayout.Button("Min"))
             {
@@ -54,6 +59,8 @@ namespace InfinityCode.UltimateEditorEnhancer.TransformEditorTools
             }
 
             EditorGUILayout.EndHorizontal();
+
+            GUI.color = Color.Lerp(Color.green, targetColor, f);
 
             EditorGUILayout.BeginHorizontal();
 
@@ -80,6 +87,8 @@ namespace InfinityCode.UltimateEditorEnhancer.TransformEditorTools
 
             EditorGUILayout.EndHorizontal();
 
+            GUI.color = Color.Lerp(Color.blue, targetColor, f);
+
             EditorGUILayout.BeginHorizontal();
 
             GUILayout.Label("Z", GUILayout.ExpandWidth(false));
@@ -104,6 +113,8 @@ namespace InfinityCode.UltimateEditorEnhancer.TransformEditorTools
             }
 
             EditorGUILayout.EndHorizontal();
+
+            GUI.color = color;
         }
 
         public override void Init()

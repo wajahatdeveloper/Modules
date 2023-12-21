@@ -22,5 +22,10 @@ namespace InfinityCode.UltimateEditorEnhancer
         {
 
         }
+
+        public override bool HasLabel(string label)
+        {
+            return false;
+        }
     }
 }

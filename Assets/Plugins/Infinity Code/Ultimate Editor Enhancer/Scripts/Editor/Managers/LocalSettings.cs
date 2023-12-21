@@ -14,6 +14,9 @@ namespace InfinityCode.UltimateEditorEnhancer
         private static LocalSettings _instance;
 
         [SerializeField]
+        private bool _askMaximizeGameView = true;
+
+        [SerializeField]
         private bool _collapseQuickAccessBar = false;
 
         [SerializeField]
@@ -25,14 +28,12 @@ namespace InfinityCode.UltimateEditorEnhancer
         [SerializeField]
         private int _upgradeID = 0;
 
-        [SerializeField]
-        private bool _askMaximizeGameView = true;
-
         public static bool askMaximizeGameView 
         {
             get { return _instance._askMaximizeGameView; }
             set
             {
+                if (instance._askMaximizeGameView == value) return;
                 _instance._askMaximizeGameView = value;
                 Save();
             }
@@ -43,6 +44,7 @@ namespace InfinityCode.UltimateEditorEnhancer
             get { return instance._collapseQuickAccessBar; }
             set
             {
+                if (instance._collapseQuickAccessBar == value) return;
                 instance._collapseQuickAccessBar = value;
                 Save();
             }
@@ -54,6 +56,7 @@ namespace InfinityCode.UltimateEditorEnhancer
             get { return instance._enhancedHierarchyShown; }
             set
             {
+                if (instance._enhancedHierarchyShown == value) return;
                 instance._enhancedHierarchyShown = value;
                 Save();
             }
@@ -73,6 +76,7 @@ namespace InfinityCode.UltimateEditorEnhancer
             get { return instance._hideObjectToolbar; }
             set
             {
+                if (instance._hideObjectToolbar == value) return;
                 instance._hideObjectToolbar = value;
                 Save();
             }
@@ -127,6 +131,16 @@ namespace InfinityCode.UltimateEditorEnhancer
             }
         }
 
+        public static void ResetContent()
+        {
+            instance._askMaximizeGameView = true;
+            instance._collapseQuickAccessBar = false;
+            instance._enhancedHierarchyShown = false;
+            instance._hideObjectToolbar = false;
+            instance._upgradeID = 0;
+            Save();
+        }
+
         public static void Save()
         {
             try
@@ -137,7 +151,6 @@ namespace InfinityCode.UltimateEditorEnhancer
             {
 
             }
-
         }
     }
 }

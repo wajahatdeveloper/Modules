@@ -14,6 +14,8 @@ namespace InfinityCode.UltimateEditorEnhancer.Integration
         private static MethodInfo getFullscreenFromViewMethod;
         private static MethodInfo toggleFullscreenMethod;
         private static MethodInfo makeFullscreenMethod;
+        private static MethodInfo openSceneViewMethod;
+        private static MethodInfo openGameViewMethod;
 
         public static bool isPresent { get; }
 
@@ -28,6 +30,11 @@ namespace InfinityCode.UltimateEditorEnhancer.Integration
             getFullscreenFromViewMethod = Reflection.GetMethod(feType, "GetFullscreenFromView", new[] {typeof(ScriptableObject), typeof(bool)}, BindingFlags.Static | BindingFlags.Public);
             toggleFullscreenMethod = Reflection.GetMethod(feType, "ToggleFullscreen", new[] {typeof(ScriptableObject)}, BindingFlags.Static | BindingFlags.Public);
             makeFullscreenMethod = Reflection.GetMethod(feType, "MakeFullscreen", new[] {typeof(Type), typeof(EditorWindow), typeof(bool)}, BindingFlags.Static | BindingFlags.Public);
+            
+            Type menuItemsType = assembly.GetType("FullscreenEditor.MenuItems");
+
+            openSceneViewMethod = Reflection.GetMethod(menuItemsType, "SVMenuItem", Reflection.StaticLookup);
+            openGameViewMethod = Reflection.GetMethod(menuItemsType, "GVMenuItem", Reflection.StaticLookup);
 
             if (getFullscreenFromViewMethod == null || toggleFullscreenMethod == null || makeFullscreenMethod == null) return;
 
@@ -54,6 +61,16 @@ namespace InfinityCode.UltimateEditorEnhancer.Integration
         {
             if (!isPresent) return null;
             return makeFullscreenMethod.Invoke(null, new object[] {type, window, disposableWindow});
+        }
+
+        public static void OpenFullscreenGameView()
+        {
+            openGameViewMethod.Invoke(null, null);
+        }
+
+        public static void OpenFullscreenSceneView()
+        {
+            openSceneViewMethod.Invoke(null, null);
         }
 
         public static void ToggleFullscreen(ScriptableObject viewOrWindow)

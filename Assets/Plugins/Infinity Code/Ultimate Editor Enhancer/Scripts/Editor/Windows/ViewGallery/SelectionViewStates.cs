@@ -18,11 +18,11 @@ namespace InfinityCode.UltimateEditorEnhancer.Tools
 
             KeyManager.KeyBinding binding = KeyManager.AddBinding();
             binding.OnValidate += OnAddToSelectedValidate;
-            binding.OnInvoke += AddToSelection;
+            binding.OnPress += AddToSelection;
 
             binding = KeyManager.AddBinding();
             binding.OnValidate += OnRestoreSelectedValidate;
-            binding.OnInvoke += OnRestoreSelectedInvoke;
+            binding.OnPress += OnRestoreSelectedInvoke;
 
             ToolbarManager.AddLeftToolbar("SelectionViewStates", ToolbarIcon);
             Selection.selectionChanged += SelectionChanged;

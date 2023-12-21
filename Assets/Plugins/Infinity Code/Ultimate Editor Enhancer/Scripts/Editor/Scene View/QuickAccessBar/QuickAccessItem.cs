@@ -3,6 +3,7 @@
 
 using System;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using InfinityCode.UltimateEditorEnhancer.Integration;
 using InfinityCode.UltimateEditorEnhancer.JSON;
@@ -47,6 +48,8 @@ namespace InfinityCode.UltimateEditorEnhancer.SceneTools
 
         [NonSerialized]
         private bool contentMissed;
+
+        [NonSerialized]
         private bool methodTypeMissed;
         [NonSerialized]
         private bool scriptableObjectMissed;
@@ -217,7 +220,8 @@ namespace InfinityCode.UltimateEditorEnhancer.SceneTools
 
             if (actionObject == null)
             {
-                Type t = Type.GetType(settings[0]);
+                Type t = TypeCache.GetTypesDerivedFrom<QuickAccessAction>().FirstOrDefault(i => i.FullName == settings[0]);
+                
                 if (t == null)
                 {
                     methodTypeMissed = true;
@@ -401,6 +405,8 @@ namespace InfinityCode.UltimateEditorEnhancer.SceneTools
         {
             _content = null;
             contentMissed = false;
+            actionObject = null;
+            methodTypeMissed = false;
             if (type == QuickAccessItemType.action && actionObject != null) actionObject.ResetContent();
         }
 

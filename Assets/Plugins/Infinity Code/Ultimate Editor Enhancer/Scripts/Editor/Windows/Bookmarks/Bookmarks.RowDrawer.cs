@@ -24,6 +24,8 @@ namespace InfinityCode.UltimateEditorEnhancer.Windows
 
         private void DrawListElement(Rect rect, int index, bool isactive, bool isfocused)
         {
+            if (index < 0 || index >= activeItems.Count) return;
+
             BookmarkItem item = activeItems[index] as BookmarkItem;
             DrawRow(item, rect);
         }
@@ -47,7 +49,7 @@ namespace InfinityCode.UltimateEditorEnhancer.Windows
             r.xMin = r.xMax - 20;
             r.y += 2;
 
-            if (folderItems == null && GUI.Button(r, closeContent, Styles.transparentButton)) removeItem = item;
+            if (selectedFolderItems == null && item.canBeRemoved && GUI.Button(r, closeContent, Styles.transparentButton)) removeItem = item;
         }
 
         private void DrawRowFirstButton(BookmarkItem item, ref Rect rect)

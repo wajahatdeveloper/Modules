@@ -60,6 +60,21 @@ namespace InfinityCode.UltimateEditorEnhancer.SceneTools.QuickAccessActions
                 GenericMenuEx menu = GenericMenuEx.Start();
                 menu.Add("Save", () => EditorApplication.ExecuteMenuItem("File/Save"));
                 menu.Add("Save As", () => EditorApplication.ExecuteMenuItem("File/Save As..."));
+
+                menu.AddSeparator();
+
+                menu.Add("Autosave/On Entering Playmode", Prefs.saveScenesWhenEnteringPlaymode, () =>
+                {
+                    Prefs.saveScenesWhenEnteringPlaymode = !Prefs.saveScenesWhenEnteringPlaymode;
+                    Prefs.Save();
+                });
+                menu.Add("Autosave/By Timer", Prefs.saveScenesByTimer, () =>
+                {
+                    Prefs.saveScenesByTimer = !Prefs.saveScenesByTimer;
+                    Prefs.Save();
+                });
+                menu.AddSeparator("Autosave/");
+                menu.Add("Autosave/Settings", Settings.OpenSettings);
                 menu.Show();
             }
 

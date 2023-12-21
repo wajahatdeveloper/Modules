@@ -37,6 +37,7 @@ namespace InfinityCode.UltimateEditorEnhancer.Windows
         private bool useX = true;
         private bool useY = true;
         private bool useZ = true;
+        private Vector3 pointUnderCursor;
 
         public static GUIStyle distanceStyle
         {
@@ -208,17 +209,17 @@ namespace InfinityCode.UltimateEditorEnhancer.Windows
 
             if (!lastPointUnderCursor) return;
 
-            if (hasPrev)
+            Event e = Event.current;
+
+            if (hasPrev && e.type == EventType.MouseMove)
             {
-                if (SceneViewManager.lastGameObjectUnderCursor != null)
-                {
-                    totalDistance += GetDistance(SceneViewManager.lastWorldPosition, prevPosition);
-                }
+                Vector3 worldPosition;
+                SceneViewManager.GetWorldPosition(out worldPosition);
+                totalDistance += GetDistance(worldPosition, prevPosition);
             }
 
             isDirty = true;
 
-            Event e = Event.current;
             if (e.type == EventType.KeyDown)
             {
                 if (e.keyCode == KeyCode.Escape)
@@ -233,22 +234,27 @@ namespace InfinityCode.UltimateEditorEnhancer.Windows
         {
             Event e = Event.current;
 
-            if (SceneView.lastActiveSceneView.in2DMode)
+            SceneView view = SceneView.lastActiveSceneView;
+            if (view.in2DMode)
             {
-                Vector3 p = SceneView.lastActiveSceneView.camera.ScreenToWorldPoint(new Vector3(e.mousePosition.x, Screen.height - e.mousePosition.y - 40));
+                Vector3 p = view.camera.ScreenToWorldPoint(new Vector3(e.mousePosition.x, Screen.height - e.mousePosition.y - 40));
                 p.z = 0;
                 return p;
             }
 
-            if (SceneViewManager.lastGameObjectUnderCursor != null)
+            GameObject go = HandleUtility.PickGameObject(e.mousePosition, false);
+
+            if (go != null)
             {
-                if (KeyManager.isKeyDown(KeyCode.V))
+                if (KeyManager.IsKeyDown(KeyCode.V))
                 {
                     Vector3 p;
                     HandleUtilityRef.FindNearestVertex(e.mousePosition, out p);
                     return p;
                 }
-                return SceneViewManager.lastWorldPosition;
+                Vector3 worldPosition;
+                SceneViewManager.GetWorldPosition(out worldPosition);
+                return worldPosition;
             }
 
             return Vector3.zero;
@@ -260,23 +266,23 @@ namespace InfinityCode.UltimateEditorEnhancer.Windows
 
             Event e = Event.current;
 
-            Vector3 point = GetCurrentPoint();
+            if (e.type == EventType.MouseMove) pointUnderCursor = GetCurrentPoint();
             if (hasPrev)
             {
-                DrawLine(prevPosition, point);
+                DrawLine(prevPosition, pointUnderCursor);
             }
             
-            if (!SceneView.lastActiveSceneView.in2DMode && KeyManager.isKeyDown(KeyCode.V))
+            if (!SceneView.lastActiveSceneView.in2DMode && KeyManager.IsKeyDown(KeyCode.V))
             {
-                float handleSize = HandleUtility.GetHandleSize(point);
-                Handles.RectangleHandleCap(-1, point, sceneView.camera.transform.rotation, handleSize * 0.125f, Event.current.type);
+                float handleSize = HandleUtility.GetHandleSize(pointUnderCursor);
+                Handles.RectangleHandleCap(-1, pointUnderCursor, sceneView.camera.transform.rotation, handleSize * 0.125f, Event.current.type);
             }
 
             if (e.type == EventType.MouseDown && e.modifiers == EventModifiers.None)
             {
                 if (e.button == 0)
                 {
-                    AddPoint(point);
+                    AddPoint(pointUnderCursor);
                     SceneViewManager.BlockMouseUp();
                     e.Use();
                 }
@@ -375,13 +381,15 @@ namespace InfinityCode.UltimateEditorEnhancer.Windows
                 return;
             }
 
-            if (e.type == EventType.Repaint)
+            if (e.type == EventType.MouseMove)
             {
-                if (SceneViewManager.lastGameObjectUnderCursor != null)
+                GameObject go = HandleUtility.PickGameObject(e.mousePosition, false);
+                if (go != null)
                 {
-                    Vector3 p = SceneViewManager.lastWorldPosition;
-                    float d = (pickTarget.point - p).sqrMagnitude;
-                    pickTarget.point = p;
+                    Vector3 worldPosition;
+                    SceneViewManager.GetWorldPosition(out worldPosition);
+                    float d = (pickTarget.point - worldPosition).sqrMagnitude;
+                    pickTarget.point = worldPosition;
                     if (d > 0) Repaint();
                 }
                 else if (sceneView.in2DMode)

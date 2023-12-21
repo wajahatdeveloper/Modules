@@ -12,10 +12,13 @@ namespace InfinityCode.UltimateEditorEnhancer.HierarchyTools
     [InitializeOnLoad]
     public static class BestIconDrawer
     {
+        private const double CACHE_LIFE_TIME_SEC = 5;
+        
         private static Texture _prefabIcon;
         private static Texture _unityLogoTexture;
         private static HashSet<int> hierarchyWindows;
         private static bool inited = false;
+        private static Dictionary<int, CachedTexture> cachedTextures = new Dictionary<int, CachedTexture>();
 
         private static Texture prefabIcon
         {
@@ -30,7 +33,7 @@ namespace InfinityCode.UltimateEditorEnhancer.HierarchyTools
         {
             get
             {
-                if (_unityLogoTexture == null) _unityLogoTexture = EditorIconContents.sceneAsset.image;
+                if (_unityLogoTexture == null) _unityLogoTexture = EditorIconContents.unityLogo.image;
                 return _unityLogoTexture;
             }
         }
@@ -38,7 +41,7 @@ namespace InfinityCode.UltimateEditorEnhancer.HierarchyTools
         static BestIconDrawer()
         {
             hierarchyWindows = new HashSet<int>();
-            HierarchyItemDrawer.Register("BestIconDrawer", DrawItem);
+            HierarchyItemDrawer.Register("BestIconDrawer", DrawItem, HierarchyToolOrder.BEST_ICON);
         }
 
         private static void DrawItem(HierarchyItem item)
@@ -70,7 +73,7 @@ namespace InfinityCode.UltimateEditorEnhancer.HierarchyTools
             GUI.DrawTexture(iconRect, texture, ScaleMode.ScaleToFit);
         }
 
-        private static Texture GetGameObjectIcon(HierarchyItem item, GameObject go)
+        public static Texture GetGameObjectIcon(GameObject go)
         {
             if (go.tag == "Collection")
             {
@@ -82,10 +85,9 @@ namespace InfinityCode.UltimateEditorEnhancer.HierarchyTools
 
             if (textureName == "d_Prefab Icon" || textureName == "Prefab Icon")
             {
-                return prefabIcon;
+                if (PrefabUtility.IsAnyPrefabInstanceRoot(go)) return prefabIcon;
             }
-
-            if (textureName != "d_GameObject Icon" && textureName != "GameObject Icon")
+            else if (textureName != "d_GameObject Icon" && textureName != "GameObject Icon")
             {
                 return texture;
             }
@@ -104,8 +106,11 @@ namespace InfinityCode.UltimateEditorEnhancer.HierarchyTools
                         {
                             Component c = components[3];
                             texture = AssetPreview.GetMiniThumbnail(c);
-                            textureName = texture.name;
-                            if (textureName != "cs Script Icon" && textureName != "d_cs Script Icon") best = c;
+                            if (texture != null)
+                            {
+                                textureName = texture.name;
+                                if (textureName != "cs Script Icon" && textureName != "d_cs Script Icon") best = c;
+                            }
                         }
                     }
                 }
@@ -121,7 +126,26 @@ namespace InfinityCode.UltimateEditorEnhancer.HierarchyTools
         private static bool GetTexture(HierarchyItem item, out Texture texture)
         {
             texture = null;
-            if (item.gameObject != null) texture = GetGameObjectIcon(item, item.gameObject);
+            CachedTexture cachedTexture;
+            if (cachedTextures.TryGetValue(item.id, out cachedTexture))
+            {
+                if (EditorApplication.timeSinceStartup - cachedTexture.time < CACHE_LIFE_TIME_SEC)
+                {
+                    texture = cachedTexture.texture;
+                    return true; 
+                }
+                cachedTextures.Remove(item.id);
+            }
+
+            if (item.gameObject != null)
+            {
+                texture = GetGameObjectIcon(item.gameObject);
+                cachedTextures.Add(item.id, new CachedTexture
+                {
+                    texture = texture,
+                    time = EditorApplication.timeSinceStartup
+                });
+            }
             else if (item.target == null) texture = unityLogoTexture;
             else return false;
 
@@ -156,6 +180,12 @@ namespace InfinityCode.UltimateEditorEnhancer.HierarchyTools
 
             EditorWindow w = EditorUtility.InstanceIDToObject(wid) as EditorWindow;
             if (w != null) HierarchyHelper.SetDefaultIconsSize(w);
+        }
+        
+        internal class CachedTexture
+        {
+            public Texture texture;
+            public double time;
         }
     }
 }
