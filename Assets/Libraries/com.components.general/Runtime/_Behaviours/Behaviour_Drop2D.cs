@@ -5,7 +5,7 @@ using UnityEngine.Events;
 
 [RequireComponent(typeof(Rigidbody2D))]
 [RequireComponent(typeof(BoxCollider2D))]
-public class Drop2D : MonoBehaviour
+public class Behaviour_Drop2D : MonoBehaviour
 {
 	public UnityEvent<GameObject> onDrop;
 
@@ -20,7 +20,7 @@ public class Drop2D : MonoBehaviour
 	private void Update()
 	{
 		if (droppedObject == null) { return; }
-		if (droppedObject.GetComponent<Drag2D>() == null) { return; }
+		if (droppedObject.GetComponent<Behaviour_Drag2D>() == null) { return; }
 		if (Input.GetMouseButtonUp(0))
 		{
 			onDrop?.Invoke(droppedObject);

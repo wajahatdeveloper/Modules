@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.Events;
 
 [RequireComponent(typeof(BoxCollider2D))]
-public class Drag2D : MonoBehaviour
+public class Behaviour_Drag2D : MonoBehaviour
 {
 	public UnityEvent onDrag;
 	public UnityEvent onDragStart;

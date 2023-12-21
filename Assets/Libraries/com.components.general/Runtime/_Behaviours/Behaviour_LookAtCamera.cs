@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 using System.Collections;
  
-public class Billboard : MonoBehaviour
+public class Behaviour_LookAtCamera : MonoBehaviour
 {
     private Camera cameraToLookAt;
 

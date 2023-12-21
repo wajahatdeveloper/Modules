@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Destroy : MonoBehaviour
+public class Action_Destroy : MonoBehaviour
 {
 	public float delay = 0.0f;
 	public bool isRealtime = false;
