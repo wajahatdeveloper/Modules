@@ -5,7 +5,7 @@ public class AutoReferencer<T> : MonoBehaviour where T : AutoReferencer<T> {
 
 #if UNITY_EDITOR
     // This method is called once when we add component do game object
-    protected new virtual void Reset()
+    protected virtual void Reset()
     {
         // Magic of reflection
         // For each field in your class/component we are looking only for those that are empty/null

@@ -1,8 +1,9 @@
 
     using System;
     using System.Text;
+    using UnityEngine;
 
-    [AttributeUsage(AttributeTargets.Class)]
+    [AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
     public class RunBefore : Attribute
     {
         private Type[] _deps; /* dependants */
@@ -17,6 +18,24 @@
 
         public RunBefore(params Type[] deps)
         {
+            if (deps is null)
+            {
+                throw new ArgumentNullException(nameof(deps));
+            }
+
+            foreach (Type type in deps)
+            {
+                if (type is null)
+                {
+                    throw new ArgumentNullException(nameof(type));
+                }
+
+                if (!typeof(MonoBehaviour).IsAssignableFrom(type))
+                {
+                    throw new Exception(string.Format("The type '{0}' is not assignable from a {1}.", type.Name, typeof(MonoBehaviour).Name));
+                }
+            }
+
             this._deps = deps;
         }
 

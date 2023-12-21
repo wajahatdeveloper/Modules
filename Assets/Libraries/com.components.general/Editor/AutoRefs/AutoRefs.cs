@@ -10,6 +10,7 @@ using UnityEditor.Callbacks;
 public class AutoRefs : Editor
 {
 	[MenuItem("Hub/Editor/Set AutoRefs")]
+	[MenuItem("CONTEXT/MonoBehaviour/Set AutoRefs")]
 	static void GetAutoRefs()
 	{
 		// Get all game objects.
@@ -25,15 +26,27 @@ public class AutoRefs : Editor
 			// Get all MonoBehaviours attached to the current GameObject.
 			MonoBehaviour[] acMonoBehaviours = cGameObject.GetComponents<MonoBehaviour>();
 
-			// Register the MonoBehaviours with the Undo system.
-			if (acMonoBehaviours != null)
+			foreach (MonoBehaviour behaviour in acMonoBehaviours)
 			{
-				Undo.RecordObjects(acMonoBehaviours, "AutoRefs MonoBehaviours");
+				if (behaviour == null)
+				{
+					continue;
+				}
+
+				Undo.RecordObject(behaviour, "AutoRefs MonoBehaviours");
 			}
+
+			// Register the MonoBehaviours with the Undo system.
+			//* Undo.RecordObjects(acMonoBehaviours, "AutoRefs MonoBehaviours");
 
 			for (int nMonoBehaviour = 0; nMonoBehaviour < acMonoBehaviours.Length; nMonoBehaviour++)
 			{
 				MonoBehaviour cMonoBehaviour = acMonoBehaviours[nMonoBehaviour];
+
+				if (cMonoBehaviour == null)
+				{
+					continue;
+				}
 
 				// Get the type of the MonoBehaviour.
 				Type cType = cMonoBehaviour.GetType();

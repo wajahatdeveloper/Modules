@@ -23,7 +23,7 @@ Supported target types are as follows:
 - Scene: The reference/references exist on any GameObject found within the same scene file.
 - NamedGameObjects: The reference/references exist on the GameObjects named in the [AutoRef] attribute.
 
-To set the references automatically either select the "Tools/AutoRefs/Set AutoRefs" option in the Unity inspector menu, press the play button or build the project. By selecting the "Hub/Set AutoRefs" menu option, the references are set without the Unity player running, which allows the references found to be saved into the scene file. The other methods will set the references but will not save them as the references are set at runtime. After exiting the player runtime, the changes are discarded and the references will appear as unassigned in the Unity inspector again.
+To set the references automatically either select the "Tools/AutoRefs/Set AutoRefs" option in the Unity inspector menu, press the play button or build the project. By selecting the "Tools/AutoRefs/Set AutoRefs" menu option, the references are set without the Unity player running, which allows the references found to be saved into the scene file. The other methods will set the references but will not save them as the references are set at runtime. After exiting the player runtime, the changes are discarded and the references will appear as unassigned in the Unity inspector again.
 
 
 == Example ==
