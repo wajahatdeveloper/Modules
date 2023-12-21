@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.Video;
 using System.Linq;
 
-public class VideoLoad : MonoBehaviour
+public class Action_LoadVideo : MonoBehaviour
 {
     public VideoPlayer bgVideo;
     public GameObject[] objectsToEnable;
