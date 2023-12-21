@@ -9,6 +9,626 @@ using UnityEngine;
 public static class RectTransformExtensions
 {
 	/// <summary>
+    /// The normalized position in the parent RectTransform that the corners is anchored to.
+    /// </summary>
+    /// <returns>A MinMax01 defining the normalized position in the parent RectTransform that the corners is anchored to.</returns>
+    public static MinMax01 GetAnchors(this RectTransform rt)
+    {
+      return new MinMax01(rt.anchorMin, rt.anchorMax);
+    }
+
+
+    /// <summary>
+    /// Sets the normalized position in the parent RectTransform that the corners is anchored to.
+    /// </summary>
+    public static void SetAnchors(this RectTransform rt, MinMax01 anchors)
+    {
+      rt.anchorMin = anchors.min;
+      rt.anchorMax = anchors.max;
+    }
+
+    /// <summary>
+    /// The RecTransform parent of the RectTransform.
+    /// </summary>
+    /// <returns>The RecTransform parent of the RectTransform.</returns>
+    public static RectTransform GetParent(this RectTransform rt)
+    {
+      return rt.parent as RectTransform;
+    }
+
+    /// <summary>
+    /// Sets the width and the height of the RectTransform keeping the current anchors.
+    /// </summary>
+    /// <param name="width">The desired width of the RectTransform</param>
+    /// <param name="height">The desired height of the RectTransform</param>
+    public static void SetSize(this RectTransform rt, float width, float height)
+    {
+      rt.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, width);
+      rt.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, height);
+    }
+
+    /// <summary>
+    /// The center of the left edge.
+    /// </summary>
+    /// <returns>The center of the left edge.</returns>
+    public static Vector2 GetLeft(this RectTransform rt)
+    {
+      return new Vector2(rt.offsetMin.x, rt.anchoredPosition.y);
+    }
+
+    /// <summary>
+    /// The center of the right edge.
+    /// </summary>
+    /// <returns>The center of the right edge.</returns>
+    public static Vector2 GetRight(this RectTransform rt)
+    {
+      return new Vector2(rt.offsetMax.x, rt.anchoredPosition.y);
+    }
+
+    /// <summary>
+    /// The center of the top edge.
+    /// </summary>
+    /// <returns>The center of the top edge.</returns>
+    public static Vector2 GetTop(this RectTransform rt)
+    {
+      return new Vector2(rt.anchoredPosition.x, rt.offsetMax.y);
+    }
+
+    /// <summary>
+    /// The center of the bottom edge.
+    /// </summary>
+    /// <returns>The center of the bottom edge.</returns>
+    public static Vector2 GetBottom(this RectTransform rt)
+    {
+      return new Vector2(rt.anchoredPosition.x, rt.offsetMin.y);
+    }
+
+
+    // Set[edgeName](float) is similar to setting the "Left" etc variables in the inspector.  Unlike the inspector, these
+    // can be used regardless of anchor position.  Be warned, there's a reason the functionality
+    // is hidden in the editor, as the behavior is unintuitive when adjusting the parent's rect.
+    // If you're calling these every frame or otherwise updating frequently, shouldn't be a problem, though.
+    //
+    //Keep in mind that these functions all use standard directions when determining positioning; this means
+    // that unlike the inspector, positive ALWAYS means to the right/top, and negative ALWAYS means to the left/
+    // bottom.  If you want true inspector functionality, use Left() and so on, below.
+    //
+    //E.g., SetLeftEdge(-10) will turn
+    /*
+        .__________.
+        |          |
+        |          |
+        |   [ ]    |
+        |          |
+        |__________|
+
+            into
+        .__________.
+        |          |
+        |          |
+      [       ]    |
+        |          |
+        |__________|
+
+      [ ] is the RectTransform, the bigger square is the parent
+    */
+
+    // Truly matches the functionality of the "Left" etc property in the inspector. This means that
+    // Right(10) will actually move the right edge to 10 units from the LEFT of the parent's right edge.
+    // In other words, all coordinates are "inside": they measure distance from the parent's edge to the inside of the parent.
+    /// <summary>
+    /// Moves the edge to a distance towards the center from the same edge of the parent.
+    /// </summary>
+    /// <param name="distance"></param>
+    public static void Left(this RectTransform rt, float distance)
+    {
+      rt.SetLeft(distance);
+    }
+    /// <summary>
+    /// Moves the edge to a distance towards the center from the same edge of the parent.
+    /// </summary>
+    /// <param name="distance"></param>
+    public static void Right(this RectTransform rt, float distance)
+    {
+      rt.SetRight(-distance);
+    }
+    /// <summary>
+    /// Moves the edge to a distance towards the center from the same edge of the parent.
+    /// </summary>
+    /// <param name="distance"></param>
+    public static void Top(this RectTransform rt, float distance)
+    {
+      rt.SetTop(-distance);
+    }
+    /// <summary>
+    /// Moves the edge to a distance towards the center from the same edge of the parent.
+    /// </summary>
+    /// <param name="distance"></param>
+    public static void Bottom(this RectTransform rt, float distance)
+    {
+      rt.SetRight(distance);
+    }
+
+
+    /// <summary>
+    /// Repositions the requested edge relative to the passed anchor.
+    /// </summary>
+    /// <param name="anchor">The anchor to get the relative from.</param>
+    /// <param name="distance">The distance to be moved to.</param>
+    public static void SetLeftFrom(this RectTransform rt, MinMax01 anchor, float distance)
+    {
+      Vector2 origin = rt.AnchorToParentSpace(anchor.min - rt.anchorMin);
+
+      rt.offsetMin = new Vector2(origin.x + distance, rt.offsetMin.y);
+    }
+    /// <summary>
+    /// Repositions the requested edge relative to the passed anchor.
+    /// </summary>
+    /// <param name="anchor">The anchor to get the relative from.</param>
+    /// <param name="distance">The distance to be moved to.</param>
+    public static void SetRightFrom(this RectTransform rt, MinMax01 anchor, float distance)
+    {
+      Vector2 origin = rt.AnchorToParentSpace(anchor.max - rt.anchorMax);
+
+      rt.offsetMax = new Vector2(origin.x + distance, rt.offsetMax.y);
+    }
+    /// <summary>
+    /// Repositions the requested edge relative to the passed anchor.
+    /// </summary>
+    /// <param name="anchor">The anchor to get the relative from.</param>
+    /// <param name="distance">The distance to be moved to.</param>
+    public static void SetTopFrom(this RectTransform rt, MinMax01 anchor, float distance)
+    {
+      Vector2 origin = rt.AnchorToParentSpace(anchor.max - rt.anchorMax);
+
+      rt.offsetMax = new Vector2(rt.offsetMax.x, origin.y + distance);
+    }
+    /// <summary>
+    /// Repositions the requested edge relative to the passed anchor.
+    /// </summary>
+    /// <param name="anchor">The anchor to get the relative from.</param>
+    /// <param name="distance">The distance to be moved to.</param>
+    public static void SetBottomFrom(this RectTransform rt, MinMax01 anchor, float distance)
+    {
+      Vector2 origin = rt.AnchorToParentSpace(anchor.min - rt.anchorMin);
+
+      rt.offsetMin = new Vector2(rt.offsetMin.x, origin.y + distance);
+    }
+
+
+
+    /// <summary>
+    /// Moves the edge to the requested position relative to the current position.
+    /// <para>Using these functions repeatedly will result in unintuitive behavior, since the anchored position is getting changed with each call.</para>
+    /// </summary>
+    /// <param name="rt"></param>
+    /// <param name="distance">The distance you to displace the left edge.</param>
+    public static void SetRelativeLeft(this RectTransform rt, float distance)
+    {
+      rt.offsetMin = new Vector2(rt.anchoredPosition.x + distance, rt.offsetMin.y);
+    }
+    /// <summary>
+    /// Moves the edge to the requested position relative to the current position.
+    /// <para>Using these functions repeatedly will result in unintuitive behavior, since the anchored position is getting changed with each call.</para>
+    /// </summary>
+    /// <param name="rt"></param>
+    /// <param name="distance">The distance you to displace the right edge.</param>
+    public static void SetRelativeRight(this RectTransform rt, float distance)
+    {
+      rt.offsetMax = new Vector2(rt.anchoredPosition.x + distance, rt.offsetMax.y);
+    }
+    /// <summary>
+    /// Moves the edge to the requested position relative to the current position.
+    /// <para>Using these functions repeatedly will result in unintuitive behavior, since the anchored position is getting changed with each call.</para>
+    /// </summary>
+    /// <param name="rt"></param>
+    /// <param name="distance">The distance you to displace the top edge.</param>
+    public static void SetRelativeTop(this RectTransform rt, float distance)
+    {
+      rt.offsetMax = new Vector2(rt.offsetMax.x, rt.anchoredPosition.y + distance);
+    }
+    /// <summary>
+    /// Moves the edge to the requested position relative to the current position.
+    /// <para>Using these functions repeatedly will result in unintuitive behavior, since the anchored position is getting changed with each call.</para>
+    /// </summary>
+    /// <param name="rt"></param>
+    /// <param name="distance">The distance you to displace the bottom edge.</param>
+    public static void SetRelativeBottom(this RectTransform rt, float distance)
+    {
+      rt.offsetMin = new Vector2(rt.offsetMin.x, rt.anchoredPosition.y + distance);
+    }
+
+
+
+    //E.g., MoveLeft(0) will look like this:
+    /*
+        .__________.
+        |          |
+        |          |
+       [|]         |
+        |          |
+        |__________|
+    */
+    /// <summary>
+    /// Sets the position of the RectTransform relative to the parent's Left side, regardless of anchor setting.
+    /// </summary>
+    /// <param name="left">Sets the position of the RectTransform relative to the parent's Left side.</param>
+    public static void MoveLeft(this RectTransform rt, float left = 0)
+    {
+      float xmin = rt.GetParent().rect.xMin;
+      float center = rt.anchorMax.x - rt.anchorMin.x;
+      float anchorFactor = rt.anchorMax.x * 2 - 1;
+      rt.anchoredPosition = new Vector2(xmin + (xmin * anchorFactor) + left - (center * xmin), rt.anchoredPosition.y);
+    }
+    /// <summary>
+    /// Sets the position of the RectTransform relative to the parent's Right side, regardless of anchor setting.
+    /// </summary>
+    /// <param name="right">Sets the position of the RectTransform relative to the parent's Right side.</param>
+    public static void MoveRight(this RectTransform rt, float right = 0)
+    {
+      float xmax = rt.GetParent().rect.xMax;
+      float center = rt.anchorMax.x - rt.anchorMin.x;
+      float anchorFactor = rt.anchorMax.x * 2 - 1;
+      rt.anchoredPosition = new Vector2(xmax - (xmax * anchorFactor) - right + (center * xmax), rt.anchoredPosition.y);
+    }
+    /// <summary>
+    /// Sets the position of the RectTransform relative to the parent's Top side, regardless of anchor setting.
+    /// </summary>
+    /// <param name="top">Sets the position of the RectTransform relative to the parent's Top side.</param>
+    public static void MoveTop(this RectTransform rt, float top = 0)
+    {
+      float ymax = rt.GetParent().rect.yMax;
+      float center = rt.anchorMax.y - rt.anchorMin.y;
+      float anchorFactor = rt.anchorMax.y * 2 - 1;
+      rt.anchoredPosition = new Vector2(rt.anchoredPosition.x, ymax - (ymax * anchorFactor) - top + (center * ymax));
+    }
+    /// <summary>
+    /// Sets the position of the RectTransform relative to the parent's Bottom side, regardless of anchor setting.
+    /// </summary>
+    /// <param name="bottom">Sets the position of the RectTransform relative to the parent's Bottom side.</param>
+    public static void MoveBottom(this RectTransform rt, float bottom = 0)
+    {
+      float ymin = rt.GetParent().rect.yMin;
+      float center = rt.anchorMax.y - rt.anchorMin.y;
+      float anchorFactor = rt.anchorMax.y * 2 - 1;
+      rt.anchoredPosition = new Vector2(rt.anchoredPosition.x, ymin + (ymin * anchorFactor) + bottom - (center * ymin));
+    }
+
+
+
+    //Moves the RectTransform to align the child left edge with the parent left edge, etc.
+    //E.g., MoveLeftInside(0) will look like this:
+    /*
+        .__________.
+        |          |
+        |          |
+        [ ]        |
+        |          |
+        |__________|
+    */
+    /// <summary>
+    /// Moves the RectTransform to align the child left edge with the parent left edge.
+    /// </summary>
+    /// <param name="distance">The distance to the parent left edge.</param>
+    public static void MoveLeftInside(this RectTransform rt, float distance = 0)
+    {
+      rt.MoveLeft(distance + rt.GetWidth() / 2);
+    }
+    /// <summary>
+    /// Moves the RectTransform to align the child left edge with the parent right edge.
+    /// </summary>
+    /// <param name="distance">The distance to the parent right edge.</param>
+    public static void MoveRightInside(this RectTransform rt, float distance = 0)
+    {
+      rt.MoveRight(distance + rt.GetWidth() / 2);
+    }
+    /// <summary>
+    /// Moves the RectTransform to align the child left edge with the parent left top.
+    /// </summary>
+    /// <param name="distance">The distance to the parent top edge.</param>
+    public static void MoveTopInside(this RectTransform rt, float distance = 0)
+    {
+      rt.MoveTop(distance + rt.GetHeight() / 2);
+    }
+    /// <summary>
+    /// Moves the RectTransform to align the child left edge with the parent bottom edge.
+    /// </summary>
+    /// <param name="distance">The distance to the parent bottom edge.</param>
+    public static void MoveBottomInside(this RectTransform rt, float distance = 0)
+    {
+      rt.MoveBottom(distance + rt.GetHeight() / 2);
+    }
+
+
+    //Moves the RectTransform to align the child right edge with the parent left edge, etc
+    //E.g., MoveLeftOutside(0) will look like this:
+    /*
+        .__________.
+        |          |
+        |          |
+      [ ]          |
+        |          |
+        |__________|
+    */
+    /// <summary>
+    /// Moves the RectTransform to align the right edge with the parent left edge.
+    /// </summary>
+    /// <param name="rt"></param>
+    /// <param name="distance">The distance between the edges</param>
+    public static void MoveLeftOutside(this RectTransform rt, float distance = 0)
+    {
+      rt.MoveLeft(distance - rt.GetWidth() / 2);
+    }
+    /// <summary>
+    /// Moves the RectTransform to align the left edge with the parent right edge.
+    /// </summary>
+    /// <param name="distance">The distance between the edges</param>
+    public static void MoveRightOutside(this RectTransform rt, float distance = 0)
+    {
+      rt.MoveRight(distance - rt.GetWidth() / 2);
+    }
+    /// <summary>
+    /// Moves the RectTransform to align the bottom edge with the parent top edge.
+    /// </summary>
+    /// <param name="distance">The distance between the edges</param>
+    public static void MoveTopOutside(this RectTransform rt, float distance = 0)
+    {
+      rt.MoveTop(distance - rt.GetHeight() / 2);
+    }
+    /// <summary>
+    /// Moves the RectTransform to align the top edge with the parent bottom edge.
+    /// </summary>
+    /// <param name="distance">The distance between the edges</param>
+    public static void MoveBottomOutside(this RectTransform rt, float distance = 0)
+    {
+      rt.MoveBottom(distance - rt.GetHeight() / 2);
+    }
+
+
+    /// <summary>
+    /// Moves the RectTransform to the given point in parent space, considering (0, 0) to be the parent's lower-left corner.
+    /// </summary>
+    /// <param name="x">X coordinate of the point to move the RectTransform to.</param>
+    /// <param name="y">Y coordinate of the point to move the RectTransform to.</param>
+    public static void Move(this RectTransform rt, float x, float y)
+    {
+      rt.MoveLeft(x);
+      rt.MoveBottom(y);
+    }
+    /// <summary>
+    /// Moves the RectTransform to the given point in parent space, considering (0, 0) to be the parent's lower-left corner.
+    /// </summary>
+    /// <param name="point">The point to move the RectTransform to.</param>
+    public static void Move(this RectTransform rt, Vector2 point)
+    {
+      rt.MoveLeft(point.x);
+      rt.MoveBottom(point.y);
+    }
+
+
+    /// <summary>
+    /// Moves the RectTransform relative to the parent's lower-le1ft corner, respecting the RT's width and height.
+    /// <para>See MoveLeftInside for more information.</para>
+    /// </summary>
+    /// <param name="x">X coordinate of the point to move the RectTransform to.</param>
+    /// <param name="y">Y coordinate of the point to move the RectTransform to.</param>
+    public static void MoveInside(this RectTransform rt, float x, float y)
+    {
+      rt.MoveLeftInside(x);
+      rt.MoveBottomInside(y);
+    }
+    /// <summary>
+    /// Moves the RectTransform relative to the parent's lower-le1ft corner, respecting the RT's width and height.
+    /// <para>See MoveLeftInside for more information.</para>
+    /// </summary>
+    /// <param name="point">The point to move the RectTransform to.</param>
+    public static void MoveInside(this RectTransform rt, Vector2 point)
+    {
+      rt.MoveLeftInside(point.x);
+      rt.MoveBottomInside(point.y);
+    }
+
+
+    /// <summary>
+    /// Moves the RectTransform relative to the parent's lower-left corner, respecting the RT's width and height.
+    /// <para>See MoveLeftOutside for more information.</para>
+    /// </summary>
+    /// <param name="x">X coordinate of the point to move the RectTransform to.</param>
+    /// <param name="y">Y coordinate of the point to move the RectTransform to.</param>
+    public static void MoveOutside(this RectTransform rt, float x, float y)
+    {
+      rt.MoveLeftOutside(x);
+      rt.MoveBottomOutside(y);
+    }
+    /// <summary>
+    /// Moves the RectTransform relative to the parent's lower-left corner, respecting the RT's width and height.
+    /// <para>See MoveLeftOutside for more information.</para>
+    /// </summary>
+    /// <param name="point">The point to move the RectTransform to.</param>
+    public static void MoveOutside(this RectTransform rt, Vector2 point)
+    {
+      rt.MoveLeftOutside(point.x);
+      rt.MoveBottomOutside(point.y);
+    }
+
+
+    /// <summary>
+    /// Moves the RectTransform relative to an arbitrary anchor point.  This is effectively like setting the anchor, then moving, then setting it back, but does so without potentially getting in the way of anything else.
+    /// </summary>
+    public static void MoveFrom(this RectTransform rt, MinMax01 anchor, Vector2 point)
+    {
+      rt.MoveFrom(anchor, point.x, point.y);
+    }
+    /// <summary>
+    /// Moves the RectTransform relative to an arbitrary anchor point.  This is effectively like setting the anchor, then moving, then setting it back, but does so without potentially getting in the way of anything else.
+    /// </summary>
+    /// <param name="rt"></param>
+    public static void MoveFrom(this RectTransform rt, MinMax01 anchor, float x, float y)
+    {
+      Vector2 origin = rt.AnchorToParentSpace(AnchorOrigin(anchor) - rt.AnchorOrigin());
+      rt.anchoredPosition = new Vector2(origin.x + x, origin.y + y);
+    }
+
+
+    /// <summary>
+    /// Translates a point on the parent's frame of reference, with (0, 0) being the parent's lower-left hand corner, into the same point relative to the RectTransform's current anchor.
+    /// </summary>
+    /// <param name="point">The point to translate.</param>
+    /// <returns>The translated point.</returns>
+    public static Vector2 ParentToChildSpace(this RectTransform rt, Vector2 point)
+    {
+      return rt.ParentToChildSpace(point.x, point.y);
+    }
+    /// <summary>
+    /// Translates a point on the parent's frame of reference, with (0, 0) being the parent's lower-left hand corner, into the same point relative to the RectTransform's current anchor.
+    /// </summary>
+    /// <param name="x">X coordinate of the point to translate.</param>
+    /// <param name="y">Y coordinate of the point to translate.</param>
+    /// <returns>The translated point.</returns>
+    public static Vector2 ParentToChildSpace(this RectTransform rt, float x, float y)
+    {
+      float xmin = rt.GetParent().rect.xMin;
+      float ymin = rt.GetParent().rect.yMin;
+      float anchorFactorX = rt.anchorMin.x * 2 - 1;
+      float anchorFactorY = rt.anchorMin.y * 2 - 1;
+      return new Vector2(xmin + (xmin * anchorFactorX) + x, ymin + (ymin * anchorFactorY) + y);
+    }
+
+
+    /// <summary>
+    /// Translates a point (presumably the RectTransform's anchoredPosition) into the same point on the parent's frame of reference, with (0, 0) being the parent's lower-left hand corner.
+    /// </summary>
+    /// <param name="x">X coordinate of the point to translate.</param>
+    /// <param name="y">Y coordinate of the point to translate.</param>
+    /// <returns>The translated point.</returns>
+    public static Vector2 ChildToParentSpace(this RectTransform rt, float x, float y)
+    {
+      return rt.AnchorOriginParent() + new Vector2(x, y);
+    }
+    /// <summary>
+    /// Translates a point (presumably the RectTransform's anchoredPosition) into the same point on the parent's frame of reference, with (0, 0) being the parent's lower-left hand corner.
+    /// </summary>
+    /// <param name="point">The point to translate.</param>
+    /// <returns>The translated point.</returns>
+    public static Vector2 ChildToParentSpace(this RectTransform rt, Vector2 point)
+    {
+      return rt.AnchorOriginParent() + point;
+    }
+
+
+    /// <summary>
+    /// Normalizes a point associated with the parent object into "Anchor Space", which is to say, (0, 0) represents the parent's lower-left-hand corner, and (1, 1) represents the upper-right-hand.
+    /// </summary>
+    /// <param name="point">The point to normalize.</param>
+    /// <returns>The normalized point.</returns>
+    public static Vector2 ParentToAnchorSpace(this RectTransform rt, Vector2 point)
+    {
+      return rt.ParentToAnchorSpace(point.x, point.y);
+    }
+    /// <summary>
+    /// Normalizes a point associated with the parent object into "Anchor Space", which is to say, (0, 0) represents the parent's lower-left-hand corner, and (1, 1) represents the upper-right-hand.
+    /// </summary>
+    /// <param name="x">X coordinate of the point to normalize.</param>
+    /// <param name="y">Y coordinate of the point to normalize.</param>
+    /// <returns>The normalized point.</returns>
+    public static Vector2 ParentToAnchorSpace(this RectTransform rt, float x, float y)
+    {
+      Rect parent = rt.GetParent().rect;
+      if (parent.width != 0)
+        x /= parent.width;
+      else
+        x = 0;
+
+      if (parent.height != 0)
+        y /= parent.height;
+      else
+        y = 0;
+
+      return new Vector2(x, y);
+    }
+
+
+    /// <summary>
+    /// Translates a normalized "Anchor Space" coordinate into a real point on the parent's reference system.
+    /// </summary>
+    /// <param name="x">X coordinate of a normalized point set in "Anchor Space".</param>
+    /// <param name="y">Y coordinate of a normalized point set in "Anchor Space".</param>
+    /// <returns>The anchor space coordinate as a real point on the parent's reference</returns>
+    public static Vector2 AnchorToParentSpace(this RectTransform rt, float x, float y)
+    {
+      return new Vector2(x * rt.GetParent().rect.width, y * rt.GetParent().rect.height);
+    }
+    /// <summary>
+    /// Translates a normalized "Anchor Space" coordinate into a real point on the parent's reference system.
+    /// </summary>
+    /// <param name="point">A normalized "Anchor Space" point of a normalized point set in "Anchor Space".</param>
+    /// <returns>The anchor space coordinate as a real point on the parent's reference</returns>
+    public static Vector2 AnchorToParentSpace(this RectTransform rt, Vector2 point)
+    {
+      return new Vector2(point.x * rt.GetParent().rect.width, point.y * rt.GetParent().rect.height);
+    }
+
+
+
+    /// <summary>
+    /// The center of the rectangle the two anchors represent, which is the origin that a RectTransform's anchoredPosition is an offset of.
+    /// </summary>
+    /// <returns>The center of the rectangle the two anchors represent.</returns>
+    public static Vector2 AnchorOrigin(this RectTransform rt)
+    {
+      return AnchorOrigin(rt.GetAnchors());
+    }
+    /// <summary>
+    /// The center of the rectangle the two anchors represent, which is the origin that a RectTransform's anchoredPosition is an offset of.
+    /// </summary>
+    /// <returns>The center of the rectangle the two anchors represent.</returns>
+    public static Vector2 AnchorOrigin(MinMax01 anchor)
+    {
+      float x = anchor.min.x + (anchor.max.x - anchor.min.x) / 2;
+      float y = anchor.min.y + (anchor.max.y - anchor.min.y) / 2;
+
+      return new Vector2(x, y);
+    }
+
+    /// <summary>
+    /// Translates a RectTransform's anchor origin into Parent space.
+    /// </summary>
+    /// <returns>The anchor origin in parent space.</returns>
+    public static Vector2 AnchorOriginParent(this RectTransform rt)
+    {
+      return Vector2.Scale(rt.AnchorOrigin(), new Vector2(rt.GetParent().rect.width, rt.GetParent().rect.height));
+    }
+
+    /// <summary>
+    /// Returns the top-most-level canvas that this RectTransform is a child of.
+    /// </summary>
+    /// <returns>The top-most-level canvas that this RectTransform is a child of, the root canvas.</returns>
+    public static Canvas GetRootCanvas(this RectTransform rt)
+    {
+      Canvas rootCanvas = rt.GetComponentInParent<Canvas>();
+
+      while (!rootCanvas.isRootCanvas)
+        rootCanvas = rootCanvas.transform.parent.GetComponentInParent<Canvas>();
+
+      return rootCanvas;
+    }
+    
+    /// <summary>
+	/// Converts the anchoredPosition of the first RectTransform to the second RectTransform,
+	/// taking into consideration offset, anchors and pivot, and returns the new anchoredPosition
+	/// </summary>
+	public static Vector2 switchToRectTransform(this RectTransform from, RectTransform to)
+	{
+		Vector2 localPoint;
+		Vector2 fromPivotDerivedOffset = new Vector2(from.rect.width * from.pivot.x + from.rect.xMin, from.rect.height * from.pivot.y + from.rect.yMin);
+		Vector2 screenP = RectTransformUtility.WorldToScreenPoint(null, from.position);
+		screenP += fromPivotDerivedOffset;
+		RectTransformUtility.ScreenPointToLocalPointInRectangle(to, screenP, null, out localPoint);
+		Vector2 pivotDerivedOffset = new Vector2(to.rect.width * to.pivot.x + to.rect.xMin, to.rect.height * to.pivot.y + to.rect.yMin);
+		return to.anchoredPosition + localPoint - pivotDerivedOffset;
+	}
+
+	/// <summary>
 	/// Resets `anchorMin`, `anchorMax`, `offsetMin`, `offsetMax` to `Vector2.zero`.
 	/// </summary>
 	/// <param name="rectTransform">RectTransform to operate with.</param>
@@ -571,4 +1191,25 @@ public enum RectAnchor
 	STRETCH_CENTER = 13,
 	STRETCH_RIGHT = 14,
 	STRETCH_FULL = 15
+}
+
+/// <summary>
+/// Class containing a minimum and max Vectors with its components between 0 and 1
+/// </summary>
+public struct MinMax01
+{
+	public Vector2 min { get; private set; }
+	public Vector2 max { get; private set; }
+
+	public MinMax01(Vector2 min, Vector2 max)
+	{
+		this.min = new Vector2(Mathf.Clamp01(min.x), Mathf.Clamp01(min.y));
+		this.max = new Vector2(Mathf.Clamp01(max.x), Mathf.Clamp01(max.y));
+	}
+
+	public MinMax01(float minx, float miny, float maxx, float maxy)
+	{
+		this.min = new Vector2(Mathf.Clamp01(minx), Mathf.Clamp01(miny));
+		this.max = new Vector2(Mathf.Clamp01(maxx), Mathf.Clamp01(maxy));
+	}
 }

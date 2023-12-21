@@ -15,6 +15,58 @@ using Object = UnityEngine.Object;
 public static class EditorX
 {
 	/// <summary>
+        /// Gets all children of `SerializedProperty` at 1 level depth.
+        /// </summary>
+        /// <param name="serializedProperty">Parent `SerializedProperty`.</param>
+        /// <returns>Collection of `SerializedProperty` children.</returns>
+        public static IEnumerable<SerializedProperty> GetChildren(this SerializedProperty serializedProperty)
+        {
+            SerializedProperty currentProperty = serializedProperty.Copy();
+            SerializedProperty nextSiblingProperty = serializedProperty.Copy();
+            {
+                nextSiblingProperty.Next(false);
+            }
+
+            if (currentProperty.Next(true))
+            {
+                do
+                {
+                    if (SerializedProperty.EqualContents(currentProperty, nextSiblingProperty))
+                        break;
+
+                    yield return currentProperty;
+                }
+                while (currentProperty.Next(false));
+            }
+        }
+
+        /// <summary>
+        /// Gets visible children of `SerializedProperty` at 1 level depth.
+        /// </summary>
+        /// <param name="serializedProperty">Parent `SerializedProperty`.</param>
+        /// <returns>Collection of `SerializedProperty` children.</returns>
+        public static IEnumerable<SerializedProperty> GetVisibleChildren(this SerializedProperty serializedProperty)
+        {
+            SerializedProperty currentProperty = serializedProperty.Copy();
+            SerializedProperty nextSiblingProperty = serializedProperty.Copy();
+            {
+                nextSiblingProperty.NextVisible(false);
+            }
+
+            if (currentProperty.NextVisible(true))
+            {
+                do
+                {
+                    if (SerializedProperty.EqualContents(currentProperty, nextSiblingProperty))
+                        break;
+
+                    yield return currentProperty;
+                }
+                while (currentProperty.NextVisible(false));
+            }
+        }
+
+	/// <summary>
 		/// Draw line with arrows showing direction
 		/// </summary>
 		public static void DrawDirectionalLine(Vector3 fromPos, Vector3 toPos, float screenSpaceSize = 3, float arrowsDensity = .5f)
