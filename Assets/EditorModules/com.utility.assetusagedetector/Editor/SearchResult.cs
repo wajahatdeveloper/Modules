@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 using UnityEditor;
 using UnityEditor.IMGUI.Controls;
@@ -802,7 +803,12 @@ namespace AssetUsageDetectorNamespace
 						}
 					}
 
-					if( Type == GroupType.Scene && !EditorApplication.isPlaying && SceneManager.loadedSceneCount > 1 )
+#if UNITY_2022_2_OR_NEWER
+					int loadedSceneCount = SceneManager.loadedSceneCount;
+#else
+					int loadedSceneCount = EditorSceneManager.loadedSceneCount;
+#endif
+					if( Type == GroupType.Scene && !EditorApplication.isPlaying && loadedSceneCount > 1 )
 					{
 						// Show context menu when SearchResultGroup's header is right clicked
 						Scene scene = EditorSceneManager.GetSceneByPath( ScenePath );
@@ -1174,30 +1180,6 @@ namespace AssetUsageDetectorNamespace
 			}
 		}
 
-		internal bool HasLinkToObjectWithDescriptions( int instanceId, List<string> descriptions )
-		{
-			for( int i = links.Count - 1; i >= 0; i-- )
-			{
-				Link link = links[i];
-				if( link.targetNode.instanceId == instanceId )
-				{
-					List<string> _descriptions = link.descriptions;
-					if( _descriptions.Count != descriptions.Count )
-						return false;
-
-					for( int j = _descriptions.Count - 1; j >= 0; j-- )
-					{
-						if( _descriptions[j] != descriptions[j] )
-							return false;
-					}
-
-					return true;
-				}
-			}
-
-			return false;
-		}
-
 		public void CopyReferencesTo( ReferenceNode other )
 		{
 			other.links.Clear();
@@ -1221,6 +1203,13 @@ namespace AssetUsageDetectorNamespace
 			{
 				instanceId = unityObject.GetInstanceID();
 				Label = unityObject.name + " (" + unityObject.GetType().Name + ")";
+
+				if( AssetUsageDetectorSettings.ShowRootAssetName && unityObject.IsAsset() && !AssetDatabase.IsMainAsset( unityObject ) )
+				{
+					string mainAssetName = Path.GetFileNameWithoutExtension( AssetDatabase.GetAssetPath( unityObject ) );
+					if( unityObject.name != mainAssetName )
+						Label += " <in " + mainAssetName + ">";
+				}
 			}
 			else if( nodeObject != null )
 			{

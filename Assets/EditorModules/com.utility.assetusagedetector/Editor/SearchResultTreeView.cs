@@ -287,25 +287,6 @@ namespace AssetUsageDetectorNamespace
 
 		private bool GenerateRowsRecursive( TreeViewItem parent, ReferenceNode referenceNode, ReferenceNodeData parentData, int siblingIndex, int depth, bool? itemForcedVisibility, List<ReferenceNode> stack, HashSet<ReferenceNode> processedNodes, ref int id )
 		{
-#if UNITY_2018_3_OR_NEWER
-			// If the same reference is found in both a prefab variant and its base prefab, omit the prefab variant to reduce the number of
-			// redundant links (changing the value in base prefab will automatically change the value in its variants, after all)
-			if( hideReduntantPrefabVariantLinks && depth > 0 )
-			{
-				Object unityObject = referenceNode.UnityObject;
-				if( unityObject && ( unityObject is Component || unityObject is GameObject ) && unityObject.IsAsset() )
-				{
-					List<string> linkDescriptions = parentData.node[siblingIndex].descriptions;
-					if( linkDescriptions.Count > 0 )
-					{
-						Object prefabObject = PrefabUtility.GetCorrespondingObjectFromSource( unityObject );
-						if( prefabObject && parentData.node.HasLinkToObjectWithDescriptions( prefabObject.GetInstanceID(), linkDescriptions ) )
-							return false;
-					}
-				}
-			}
-#endif
-
 			TreeViewItem item = new TreeViewItem( id++, depth, "" );
 			ReferenceNodeData data = new ReferenceNodeData( item, referenceNode, parentData, siblingIndex );
 
@@ -966,6 +947,8 @@ namespace AssetUsageDetectorNamespace
 				for( int i = 0; i < item.children.Count; i++ )
 					shouldExpand |= GetMainReferenceIdsRecursive( item.children[i], ids );
 			}
+			else
+				shouldExpand = true; // No main reference is encountered in this branch; expand the whole branch
 
 			if( shouldExpand )
 				ids.Add( item.id );
@@ -1178,7 +1161,7 @@ namespace AssetUsageDetectorNamespace
 				SearchResultTreeView isolatedTreeView = new SearchResultTreeView( new SearchResultTreeViewState(), selectedNodes, TreeType.IsolatedView, null, hideDuplicateRows, hideReduntantPrefabVariantLinks, false );
 				isolatedTreeView.ExpandMainReferences();
 
-				SearchResultTreeViewIsolatedView.Show( new Vector2( EditorWindow.focusedWindow.position.width, isolatedTreeView.totalHeight + 1f ), isolatedTreeView, new GUIContent( selectedNodes[0].Label + ( selectedNodes.Count <= 1 ? "" : ( " (and " + ( selectedNodes.Count - 1 ) + " more)" ) ) ) );
+				SearchResultTreeViewIsolatedView.Show( new Vector2( EditorWindow.focusedWindow.position.width, Mathf.Max( isolatedTreeView.totalHeight, EditorGUIUtility.singleLineHeight * 5f ) + 1f ), isolatedTreeView, new GUIContent( selectedNodes[0].Label + ( selectedNodes.Count <= 1 ? "" : ( " (and " + ( selectedNodes.Count - 1 ) + " more)" ) ) ) );
 			}
 		}
 
@@ -1332,7 +1315,7 @@ namespace AssetUsageDetectorNamespace
 			SearchResultTreeViewIsolatedView window = CreateInstance<SearchResultTreeViewIsolatedView>();
 			window.treeView = treeView;
 			window.titleContent = title;
-			window.ShowAuxWindow();
+			window.Show();
 
 			window.minSize = new Vector2( 150f, Mathf.Min( preferredSize.y, EditorGUIUtility.singleLineHeight * 2f ) );
 			window.position = new Rect( new Vector2( -9999f, -9999f ), preferredSize );

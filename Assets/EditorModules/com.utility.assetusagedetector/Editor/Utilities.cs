@@ -177,6 +177,12 @@ namespace AssetUsageDetectorNamespace
 							selection = objTR.gameObject;
 #endif
 					}
+					else if( prefabAssetType == PrefabAssetType.Model )
+					{
+						objTR = ( (GameObject) obj ).transform;
+						while( objTR.parent != null && objTR.parent.parent != null )
+							objTR = objTR.parent;
+					}
 #else
 					Transform objTR = ( (GameObject) obj ).transform;
 					while( objTR.parent != null && objTR.parent.parent != null )
@@ -410,9 +416,9 @@ namespace AssetUsageDetectorNamespace
 		// Check if all open scenes are saved (not dirty)
 		public static bool AreScenesSaved()
 		{
-			for( int i = 0; i < SceneManager.loadedSceneCount; i++ )
+			for( int i = 0; i < SceneManager.sceneCount; i++ )
 			{
-				Scene scene = EditorSceneManager.GetSceneAt( i );
+				Scene scene = SceneManager.GetSceneAt( i );
 				if( scene.isDirty || string.IsNullOrEmpty( scene.path ) )
 					return false;
 			}

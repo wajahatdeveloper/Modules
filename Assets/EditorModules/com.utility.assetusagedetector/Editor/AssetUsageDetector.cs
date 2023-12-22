@@ -31,6 +31,7 @@ namespace AssetUsageDetectorNamespace
 			public SceneSearchMode searchInScenes = SceneSearchMode.AllScenes;
 			public Object[] searchInScenesSubset = null;
 			public Object[] excludedScenesFromSearch = null;
+			public bool searchInSceneLightingSettings = true;
 			public bool searchInAssetsFolder = true;
 			public Object[] searchInAssetsSubset = null;
 			public Object[] excludedAssetsFromSearch = null;
@@ -162,6 +163,7 @@ namespace AssetUsageDetectorNamespace
 
 			// Get the scenes that are open right now
 			SceneSetup[] initialSceneSetup = !isInPlayMode ? EditorSceneManager.GetSceneManagerSetup() : null;
+			Scene activeScene = EditorSceneManager.GetActiveScene();
 
 			// Make sure that the AssetDatabase is up-to-date
 			AssetDatabase.SaveAssets();
@@ -289,10 +291,10 @@ namespace AssetUsageDetectorNamespace
 					if( ( searchParameters.searchInScenes & SceneSearchMode.OpenScenes ) == SceneSearchMode.OpenScenes )
 					{
 						// Get all open (and loaded) scenes
-						for( int i = 0; i < SceneManager.loadedSceneCount; i++ )
+						for( int i = 0; i < SceneManager.sceneCount; i++ )
 						{
-							Scene scene = EditorSceneManager.GetSceneAt( i );
-							if( scene.IsValid() )
+							Scene scene = SceneManager.GetSceneAt( i );
+							if( scene.IsValid() && scene.isLoaded )
 								scenesToSearch.Add( scene.path );
 						}
 					}
@@ -314,10 +316,10 @@ namespace AssetUsageDetectorNamespace
 				if( isInPlayMode )
 				{
 					HashSet<string> openScenes = new HashSet<string>();
-					for( int i = 0; i < SceneManager.loadedSceneCount; i++ )
+					for( int i = 0; i < SceneManager.sceneCount; i++ )
 					{
-						Scene scene = EditorSceneManager.GetSceneAt( i );
-						if( scene.IsValid() )
+						Scene scene = SceneManager.GetSceneAt( i );
+						if( scene.IsValid() && scene.isLoaded )
 							openScenes.Add( scene.path );
 					}
 
@@ -512,19 +514,30 @@ namespace AssetUsageDetectorNamespace
 						}
 					}
 
+					// Search scenes for references
 					foreach( string scenePath in scenesToSearch )
 					{
 						if( EditorUtility.DisplayCancelableProgressBar( "Please wait...", "Searching scene: " + scenePath, (float) ++searchProgress / searchTotalProgress ) )
 							throw new Exception( "Search aborted" );
 
-						// Search scene for references
 						if( string.IsNullOrEmpty( scenePath ) )
 							continue;
 
 						if( excludedScenesPathsSet.Contains( scenePath ) )
 							continue;
 
-						SearchScene( scenePath, searchResult, searchParameters.lazySceneSearch, initialSceneSetup );
+#if UNITY_2019_2_OR_NEWER
+						// Skip scenes in read-only packages (Issue #36)
+						// Credit: https://forum.unity.com/threads/check-if-asset-inside-package-is-readonly.900902/#post-5990822
+						if( !scenePath.StartsWithFast( "Assets/" ) )
+						{
+							var packageInfo = UnityEditor.PackageManager.PackageInfo.FindForAssetPath( scenePath );
+							if( packageInfo != null && packageInfo.source != UnityEditor.PackageManager.PackageSource.Embedded && packageInfo.source != UnityEditor.PackageManager.PackageSource.Local )
+								continue;
+						}
+#endif
+
+						SearchScene( scenePath, searchResult, searchParameters, initialSceneSetup );
 					}
 				}
 
@@ -606,6 +619,10 @@ namespace AssetUsageDetectorNamespace
 				currentSearchedObject = null;
 
 				EditorUtility.ClearProgressBar();
+
+				// If the active scene was changed during search, reset it
+				if( EditorSceneManager.GetActiveScene() != activeScene )
+					EditorSceneManager.SetActiveScene( activeScene );
 
 #if UNITY_2018_3_OR_NEWER
 				// If a prefab stage was open when the search was triggered, try reopening the prefab stage after the search is completed
@@ -895,7 +912,7 @@ namespace AssetUsageDetectorNamespace
 		}
 
 		// Search a scene for references
-		private void SearchScene( string scenePath, List<SearchResultGroup> searchResult, bool lazySearch, SceneSetup[] initialSceneSetup )
+		private void SearchScene( string scenePath, List<SearchResultGroup> searchResult, Parameters searchParameters, SceneSetup[] initialSceneSetup )
 		{
 			Scene scene = EditorSceneManager.GetSceneByPath( scenePath );
 			if( isInPlayMode && !scene.isLoaded )
@@ -911,7 +928,7 @@ namespace AssetUsageDetectorNamespace
 
 			if( !scene.isLoaded )
 			{
-				if( lazySearch )
+				if( searchParameters.lazySceneSearch )
 				{
 					searchResult.Add( new SearchResultGroup( scenePath, SearchResultGroup.GroupType.Scene, true, true ) );
 					return;
@@ -926,6 +943,16 @@ namespace AssetUsageDetectorNamespace
 			GameObject[] rootGameObjects = scene.GetRootGameObjects();
 			for( int i = 0; i < rootGameObjects.Length; i++ )
 				SearchGameObjectRecursively( rootGameObjects[i] );
+
+			// Search through Lighting Settings (it requires changing the active scene but don't do that in play mode)
+			if( searchParameters.searchInSceneLightingSettings && ( !isInPlayMode || SceneManager.GetActiveScene() == scene ) )
+			{
+				if( !isInPlayMode && EditorSceneManager.GetActiveScene() != scene )
+					EditorSceneManager.SetActiveScene( scene );
+
+				BeginSearchObject( lightmapSettingsGetter() );
+				BeginSearchObject( renderSettingsGetter() );
+			}
 
 			// If no references are found in the scene and if the scene is not part of the initial scene setup, close it
 			if( currentSearchResultGroup.NumberOfReferences == 0 )

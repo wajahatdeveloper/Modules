@@ -205,6 +205,12 @@ namespace AssetUsageDetectorNamespace
 		private readonly FieldInfoGetter fieldInfoGetter = (FieldInfoGetter) Delegate.CreateDelegate( typeof( FieldInfoGetter ), typeof( Editor ).Assembly.GetType( "UnityEditor.ScriptAttributeUtility" ).GetMethod( "GetFieldInfoFromProperty", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static ) );
 #endif
 
+		private readonly Func<Object> lightmapSettingsGetter = (Func<Object>) Delegate.CreateDelegate( typeof( Func<Object> ), typeof( LightmapEditorSettings ).GetMethod( "GetLightmapSettings", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static ) );
+		private readonly Func<Object> renderSettingsGetter = (Func<Object>) Delegate.CreateDelegate( typeof( Func<Object> ), typeof( RenderSettings ).GetMethod( "GetRenderSettings", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static ) );
+#if UNITY_2021_2_OR_NEWER
+		private readonly Func<Cubemap> defaultReflectionProbeGetter = (Func<Cubemap>) Delegate.CreateDelegate( typeof( Func<Cubemap> ), typeof( RenderSettings ).GetProperty( "defaultReflection", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static ).GetGetMethod( true ) );
+#endif
+
 #if ASSET_USAGE_ADDRESSABLES
 		private readonly Func<SpriteAtlas, Sprite[]> spriteAtlasPackedSpritesGetter = (Func<SpriteAtlas, Sprite[]>) Delegate.CreateDelegate( typeof( Func<SpriteAtlas, Sprite[]> ), typeof( SpriteAtlasExtensions ).GetMethod( "GetPackedSprites", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static ) );
 		private readonly PropertyInfo assetReferenceSubObjectTypeGetter = typeof( AssetReference ).GetProperty( "SubOjbectType", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance );
@@ -235,6 +241,8 @@ namespace AssetUsageDetectorNamespace
 					{ typeof( BlendTree ), SearchBlendTree },
 					{ typeof( AnimationClip ), SearchAnimationClip },
 					{ typeof( TerrainData ), SearchTerrainData },
+					{ typeof( LightmapSettings ), SearchLightmapSettings },
+					{ typeof( RenderSettings ), SearchRenderSettings },
 #if UNITY_2017_1_OR_NEWER
 					{ typeof( SpriteAtlas ), SearchSpriteAtlas },
 #endif
@@ -1007,6 +1015,36 @@ namespace AssetUsageDetectorNamespace
 			return referenceNode;
 		}
 
+		private ReferenceNode SearchLightmapSettings( object obj )
+		{
+			ReferenceNode referenceNode = PopReferenceNode( obj );
+
+			referenceNode.AddLinkTo( SearchObject( LightmapSettings.lightProbes ), "Light Probes" );
+
+			LightmapData[] lightmaps = LightmapSettings.lightmaps;
+			if( lightmaps != null )
+			{
+				for( int i = 0; i < lightmaps.Length; i++ )
+					referenceNode.AddLinkTo( SearchObject( lightmaps[i] ), "Lightmap" );
+			}
+
+			SearchVariablesWithSerializedObject( referenceNode, true );
+			return referenceNode;
+		}
+
+		private ReferenceNode SearchRenderSettings( object obj )
+		{
+			ReferenceNode referenceNode = PopReferenceNode( obj );
+
+#if UNITY_2021_2_OR_NEWER
+			referenceNode.AddLinkTo( SearchObject( defaultReflectionProbeGetter() ), "Default Reflection Probe" );
+#else
+			referenceNode.AddLinkTo( SearchObject( ReflectionProbe.defaultTexture ), "Default Reflection Probe" );
+#endif
+			SearchVariablesWithSerializedObject( referenceNode, true );
+			return referenceNode;
+		}
+
 #if UNITY_2017_1_OR_NEWER
 		private ReferenceNode SearchSpriteAtlas( object obj )
 		{
@@ -1396,112 +1434,121 @@ namespace AssetUsageDetectorNamespace
 		}
 
 		// Search through variables of an object with SerializedObject
-		private void SearchVariablesWithSerializedObject( ReferenceNode referenceNode )
+		private void SearchVariablesWithSerializedObject( ReferenceNode referenceNode, bool forceUseSerializedObject = false )
 		{
-			if( !isInPlayMode || referenceNode.nodeObject.IsAsset() )
+			Object unityObject = (Object) referenceNode.nodeObject;
+			if( !isInPlayMode || unityObject.IsAsset() || forceUseSerializedObject )
 			{
 #if ASSET_USAGE_ADDRESSABLES
 				// See: https://github.com/yasirkula/UnityAssetUsageDetector/issues/29
-				if( searchParameters.addressablesSupport && ( (Object) referenceNode.nodeObject ).name == "Deprecated EditorExtensionImpl" )
+				if( searchParameters.addressablesSupport && unityObject.name == "Deprecated EditorExtensionImpl" )
 					return;
 #endif
 
-				SerializedObject so = new SerializedObject( (Object) referenceNode.nodeObject );
+				SerializedObject so = new SerializedObject( unityObject );
 				SerializedProperty iterator = so.GetIterator();
 				SerializedProperty iteratorVisible = so.GetIterator();
 				if( iterator.Next( true ) )
 				{
 					bool iteratingVisible = iteratorVisible.NextVisible( true );
+#if UNITY_2018_3_OR_NEWER
+					bool searchPrefabOverridesOnly = searchParameters.hideReduntantPrefabVariantLinks && unityObject.IsAsset() && PrefabUtility.GetCorrespondingObjectFromSource( unityObject ) != null;
+#endif
 					bool enterChildren;
 					do
 					{
 						// Iterate over NextVisible properties AND the properties that have corresponding FieldInfos (internal Unity
 						// properties don't have FieldInfos so we are skipping them, which is good because search results found in
 						// those properties aren't interesting and mostly confusing)
-						bool isVisible = iteratingVisible && SerializedProperty.EqualContents( iterator, iteratorVisible );
-						if( isVisible )
-							iteratingVisible = iteratorVisible.NextVisible( iteratorVisible.propertyType == SerializedPropertyType.Generic );
-						else
+						bool shouldMoveVisibleIterator = iteratingVisible && SerializedProperty.EqualContents( iterator, iteratorVisible );
+						bool isVisible = shouldMoveVisibleIterator || iterator.type == "Array";
+						if( !isVisible )
 						{
 							Type propFieldType;
-							isVisible = iterator.type == "Array" || fieldInfoGetter( iterator, out propFieldType ) != null;
+							isVisible = fieldInfoGetter( iterator, out propFieldType ) != null;
 						}
 
 						if( !isVisible )
-						{
 							enterChildren = false;
-							continue;
-						}
-
-						Object propertyValue;
-						ReferenceNode searchResult;
-						switch( iterator.propertyType )
-						{
-							case SerializedPropertyType.ObjectReference:
-								propertyValue = iterator.objectReferenceValue;
-								searchResult = SearchObject( PreferablyGameObject( propertyValue ) );
-								enterChildren = false;
-								break;
-							case SerializedPropertyType.ExposedReference:
-								propertyValue = iterator.exposedReferenceValue;
-								searchResult = SearchObject( PreferablyGameObject( propertyValue ) );
-								enterChildren = false;
-								break;
-#if UNITY_2019_3_OR_NEWER
-							case SerializedPropertyType.ManagedReference:
-								object managedReferenceValue = GetRawSerializedPropertyValue( iterator );
-								propertyValue = managedReferenceValue as Object;
-								searchResult = SearchObject( PreferablyGameObject( managedReferenceValue ) );
-								enterChildren = false;
-								break;
+#if UNITY_2018_3_OR_NEWER
+						else if( searchPrefabOverridesOnly && !iterator.prefabOverride )
+							enterChildren = false;
 #endif
-							case SerializedPropertyType.Generic:
-#if ASSET_USAGE_ADDRESSABLES
-								if( searchParameters.addressablesSupport && iterator.type.StartsWithFast( "AssetReference" ) && GetRawSerializedPropertyValue( iterator ) is AssetReference assetReference )
-								{
-									propertyValue = GetAddressablesAssetReferenceValue( assetReference );
+						else
+						{
+							Object propertyValue;
+							ReferenceNode searchResult;
+							switch( iterator.propertyType )
+							{
+								case SerializedPropertyType.ObjectReference:
+									propertyValue = iterator.objectReferenceValue;
 									searchResult = SearchObject( PreferablyGameObject( propertyValue ) );
 									enterChildren = false;
-								}
-								else
+									break;
+								case SerializedPropertyType.ExposedReference:
+									propertyValue = iterator.exposedReferenceValue;
+									searchResult = SearchObject( PreferablyGameObject( propertyValue ) );
+									enterChildren = false;
+									break;
+#if UNITY_2019_3_OR_NEWER
+								case SerializedPropertyType.ManagedReference:
+									object managedReferenceValue = GetRawSerializedPropertyValue( iterator );
+									propertyValue = managedReferenceValue as Object;
+									searchResult = SearchObject( PreferablyGameObject( managedReferenceValue ) );
+									enterChildren = false;
+									break;
+#endif
+								case SerializedPropertyType.Generic:
+#if ASSET_USAGE_ADDRESSABLES
+									if( searchParameters.addressablesSupport && iterator.type.StartsWithFast( "AssetReference" ) && GetRawSerializedPropertyValue( iterator ) is AssetReference assetReference )
+									{
+										propertyValue = GetAddressablesAssetReferenceValue( assetReference );
+										searchResult = SearchObject( PreferablyGameObject( propertyValue ) );
+										enterChildren = false;
+									}
+									else
 #endif
 #if ASSET_USAGE_VFX_GRAPH
-								if( vfxSerializableObjectValueGetter != null && iterator.type == "VFXSerializableObject" && GetRawSerializedPropertyValue( iterator ) is object vfxSerializableObject )
-								{
-									object vfxSerializableObjectValue = vfxSerializableObjectValueGetter.Invoke( vfxSerializableObject, null );
-									propertyValue = vfxSerializableObjectValue as Object;
-									searchResult = SearchObject( PreferablyGameObject( vfxSerializableObjectValue ) );
-									enterChildren = false;
-								}
-								else
+									if( vfxSerializableObjectValueGetter != null && iterator.type == "VFXSerializableObject" && GetRawSerializedPropertyValue( iterator ) is object vfxSerializableObject )
+									{
+										object vfxSerializableObjectValue = vfxSerializableObjectValueGetter.Invoke( vfxSerializableObject, null );
+										propertyValue = vfxSerializableObjectValue as Object;
+										searchResult = SearchObject( PreferablyGameObject( vfxSerializableObjectValue ) );
+										enterChildren = false;
+									}
+									else
 #endif
-								{
+									{
+										propertyValue = null;
+										searchResult = null;
+										enterChildren = true;
+									}
+
+									break;
+								default:
 									propertyValue = null;
 									searchResult = null;
-									enterChildren = true;
-								}
+									enterChildren = false;
+									break;
+							}
 
-								break;
-							default:
-								propertyValue = null;
-								searchResult = null;
-								enterChildren = false;
-								break;
-						}
-
-						if( searchResult != null && searchResult != referenceNode )
-						{
-							string propertyPath = iterator.propertyPath;
-
-							// m_RD.texture is a redundant reference that shows up when searching sprites
-							if( !propertyPath.EndsWithFast( "m_RD.texture" ) )
+							if( searchResult != null && searchResult != referenceNode )
 							{
-								referenceNode.AddLinkTo( searchResult, "Variable: " + propertyPath.Replace( ".Array.data[", "[" ) ); // "arrayVariable.Array.data[0]" becomes "arrayVariable[0]"
+								string propertyPath = iterator.propertyPath;
 
-								if( searchParameters.searchRefactoring != null && objectsToSearchSet.Contains( propertyValue ) )
-									searchParameters.searchRefactoring( new SerializedPropertyMatch( (Object) referenceNode.nodeObject, propertyValue, iterator ) );
+								// m_RD.texture is a redundant reference that shows up when searching sprites
+								if( !propertyPath.EndsWithFast( "m_RD.texture" ) )
+								{
+									referenceNode.AddLinkTo( searchResult, "Variable: " + propertyPath.Replace( ".Array.data[", "[" ) ); // "arrayVariable.Array.data[0]" becomes "arrayVariable[0]"
+
+									if( searchParameters.searchRefactoring != null && objectsToSearchSet.Contains( propertyValue ) )
+										searchParameters.searchRefactoring( new SerializedPropertyMatch( unityObject, propertyValue, iterator ) );
+								}
 							}
 						}
+
+						if( shouldMoveVisibleIterator )
+							iteratingVisible = iteratorVisible.NextVisible( enterChildren );
 					} while( iterator.Next( enterChildren ) );
 
 					return;
@@ -1639,6 +1686,12 @@ namespace AssetUsageDetectorNamespace
 						if( field.FieldType.IsIgnoredUnityType() )
 							continue;
 
+#if UNITY_2021_2_OR_NEWER
+						// "ref struct"s can't be accessed via reflection
+						if( field.FieldType.IsByRefLike )
+							continue;
+#endif
+
 						// Additional filtering for fields:
 						// 1- Ignore "m_RectTransform", "m_CanvasRenderer" and "m_Canvas" fields of Graphic components
 						string fieldName = field.Name;
@@ -1672,6 +1725,12 @@ namespace AssetUsageDetectorNamespace
 						// Skip primitive types
 						if( property.PropertyType.IsIgnoredUnityType() )
 							continue;
+
+#if UNITY_2021_2_OR_NEWER
+						// "ref struct"s can't be accessed via reflection
+						if( property.PropertyType.IsByRefLike )
+							continue;
+#endif
 
 						// Skip properties without a getter function
 						MethodInfo propertyGetter = property.GetGetMethod( true );
