@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public static class ColliderX
+public static class ColliderExtensions
 {
     public static Vector3 GetRandomPointInsideCollider(this BoxCollider boxCollider)
     {
@@ -23,7 +23,7 @@ public static class ColliderX
         return boxCollider.transform.TransformPoint(point);
     }
     
-    public static bool IsColliderInside(Collider insideCollider, Collider outsideCollider)
+    public static bool IsColliderInside(this Collider insideCollider, Collider outsideCollider)
     {
         Bounds insideBounds = insideCollider.bounds;
         Bounds outsideBounds = outsideCollider.bounds;
