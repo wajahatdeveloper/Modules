@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class YesNoPanel : SingletonBehaviourUI<YesNoPanel>
+public class YesNoPanel : SingletonBehaviour<YesNoPanel>
 {
     public GameObject panel;
     public Text message;

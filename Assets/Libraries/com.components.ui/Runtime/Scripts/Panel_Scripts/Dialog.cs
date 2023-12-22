@@ -1,17 +1,18 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 
-public class Dialog : SingletonBehaviourUI<Dialog>
+public class Dialog : SingletonBehaviour<Dialog>
 {
     public GameObject panel;
     
-    public Text message;
-    public Text title;
+    public TextMeshProUGUI title;
+    public TextMeshProUGUI message;
 
     public Button yesButton, noButton, okButton, cancelButton;
 

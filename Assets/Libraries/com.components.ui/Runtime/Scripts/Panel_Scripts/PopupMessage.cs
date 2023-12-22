@@ -1,14 +1,15 @@
 ﻿using System;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class PopupMessage : SingletonBehaviourUI<PopupMessage>
+public class PopupMessage : SingletonBehaviour<PopupMessage>
 {
     public Image signImage;
-    public Text messageText;
-    public Text titleText;
+    public TextMeshProUGUI titleText;
+    public TextMeshProUGUI messageText;
     public GameObject messagePanel;
     public Button okButton;
 

@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using TMPro;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
@@ -67,11 +68,67 @@ public class UIWidgets : EditorWindow
     protected virtual void OnGUI()
     {
         isInstantiatingPrefab = EditorGUILayout.Toggle("Use Prefabs", isInstantiatingPrefab);
+
+        EditorGUILayout.BeginVertical(GUILayout.ExpandWidth(true));
+        {
+	        DrawSelectionTools();
+        }
+        EditorGUILayout.EndHorizontal();
+
         scrollPosition = EditorGUILayout.BeginScrollView(scrollPosition);
-        EditorGUILayout.BeginVertical();
-        DrawItemList();
-        EditorGUILayout.EndVertical();
+        {
+	        EditorGUILayout.BeginVertical();
+	        {
+		        DrawItemList();
+	        }
+	        EditorGUILayout.EndVertical();
+        }
         EditorGUILayout.EndScrollView();
+    }
+
+    private void DrawSelectionTools()
+    {
+	    if (GUILayout.Button("Select All Button Text"))
+	    {
+		    Button[] buttons = FindObjectsOfType<Button>(true);
+		    List<GameObject> firstChildrenOfButtons = new();
+
+		    foreach (Button button in buttons)
+		    {
+			    if (button.transform.childCount > 0)
+			    {
+				    Transform firstChild = button.transform.GetChild(0);
+				    if (firstChild.GetComponent<Text>() == null)
+				    {
+					    continue;
+				    }
+				    firstChildrenOfButtons.Add(firstChild.gameObject);
+			    }
+		    }
+
+		    Selection.objects = firstChildrenOfButtons.ToArray();
+	    }
+
+	    if (GUILayout.Button("Select All Button Text Mesh Pro"))
+	    {
+		    Button[] buttons = FindObjectsOfType<Button>(true);
+		    List<GameObject> firstChildrenOfButtons = new();
+
+		    foreach (Button button in buttons)
+		    {
+			    if (button.transform.childCount > 0)
+			    {
+				    Transform firstChild = button.transform.GetChild(0);
+				    if (firstChild.GetComponent<TextMeshProUGUI>() == null)
+				    {
+					    continue;
+				    }
+				    firstChildrenOfButtons.Add(firstChild.gameObject);
+			    }
+		    }
+
+		    Selection.objects = firstChildrenOfButtons.ToArray();
+	    }
     }
     
     protected void DrawItemList()

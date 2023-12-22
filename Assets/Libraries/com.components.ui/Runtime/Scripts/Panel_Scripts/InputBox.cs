@@ -1,11 +1,12 @@
-﻿using UnityEngine;
+﻿using TMPro;
+using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 
-public class InputBox : SingletonBehaviourUI<InputBox>
+public class InputBox : SingletonBehaviour<InputBox>
 {
-    public Text headingText;
-    public InputField inputField;
+    public TextMeshProUGUI headingText;
+    public TMP_InputField inputField;
     public GameObject inputPanel;
 
     [Header("Debugging")]

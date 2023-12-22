@@ -1,12 +1,13 @@
-﻿using UnityEngine;
+﻿using TMPro;
+using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class WaitPanel : SingletonBehaviourUI<WaitPanel>
+public class WaitPanel : SingletonBehaviour<WaitPanel>
 {
     public GameObject waitPanel;
-    public Text waitingText;
+    public TextMeshProUGUI waitingText;
     public UnityEvent onClose;
 
     private int _count = 0;

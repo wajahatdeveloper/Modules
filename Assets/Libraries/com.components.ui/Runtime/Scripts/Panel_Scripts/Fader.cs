@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 
-public class Fader : SingletonBehaviourUI<Fader>
+public class Fader : SingletonBehaviour<Fader>
 {
 	public Image fadeImage;
 	[Space]
