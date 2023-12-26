@@ -39,6 +39,181 @@ public static class MathX
 
     #endregion
 
+    	/// <summary>
+		/// Computes and returns the direction between two vector3, used to check if a vector is pointing left or right of another one
+		/// </summary>
+		/// <returns>The <see cref="System.Single"/>.</returns>
+		/// <param name="vectorA">Vector a.</param>
+		/// <param name="vectorB">Vector b.</param>
+		public static float AngleDirection(Vector3 vectorA, Vector3 vectorB, Vector3 up)
+		{
+			Vector3 cross = Vector3.Cross(vectorA, vectorB);
+			float direction = Vector3.Dot(cross, up);
+
+			return direction;
+		}
+
+		/// <summary>
+		/// Returns the distance between a point and a line.
+		/// </summary>
+		/// <returns>The between point and line.</returns>
+		/// <param name="point">Point.</param>
+		/// <param name="lineStart">Line start.</param>
+		/// <param name="lineEnd">Line end.</param>
+		public static float DistanceBetweenPointAndLine(Vector3 point, Vector3 lineStart, Vector3 lineEnd)
+		{
+			return Vector3.Magnitude(ProjectPointOnLine(point, lineStart, lineEnd) - point);
+		}
+
+		/// <summary>
+		/// Projects a point on a line (perpendicularly) and returns the projected point.
+		/// </summary>
+		/// <returns>The point on line.</returns>
+		/// <param name="point">Point.</param>
+		/// <param name="lineStart">Line start.</param>
+		/// <param name="lineEnd">Line end.</param>
+		public static Vector3 ProjectPointOnLine(Vector3 point, Vector3 lineStart, Vector3 lineEnd)
+		{
+			Vector3 rhs = point - lineStart;
+			Vector3 vector2 = lineEnd - lineStart;
+			float magnitude = vector2.magnitude;
+			Vector3 lhs = vector2;
+			if (magnitude > 1E-06f)
+			{
+				lhs = (Vector3)(lhs / magnitude);
+			}
+			float num2 = Mathf.Clamp(Vector3.Dot(lhs, rhs), 0f, magnitude);
+			return (lineStart + ((Vector3)(lhs * num2)));
+		}
+
+		/// <summary>
+		/// Returns the sum of all the int passed in parameters
+		/// </summary>
+		/// <param name="thingsToAdd">Things to add.</param>
+		public static int Sum(params int[] thingsToAdd)
+		{
+			int result=0;
+			for (int i = 0; i < thingsToAdd.Length; i++)
+			{
+				result += thingsToAdd[i];
+			}
+			return result;
+		}
+        
+        /// <summary>
+		/// Remaps a value x in interval [A,B], to the proportional value in interval [C,D]
+		/// </summary>
+		/// <param name="x">The value to remap.</param>
+		/// <param name="A">the minimum bound of interval [A,B] that contains the x value</param>
+		/// <param name="B">the maximum bound of interval [A,B] that contains the x value</param>
+		/// <param name="C">the minimum bound of target interval [C,D]</param>
+		/// <param name="D">the maximum bound of target interval [C,D]</param>
+		public static float Remap(float x, float A, float B, float C, float D)
+		{
+			float remappedValue = C + (x-A)/(B-A) * (D - C);
+			return remappedValue;
+		}
+
+		/// <summary>
+		/// Clamps the angle in parameters between a minimum and maximum angle (all angles expressed in degrees)
+		/// </summary>
+		/// <param name="angle"></param>
+		/// <param name="minimumAngle"></param>
+		/// <param name="maximumAngle"></param>
+		/// <returns></returns>
+		public static float ClampAngle(float angle, float minimumAngle, float maximumAngle)
+		{
+			if (angle < -360)
+			{
+				angle += 360;
+			}
+			if (angle > 360)
+			{
+				angle -= 360;
+			}
+			return Mathf.Clamp(angle, minimumAngle, maximumAngle);
+		}
+
+		public static float RoundToDecimal(float value, int numberOfDecimals)
+		{
+			if (numberOfDecimals <= 0)
+			{
+				return Mathf.Round(value);
+			}
+			else
+			{
+				return Mathf.Round(value * 10f * numberOfDecimals) / (10f * numberOfDecimals);
+			}
+		}
+
+		/// <summary>
+		/// Rounds the value passed in parameters to the closest value in the parameter array
+		/// </summary>
+		/// <param name="value"></param>
+		/// <param name="possibleValues"></param>
+		/// <returns></returns>
+		public static float RoundToClosest(float value, float[] possibleValues, bool pickSmallestDistance = false)
+		{
+			if (possibleValues.Length == 0)
+			{
+				return 0f;
+			}
+
+			float closestValue = possibleValues[0];
+
+			foreach (float possibleValue in possibleValues)
+			{
+				float closestDistance = Mathf.Abs(closestValue - value);
+				float possibleDistance = Mathf.Abs(possibleValue - value);
+
+				if (closestDistance > possibleDistance)
+				{
+					closestValue = possibleValue;
+				}
+				else if (closestDistance == possibleDistance)
+				{
+					if ((pickSmallestDistance && closestValue > possibleValue) || (!pickSmallestDistance && closestValue < possibleValue))
+					{
+						closestValue = (value < 0) ? closestValue : possibleValue;
+					}
+				}
+			}
+			return closestValue;
+
+		}
+
+		/// <summary>
+		/// Returns a vector3 based on the angle in parameters
+		/// </summary>
+		/// <param name="angle"></param>
+		/// <returns></returns>
+		public static Vector3 DirectionFromAngle(float angle, float additionalAngle)
+		{
+			angle += additionalAngle;
+
+			Vector3 direction = Vector3.zero;
+			direction.x = Mathf.Sin(angle * Mathf.Deg2Rad);
+			direction.y = 0f;
+			direction.z = Mathf.Cos(angle * Mathf.Deg2Rad);
+			return direction;
+		}
+
+		/// <summary>
+		/// Returns a vector3 based on the angle in parameters
+		/// </summary>
+		/// <param name="angle"></param>
+		/// <returns></returns>
+		public static Vector3 DirectionFromAngle2D(float angle, float additionalAngle)
+		{
+			angle += additionalAngle;
+
+			Vector3 direction = Vector3.zero;
+			direction.x = Mathf.Cos(angle * Mathf.Deg2Rad);
+			direction.y = Mathf.Sin(angle * Mathf.Deg2Rad);
+			direction.z = 0f;
+			return direction;
+		}
+
     public static T Clamp<T>(T value, T max, T min) where T : System.IComparable<T>
     {
         return value.CompareTo(max) > 0 ?
@@ -326,6 +501,52 @@ public static class MathX
 
     #endregion
 
+    /// <summary>
+    /// Returns the result of rolling a dice of the specified number of sides
+    /// </summary>
+    /// <returns>The result of the dice roll.</returns>
+    /// <param name="numberOfSides">Number of sides of the dice.</param>
+    public static int RollADice(int numberOfSides)
+    {
+        return (UnityEngine.Random.Range(1,numberOfSides+1));
+    }
+
+    /// <summary>
+    /// Returns a random success based on X% of chance.
+    /// Example : I have 20% of chance to do X, Chance(20) > true, yay!
+    /// </summary>
+    /// <param name="percent">Percent of chance.</param>
+    public static bool Chance(int percent)
+    {
+        return (UnityEngine.Random.Range(0,100) <= percent);
+    }
+
+    /// <summary>
+    /// Moves from "from" to "to" by the specified amount and returns the corresponding value
+    /// </summary>
+    /// <param name="from">From.</param>
+    /// <param name="to">To.</param>
+    /// <param name="amount">Amount.</param>
+    public static float Approach(float from, float to, float amount)
+    {
+        if (from < to)
+        {
+            from += amount;
+            if (from > to)
+            {
+                return to;
+            }
+        }
+        else
+        {
+            from -= amount;
+            if (from < to)
+            {
+                return to;
+            }
+        }
+        return from;
+    }
 
     public static Quaternion Slerp2D(Vector2 a, Vector2 b, float t, bool usesRight = false)
     {
