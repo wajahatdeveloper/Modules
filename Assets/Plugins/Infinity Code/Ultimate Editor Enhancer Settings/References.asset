@@ -532,10 +532,12 @@ MonoBehaviour:
     icon: VideoPlayer Icon
     color: {r: 0.5764706, g: 0.43921572, b: 0.8588236, a: 1}
   _sceneHistory:
-  - name: ContentSnapScrollExample
-    path: Assets/Libraries/com.components.ui/com.unity.uiextensions/Examples/HSS-VSS-ScrollSnap/ContentSnapScrollExample.unity
+  - name: Physics2dSample
+    path: Assets/CastVisualizer/Samples/SampleScenes/Physics2dSample.unity
   - name: SampleScene
     path: Assets/Scenes/SampleScene.unity
+  - name: ContentSnapScrollExample
+    path: Assets/Libraries/com.components.ui/com.unity.uiextensions/Examples/HSS-VSS-ScrollSnap/ContentSnapScrollExample.unity
   - name: TestScene
     path: Assets/LazyCoroutines/EmreBeratKR/LazyCoroutines/Test/Scenes/TestScene.unity
   - name: AnimationParameters
