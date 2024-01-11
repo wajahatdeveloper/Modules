@@ -10,14 +10,6 @@ using UnityEngine;
 public static class RichTextExtensions
 {
 	/// <summary>
-	/// Renders the text in boldface.
-	/// </summary>
-	/// <param name="input">Text to render in boldface.</param>
-	/// <returns>Text rendered in boldface.</returns>
-	public static string Bold(this string input)
-		=> WrapAround("<b>", input, "</b>");
-
-	/// <summary>
 	/// Renders the text in italics.
 	/// </summary>
 	/// <param name="input">Text to render in italics.</param>

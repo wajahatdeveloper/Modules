@@ -6,6 +6,44 @@
       "source": "embedded",
       "dependencies": {}
     },
+    "com.google.external-dependency-manager": {
+      "version": "file:C:/Users/pc/Downloads/com.google.external-dependency-manager-1.2.177.tgz",
+      "depth": 0,
+      "source": "local-tarball",
+      "dependencies": {}
+    },
+    "com.google.firebase.app": {
+      "version": "file:C:/Users/pc/Downloads/com.google.firebase.app-11.4.0.tgz",
+      "depth": 0,
+      "source": "local-tarball",
+      "dependencies": {
+        "com.google.external-dependency-manager": "1.2.177"
+      }
+    },
+    "com.google.firebase.auth": {
+      "version": "file:C:/Users/pc/Downloads/com.google.firebase.auth-11.4.0.tgz",
+      "depth": 0,
+      "source": "local-tarball",
+      "dependencies": {
+        "com.google.firebase.app": "11.4.0"
+      }
+    },
+    "com.google.firebase.database": {
+      "version": "file:C:/Users/pc/Downloads/com.google.firebase.database-11.4.0.tgz",
+      "depth": 0,
+      "source": "local-tarball",
+      "dependencies": {
+        "com.google.firebase.auth": "11.4.0"
+      }
+    },
+    "com.google.firebase.messaging": {
+      "version": "file:C:/Users/pc/Downloads/com.google.firebase.messaging-11.4.0.tgz",
+      "depth": 0,
+      "source": "local-tarball",
+      "dependencies": {
+        "com.google.firebase.app": "11.4.0"
+      }
+    },
     "com.unity.2d.animation": {
       "version": "9.0.3",
       "depth": 0,

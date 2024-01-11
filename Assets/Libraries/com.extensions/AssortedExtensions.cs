@@ -7,6 +7,41 @@ using UnityEngine;
 using UnityEngine.UI;
 using Object = UnityEngine.Object;
 
+public class OnceAction
+{
+	private Action action;
+	private bool invoked;
+
+	public OnceAction(Action action)
+	{
+		this.action = action;
+		this.invoked = false;
+	}
+
+	public void Invoke()
+	{
+		if (!invoked)
+		{
+			invoked = true;
+			action?.Invoke();
+			RemoveListener();
+		}
+	}
+
+	private void RemoveListener()
+	{
+		action = null;
+	}
+}
+
+public static class ActionExtensions
+{
+	public static OnceAction Once(this Action action)
+	{
+		return new OnceAction(action);
+	}
+}
+
 public static class AssortedExtensions
 {
 	public static void PushRange<T>(this Stack<T> stack, IEnumerable<T> items)
