@@ -1,0 +1,13 @@
+ public static string ConvertMaticToWei(decimal maticAmount)
+ {
+     // Define the conversion factor (1 MATIC = 10^18 wei)
+     decimal conversionFactor = 1000000000000000000m;
+ 
+     // Perform the conversion
+     decimal weiAmount = maticAmount * conversionFactor;
+ 
+     // Convert the result to a string with appropriate formatting
+     string weiString = weiAmount.ToString("F0"); // Remove decimal places but handle potential scientific notation
+ 
+     return weiString;
+ }
