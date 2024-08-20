@@ -1,10 +1,10 @@
 {
   "dependencies": {
-    "com.google.external-dependency-manager": "file:C:/Users/pc/Downloads/com.google.external-dependency-manager-1.2.177.tgz",
-    "com.google.firebase.app": "file:C:/Users/pc/Downloads/com.google.firebase.app-11.4.0.tgz",
-    "com.google.firebase.auth": "file:C:/Users/pc/Downloads/com.google.firebase.auth-11.4.0.tgz",
-    "com.google.firebase.database": "file:C:/Users/pc/Downloads/com.google.firebase.database-11.4.0.tgz",
-    "com.google.firebase.messaging": "file:C:/Users/pc/Downloads/com.google.firebase.messaging-11.4.0.tgz",
+    "com.google.external-dependency-manager": "file:F:/UnityAssets/com.google.external-dependency-manager-1.2.182.tgz",
+    "com.google.firebase.app": "file:F:/UnityAssets/com.google.firebase.app-12.2.0.tgz",
+    "com.google.firebase.auth": "file:F:/UnityAssets/com.google.firebase.auth-12.2.0.tgz",
+    "com.google.firebase.database": "file:F:/UnityAssets/com.google.firebase.database-12.2.0.tgz",
+    "com.google.firebase.messaging": "file:F:/UnityAssets/com.google.firebase.messaging-12.2.0.tgz",
     "com.unity.2d.animation": "9.0.3",
     "com.unity.2d.sprite": "1.0.0",
     "com.unity.ai.navigation": "1.1.4",
