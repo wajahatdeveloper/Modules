@@ -453,7 +453,7 @@ GameObject:
   - component: {fileID: 183428428591343565}
   - component: {fileID: 3774497103800456644}
   m_Layer: 0
-  m_Name: Dropdown(TMP)
+  m_Name: Dropdown (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -40,6 +40,8 @@ public partial class UIWidgets : EditorWindow
 
 	    DrawSelectionTools();
 
+	    EditorGUILayout.Separator();
+
 	    scrollPosition = GUILayout.BeginScrollView(scrollPosition);
 	    {
 		    GUILayout.BeginVertical();

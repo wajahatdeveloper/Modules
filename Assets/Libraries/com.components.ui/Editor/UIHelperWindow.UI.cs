@@ -162,7 +162,7 @@ public partial class UIWidgets
 
     private void DrawItemList()
     {
-        foreach (var spawnableItem in _SpawnableItems)
+	    foreach (var spawnableItem in _SpawnableItems)
         {
 	        // Separator Item
 	        if (spawnableItem.Key.StartsWith("-"))
@@ -226,7 +226,7 @@ public partial class UIWidgets
 
     private string RemoveParenthesisSections(string key)
     {
-	    int i = key.IndexOf('(');
+	    int i = key.IndexOf(' ');
 	    if (i >= 0)
 	    {
 		    key = key.Remove(i);
