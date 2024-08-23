@@ -115,9 +115,9 @@ public partial class UIWidgets
 
 	    GUIStyle buttonStyle = (Selection.activeGameObject == null)?buttonStyleInactive:buttonStyleActive;
 
-	    GUILayout.BeginVertical(GUILayout.Width(50));
+	    GUILayout.BeginVertical(GUILayout.Width(325));
 	    {
-		    GUILayout.BeginHorizontal(GUILayout.Width(100));
+		    GUILayout.BeginHorizontal(GUILayout.Width(325));
 		    {
 			    if (GUILayout.Button("Select All Button Text", buttonStyleActive))
 			    {
@@ -127,7 +127,7 @@ public partial class UIWidgets
 				    Selection.objects = arr;
 			    }
 
-			    if (GUILayout.Button("In Children", buttonStyle) && buttonStyle == buttonStyleActive)
+			    if (GUILayout.Button("In Children", buttonStyle, GUILayout.Width(75)) && buttonStyle == buttonStyleActive)
 			    {
 				    var arr = GetAllT2FromT1<Button, Text>(true, Selection.activeTransform)
 						    .Select(x => x.gameObject)
@@ -137,13 +137,25 @@ public partial class UIWidgets
 		    }
 		    GUILayout.EndHorizontal();
 
-		    if (GUILayout.Button("Select All Button Text Mesh Pro", buttonStyleActive))
+		    GUILayout.BeginHorizontal(GUILayout.Width(325));
 		    {
-			    var arr = GetAllT2FromT1<Button, TextMeshProUGUI>(true)
-					    .Select(x => x.gameObject)
-					    .ToArray();
-			    Selection.objects = arr;
+			    if (GUILayout.Button("Select All Button TextMeshProUGUI", buttonStyleActive))
+			    {
+				    var arr = GetAllT2FromT1<Button, TextMeshProUGUI>(true)
+						    .Select(x => x.gameObject)
+						    .ToArray();
+				    Selection.objects = arr;
+			    }
+
+			    if (GUILayout.Button("In Children", buttonStyle, GUILayout.Width(75)) && buttonStyle == buttonStyleActive)
+			    {
+				    var arr = GetAllT2FromT1<Button, TextMeshProUGUI>(true, Selection.activeTransform)
+						    .Select(x => x.gameObject)
+						    .ToArray();
+				    Selection.objects = arr;
+			    }
 		    }
+		    GUILayout.EndHorizontal();
 	    }
 	    GUILayout.EndVertical();
     }
