@@ -10,7 +10,7 @@ using UnityEngine.UI;
 public class UIWidgets : EditorWindow
 {
     protected static Dictionary<string, GameObject> items = new Dictionary<string, GameObject>();
-    
+
     protected Vector2 scrollPosition;
 
     private bool isInstantiatingPrefab = true;
@@ -21,7 +21,7 @@ public class UIWidgets : EditorWindow
         UpdateList();
 
         Resources.UnloadUnusedAssets();
-        
+
         var window = GetWindow<UIWidgets>();
         window.minSize = new Vector2(250f, 200f);
         window.Show();
@@ -130,7 +130,7 @@ public class UIWidgets : EditorWindow
 		    Selection.objects = firstChildrenOfButtons.ToArray();
 	    }
     }
-    
+
     protected void DrawItemList()
     {
         foreach (var item in items)
@@ -143,7 +143,7 @@ public class UIWidgets : EditorWindow
             }
             GUIStyle gUIStyle = new GUIStyle(GUI.skin.button);
             gUIStyle.alignment = TextAnchor.MiddleLeft;
-            
+
             Texture svicon = Resources.Load($"IconImages/{s}")as Texture;
             if (item.Key.StartsWith("-"))
             {
@@ -172,6 +172,8 @@ public class UIWidgets : EditorWindow
 								newCanvas = Instantiate(items["Canvas"], Selection.activeTransform);
 							}
 
+							Undo.RegisterCreatedObjectUndo(newCanvas, $"Create new Canvas");
+
 							Selection.activeTransform = newCanvas.transform;
 						}
 					}
@@ -197,7 +199,10 @@ public class UIWidgets : EditorWindow
 					itemObject = Instantiate(itemPrefab, Selection.activeTransform);
 				}
 
+                Undo.RegisterCreatedObjectUndo(itemObject, $"Create {itemPrefab.name}");
+
                 itemObject.name = itemObject.name.Replace("(Clone)", "");
+                Selection.activeObject = itemObject;
             }
         }
     }

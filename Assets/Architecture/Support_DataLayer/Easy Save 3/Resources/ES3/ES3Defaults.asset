@@ -32,49 +32,45 @@ MonoBehaviour:
     assemblyNames:
     - Assembly-CSharp
     - Assembly-CSharp-firstpass
+    - baracuda.monitoring
     - Cinemachine
     - Coffee.UnmaskForUGUI
+    - ConsoleProDebug
+    - ConsoleProRemote
     - CW.Common
     - EasySave3
     - FastGizmos
-    - Ilumisoft.RadarSystem
     - L1_CloudServices
     - L2_GameServices
     - LeanCommon
-    - LeanPool
-    - Lofelt.NiceVibrations
-    - Lofelt.NiceVibrations.Demo
-    - MoreMountains.Feedbacks
-    - MoreMountains.Feedbacks.Authorizations
-    - MoreMountains.Feedbacks.Cinemachine
-    - MoreMountains.Feedbacks.HDRP
-    - MoreMountains.Feedbacks.MMTools
-    - MoreMountains.Feedbacks.NiceVibrations
-    - MoreMountains.Feedbacks.PostProcessing
-    - MoreMountains.Feedbacks.TextMeshPro
-    - MoreMountains.Feedbacks.URP
-    - MoreMountains.Tools
-    - NativeShare.Runtime
+    - LeanGUI
+    - LeanTransition
+    - Nementic.SelectionUtility.Runtime
+    - Nementic.SelectionUtility.Samples
     - PhotonChat
     - PhotonRealtime
     - PhotonUnityNetworking
+    - PhotonUnityNetworking.Demos
     - PhotonUnityNetworking.Utilities
-    - PhotonVoice
-    - PhotonVoice.API
-    - PhotonVoice.PUN
-    - Purchasing.Common
+    - QFSW.QC
+    - QFSW.QC.Demo
+    - QFSW.QC.Extras
+    - QFSW.QC.Grammar
+    - QFSW.QC.Parsers
+    - QFSW.QC.Serializers
+    - QFSW.QC.UI
     - ScriptableObject-Architecture
-    - StompyRobot.SRDebugger
-    - StompyRobot.SRF
     - Support_DataLayer
     - Support_NetworkLayer
+    - UltimateEditorEnhancer
     - UniTask
     - UniTask.Addressables
     - UniTask.DOTween
     - UniTask.Linq
     - UniTask.TextMeshPro
-    - WanzyeeStudio.Runtime
-    - Wooshii.HierarchyDecorator
+    - UnityPlayModeSaver
+    - UnityUIExtensions
+    - UnityUIExtensions.examples
     showAdvancedSettings: 0
   addMgrToSceneAutomatically: 0
   autoUpdateReferences: 1
