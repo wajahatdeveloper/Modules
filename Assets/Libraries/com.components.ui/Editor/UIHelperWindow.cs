@@ -1,209 +1,59 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using TMPro;
 using UnityEditor;
 using UnityEngine;
-using UnityEngine.UI;
 
-public class UIWidgets : EditorWindow
+public partial class UIWidgets : EditorWindow
 {
-    protected static Dictionary<string, GameObject> items = new Dictionary<string, GameObject>();
+	private static Dictionary<string, GameObject> _SpawnableItems = new Dictionary<string, GameObject>();
+	private static Vector2 _WindowMinSize = new Vector2(250f, 200f);
 
-    protected Vector2 scrollPosition;
-
-    private bool isInstantiatingPrefab = true;
+	private bool isInstantiatingPrefab = true;
+	private bool autoSelectNewItems = true;
+	private bool preferExistingCanvas = false;
+	private Vector2 scrollPosition;
 
     [MenuItem("Hub/UI Widgets", priority = 101)]
     public static void Init()
     {
-        UpdateList();
-
-        Resources.UnloadUnusedAssets();
+        RebuildSpawnList();
 
         var window = GetWindow<UIWidgets>();
-        window.minSize = new Vector2(250f, 200f);
+        window.minSize = _WindowMinSize;
         window.Show();
-    }
-
-    private static void UpdateList()
-    {
-        items.Clear();
-        var lst = Resources.LoadAll<GameObject>("UIWidgets");
-        foreach (GameObject o in lst)
-        {
-            items.Add(o.name, o);
-        }
-
-        items.Add("-", null);
-        lst = Resources.LoadAll<GameObject>("UIWidgets_Scrolls");
-        foreach (GameObject o in lst)
-        {
-            items.Add(o.name, o);
-        }
-
-        items.Add("--", null);
-        lst = Resources.LoadAll<GameObject>("UIWidgets_Panels");
-        foreach (GameObject o in lst)
-        {
-            items.Add(o.name, o);
-        }
-
-		items.Add("---", null);
-		lst = Resources.LoadAll<GameObject>("UIWidgets_Elements");
-		foreach (GameObject o in lst)
-		{
-			items.Add(o.name, o);
-		}
-	}
-
-    private void OnFocus()
-    {
-        UpdateList();
-
-        Resources.UnloadUnusedAssets();
     }
 
     protected virtual void OnGUI()
     {
-        isInstantiatingPrefab = EditorGUILayout.Toggle("Use Prefabs", isInstantiatingPrefab);
+	    var toggleStyle = new GUIStyle(GUI.skin.toggle)
+	    {
+		    fontSize = 10
+	    };
 
-        EditorGUILayout.BeginVertical(GUILayout.ExpandWidth(true));
-        {
-	        DrawSelectionTools();
-        }
-        EditorGUILayout.EndHorizontal();
+	    GUILayout.BeginHorizontal();
+	    {
+		    isInstantiatingPrefab = GUILayout.Toggle(isInstantiatingPrefab, "Use Prefabs", toggleStyle);
+		    autoSelectNewItems = GUILayout.Toggle(autoSelectNewItems, "Auto Select New Items", toggleStyle);
+		    preferExistingCanvas = GUILayout.Toggle(preferExistingCanvas, "Prefer Existing Canvas", toggleStyle);
+		    GUILayout.FlexibleSpace();
+	    }
+	    GUILayout.EndHorizontal();
 
-        scrollPosition = EditorGUILayout.BeginScrollView(scrollPosition);
-        {
-	        EditorGUILayout.BeginVertical();
-	        {
-		        DrawItemList();
-	        }
-	        EditorGUILayout.EndVertical();
-        }
-        EditorGUILayout.EndScrollView();
+	    DrawSelectionTools();
+
+	    scrollPosition = GUILayout.BeginScrollView(scrollPosition);
+	    {
+		    GUILayout.BeginVertical();
+		    {
+			    DrawItemList();
+		    }
+		    GUILayout.EndVertical();
+	    }
+	    GUILayout.EndScrollView();
     }
 
-    private void DrawSelectionTools()
+    private void OnFocus()
     {
-	    if (GUILayout.Button("Select All Button Text"))
-	    {
-		    Button[] buttons = FindObjectsOfType<Button>(true);
-		    List<GameObject> firstChildrenOfButtons = new();
-
-		    foreach (Button button in buttons)
-		    {
-			    if (button.transform.childCount > 0)
-			    {
-				    Transform firstChild = button.transform.GetChild(0);
-				    if (firstChild.GetComponent<Text>() == null)
-				    {
-					    continue;
-				    }
-				    firstChildrenOfButtons.Add(firstChild.gameObject);
-			    }
-		    }
-
-		    Selection.objects = firstChildrenOfButtons.ToArray();
-	    }
-
-	    if (GUILayout.Button("Select All Button Text Mesh Pro"))
-	    {
-		    Button[] buttons = FindObjectsOfType<Button>(true);
-		    List<GameObject> firstChildrenOfButtons = new();
-
-		    foreach (Button button in buttons)
-		    {
-			    if (button.transform.childCount > 0)
-			    {
-				    Transform firstChild = button.transform.GetChild(0);
-				    if (firstChild.GetComponent<TextMeshProUGUI>() == null)
-				    {
-					    continue;
-				    }
-				    firstChildrenOfButtons.Add(firstChild.gameObject);
-			    }
-		    }
-
-		    Selection.objects = firstChildrenOfButtons.ToArray();
-	    }
-    }
-
-    protected void DrawItemList()
-    {
-        foreach (var item in items)
-        {
-            string s = item.Key;
-            int i = s.IndexOf('(');
-            if (i >= 0)
-            {
-                s = s.Remove(i);
-            }
-            GUIStyle gUIStyle = new GUIStyle(GUI.skin.button);
-            gUIStyle.alignment = TextAnchor.MiddleLeft;
-
-            Texture svicon = Resources.Load($"IconImages/{s}")as Texture;
-            if (item.Key.StartsWith("-"))
-            {
-                EditorGUILayout.Separator();
-            }
-            else if ((GUILayout.Button(new GUIContent(item.Key,svicon),gUIStyle)/*GUILayout.Button(item.Key)*/))
-            {
-                if (Selection.activeTransform == null)
-                {
-					// Find and Try Assign Existing Canvas
-					Selection.activeTransform = FindObjectOfType<Canvas>()?.transform;
-
-					// Create and Assign New Canvas
-					if (Selection.activeTransform == null)
-					{
-						if (item.Key != "Canvas")
-						{
-							GameObject newCanvas;
-
-							if (isInstantiatingPrefab)
-							{
-								newCanvas = PrefabUtility.InstantiatePrefab(items["Canvas"], Selection.activeTransform) as GameObject;
-							}
-							else
-							{
-								newCanvas = Instantiate(items["Canvas"], Selection.activeTransform);
-							}
-
-							Undo.RegisterCreatedObjectUndo(newCanvas, $"Create new Canvas");
-
-							Selection.activeTransform = newCanvas.transform;
-						}
-					}
-				}
-                else
-                {
-                    // If No UI Object is Selected
-                    if (Selection.activeTransform.GetComponent<RectTransform>() == null)
-                    {
-                        Selection.activeTransform = null;
-                    }
-				}
-
-				var itemPrefab = item.Value;
-                GameObject itemObject;
-
-                if (isInstantiatingPrefab)
-				{
-					itemObject = PrefabUtility.InstantiatePrefab(itemPrefab, Selection.activeTransform) as GameObject;
-				}
-				else
-				{
-					itemObject = Instantiate(itemPrefab, Selection.activeTransform);
-				}
-
-                Undo.RegisterCreatedObjectUndo(itemObject, $"Create {itemPrefab.name}");
-
-                itemObject.name = itemObject.name.Replace("(Clone)", "");
-                Selection.activeObject = itemObject;
-            }
-        }
+	    RebuildSpawnList();
+	    Resources.UnloadUnusedAssets();
     }
 }
