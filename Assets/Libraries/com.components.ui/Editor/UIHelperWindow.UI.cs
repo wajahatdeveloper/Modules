@@ -162,8 +162,12 @@ public partial class UIWidgets
 
     private void DrawItemList()
     {
+	    int index = 0;
+
 	    foreach (var spawnableItem in _SpawnableItems)
-        {
+	    {
+		    index++;
+
 	        // Separator Item
 	        if (spawnableItem.Key.StartsWith("-"))
 	        {
@@ -173,7 +177,7 @@ public partial class UIWidgets
 
 	        // Load Icon for Spawnable Item
 	        string sanitizedKey = RemoveParenthesisSections(spawnableItem.Key);
-	        Texture svicon = Resources.Load($"IconImages/{sanitizedKey}")as Texture;
+	        Texture icon = Resources.Load($"IconImages/{sanitizedKey}")as Texture;
 
 	        // Set Button Style
 	        GUIStyle buttonStyle = new GUIStyle(GUI.skin.button)
@@ -181,47 +185,49 @@ public partial class UIWidgets
 		        alignment = TextAnchor.MiddleLeft,
 		        fontSize = 12
 	        };
-
+	        
 	        // Draw Button Element
-	        var buttonContent = new GUIContent(spawnableItem.Key, svicon);
+	        var buttonContent = new GUIContent(spawnableItem.Key, icon);
 	        if (GUILayout.Button(buttonContent, buttonStyle))
-            {
-	            // If nothing is selected then select the canvas
-                if (Selection.activeTransform == null || Selection.activeTransform.GetComponent<RectTransform>() == null)
-                {
-	                if (preferExistingCanvas)
-	                {
-		                // Find and Try Assign Existing Canvas
-		                Selection.activeTransform = FindObjectOfType<Canvas>()?.transform;
-	                }
+	        {
+		        // If nothing is selected then select the canvas
+		        if (Selection.activeTransform == null ||
+		            Selection.activeTransform.GetComponent<RectTransform>() == null)
+		        {
+			        if (preferExistingCanvas)
+			        {
+				        // Find and Try Assign Existing Canvas
+				        Selection.activeTransform = FindObjectOfType<Canvas>()?.transform;
+			        }
 
-	                // Create and Assign New Canvas
-	                var newCanvas = CreateCanvasExplicit();
-	                Selection.activeGameObject = newCanvas;
-                }
+			        // Create and Assign New Canvas
+			        var newCanvas = CreateCanvasExplicit();
+			        Selection.activeGameObject = newCanvas;
+		        }
 
-                var itemPrefab = spawnableItem.Value;
-                GameObject itemObject;
+		        var itemPrefab = spawnableItem.Value;
+		        GameObject itemObject;
 
-                if (isInstantiatingPrefab)
-				{
-					itemObject = PrefabUtility.InstantiatePrefab(itemPrefab, Selection.activeTransform) as GameObject;
-				}
-				else
-				{
-					itemObject = Instantiate(itemPrefab, Selection.activeTransform);
-				}
+		        if (isInstantiatingPrefab)
+		        {
+			        itemObject =
+					        PrefabUtility.InstantiatePrefab(itemPrefab, Selection.activeTransform) as GameObject;
+		        }
+		        else
+		        {
+			        itemObject = Instantiate(itemPrefab, Selection.activeTransform);
+		        }
 
-                Undo.RegisterCreatedObjectUndo(itemObject, $"Create {itemPrefab.name}");
+		        Undo.RegisterCreatedObjectUndo(itemObject, $"Create {itemPrefab.name}");
 
-                itemObject.name = itemObject.name.Replace("(Clone)", "");
+		        itemObject.name = itemObject.name.Replace("(Clone)", "");
 
-                if (autoSelectNewItems)
-                {
-	                Selection.SetActiveObjectWithContext(itemObject, itemObject);
-                }
-            }
-        }
+		        if (autoSelectNewItems)
+		        {
+			        Selection.SetActiveObjectWithContext(itemObject, itemObject);
+		        }
+	        }
+	    }
     }
 
     private string RemoveParenthesisSections(string key)
