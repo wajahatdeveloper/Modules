@@ -225,12 +225,19 @@ public partial class UIWidgets
 			    GUILayout.Space(width);
 		    }
 
-		    var pair = new KeyValuePair<string, GameObject>(
-			    (useLegacyPrefab)?widget.widgetName + " (Legacy)":widget.widgetName,
-			    (useLegacyPrefab)?widget.widgetPrefabLegacy:widget.widgetPrefab);
-		    DrawSiblingItemButton(pair, widget.widgetIcon, widget.noCanvasRequired);
-		    DrawChildItemButton(pair);
-		    DrawParentItemButton(pair);
+		    if (widget.widgetPrefab == null)
+		    {
+			    EditorGUILayout.LabelField(widget.widgetName);
+		    }
+		    else
+		    {
+			    var pair = new KeyValuePair<string, GameObject>(
+				    (useLegacyPrefab)?widget.widgetName + " (Legacy)":widget.widgetName,
+				    (useLegacyPrefab)?widget.widgetPrefabLegacy:widget.widgetPrefab);
+			    DrawSiblingItemButton(pair, widget.widgetIcon, widget.noCanvasRequired);
+			    DrawChildItemButton(pair);
+			    DrawParentItemButton(pair);
+		    }
 	    }
 	    EditorGUILayout.EndHorizontal();
     }

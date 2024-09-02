@@ -87,25 +87,19 @@ MonoBehaviour:
       widgetPrefabLegacy: {fileID: 0}
       noCanvasRequired: 0
     noCanvasRequired: 0
-  - widgetName: EventSystem
-    widgetIcon: {fileID: 2800000, guid: 15c7f095c44e6a84fab01b72e8e935e8, type: 3}
-    widgetPrefab: {fileID: 3414724395316237315, guid: 2d05f9167bb0d7a449e2d86035a83fda, type: 3}
-    widgetPrefabLegacy: {fileID: 0}
-    widgetVariations: []
-    noCanvasRequired: 1
   - widgetName: Utility
     widgetIcon: {fileID: 0}
     widgetPrefab: {fileID: 0}
     widgetPrefabLegacy: {fileID: 0}
     widgetVariations:
     - widgetName: Setup Default State
-      widgetIcon: {fileID: 0}
+      widgetIcon: {fileID: 2800000, guid: 0fa7be9b9c7f73d4e858999dd305bc5a, type: 3}
       widgetPrefab: {fileID: 349067503083571467, guid: 6a5299d58c39e934a810ea74b1150ba3, type: 3}
       widgetPrefabLegacy: {fileID: 0}
-      noCanvasRequired: 0
-    - widgetName: 
-      widgetIcon: {fileID: 0}
-      widgetPrefab: {fileID: 0}
-      widgetPrefabLegacy: {fileID: 0}
       noCanvasRequired: 1
+    - widgetName: EventSystem
+      widgetIcon: {fileID: 2800000, guid: 15c7f095c44e6a84fab01b72e8e935e8, type: 3}
+      widgetPrefab: {fileID: 3414724395316237315, guid: 2d05f9167bb0d7a449e2d86035a83fda, type: 3}
+      widgetPrefabLegacy: {fileID: 0}
+      noCanvasRequired: 0
     noCanvasRequired: 1

@@ -10,6 +10,7 @@ public partial class UIWidgets : EditorWindow
 	private bool autoSelectNewItems = true;
 	private bool preferExistingCanvas = false;
 	private Vector2 scrollPosition;
+	private bool areSelectionToolsVisible = true;
 
     [MenuItem("Hub/UI Widgets", priority = 101)]
     public static void Init()
@@ -35,7 +36,15 @@ public partial class UIWidgets : EditorWindow
 	    }
 	    GUILayout.EndHorizontal();
 
-	    DrawSelectionTools();
+	    areSelectionToolsVisible = EditorGUILayout.BeginFoldoutHeaderGroup(areSelectionToolsVisible, "Selection Tools");
+	    if(areSelectionToolsVisible)
+	    {
+		    var origColor = GUI.backgroundColor;
+		    GUI.backgroundColor = Color.gray;
+		    DrawSelectionTools();
+		    GUI.backgroundColor = origColor;
+	    }
+	    EditorGUILayout.EndFoldoutHeaderGroup();
 
 	    EditorGUILayout.Separator();
 
