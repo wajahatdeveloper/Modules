@@ -14,9 +14,9 @@ scopes = {
 	"last_search.8040E7BB" = ""
 	"OpenInspectorPreview.8040E7BB" = "0"
 	"currentGroup.8040E7BB" = "all"
-	"last_search.110DEAF1" = "h: tag=<$list:Untagged, [Untagged, Respawn, Finish, EditorOnly, MainCamera, Player, GameController, Collection, Bullet], AssetLabelIcon, #EBD05FFF$> layer=<$layer:5, UI$>"
+	"last_search.110DEAF1" = "p: t:UIHelperAssetScriptable"
 	"OpenInspectorPreview.110DEAF1" = "0"
-	"currentGroup.110DEAF1" = "scene"
+	"currentGroup.110DEAF1" = "asset"
 }
 providers = {
 	adb = {
@@ -68,6 +68,9 @@ providers = {
 objectSelectors = {
 }
 recentSearches = [
+	"p: t:UIHelperAssetScriptable"
+	"p:"
+	"h: ref=\"Assets/Libraries/com.components.ui/Editor/UIHelperWindow/Resources/UIHelperAsset.asset\""
 	"h: tag=<$list:Untagged, [Untagged, Respawn, Finish, EditorOnly, MainCamera, Player, GameController, Collection, Bullet], AssetLabelIcon, #EBD05FFF$> layer=<$layer:5, UI$>"
 	"h: tag=<$list:Untagged, [Untagged, Respawn, Finish, EditorOnly, MainCamera, Player, GameController, Collection, Bullet], AssetLabelIcon, #EBD05FFF$>"
 	"h: tag=<$list:EditorOnly, [Untagged, Respawn, Finish, EditorOnly, MainCamera, Player, GameController, Collection, Bullet], AssetLabelIcon, #EBD05FFF$>"
@@ -81,7 +84,7 @@ showSavedSearchPanel = false
 hideTabs = false
 expandedQueries = [
 ]
-queryBuilder = true
+queryBuilder = false
 ignoredProperties = "id;name;classname;imagecontentshash"
 helperWidgetCurrentArea = "h:"
 disabledIndexers = ""

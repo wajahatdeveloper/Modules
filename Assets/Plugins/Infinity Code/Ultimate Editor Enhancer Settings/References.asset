@@ -532,12 +532,28 @@ MonoBehaviour:
     icon: VideoPlayer Icon
     color: {r: 0.5764706, g: 0.43921572, b: 0.8588236, a: 1}
   _sceneHistory:
+  - name: GalleryHorizontalDemo
+    path: Assets/SuperScrollView/Demo/Scenes/Gallery/GalleryHorizontalDemo.unity
+  - name: DraggableViewLeftToRightDemo
+    path: Assets/SuperScrollView/Demo/Scenes/DraggableView/DraggableViewLeftToRightDemo.unity
+  - name: DraggableViewTopToBottomDemo
+    path: Assets/SuperScrollView/Demo/Scenes/DraggableView/DraggableViewTopToBottomDemo.unity
+  - name: DraggableViewFadeTopToBottomDemo
+    path: Assets/SuperScrollView/Demo/Scenes/DraggableView/DraggableViewFadeTopToBottomDemo.unity
+  - name: DraggableViewFadeLeftToRightDemo
+    path: Assets/SuperScrollView/Demo/Scenes/DraggableView/DraggableViewFadeLeftToRightDemo.unity
+  - name: ChatViewChangeViewportHeightDemo
+    path: Assets/SuperScrollView/Demo/Scenes/Chat/ChatViewChangeViewportHeightDemo.unity
+  - name: ChatViewDemo
+    path: Assets/SuperScrollView/Demo/Scenes/Chat/ChatViewDemo.unity
+  - name: 03_InfiniteScroll
+    path: Assets/Libraries/com.components.ui/com.unity.uiextensions/Examples/FancyScrollView/03_InfiniteScroll.unity
+  - name: SampleScene
+    path: Assets/Scenes/SampleScene.unity
   - name: Accordion
     path: Assets/Libraries/com.components.ui/com.unity.uiextensions/Examples/Accordion/Accordion.unity
   - name: Physics2dSample
     path: Assets/CastVisualizer/Samples/SampleScenes/Physics2dSample.unity
-  - name: SampleScene
-    path: Assets/Scenes/SampleScene.unity
   - name: ContentSnapScrollExample
     path: Assets/Libraries/com.components.ui/com.unity.uiextensions/Examples/HSS-VSS-ScrollSnap/ContentSnapScrollExample.unity
   - name: TestScene

@@ -2,7 +2,8 @@
     "name": "com.components.general",
     "rootNamespace": "",
     "references": [
-        "Unity.TextMeshPro"
+        "Unity.TextMeshPro",
+        "Kybernetik.UltEvents"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
