@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "UIHelperAsset")]
+[CreateAssetMenu(menuName = "UI/UIHelperAsset")]
 public class UIHelperAssetScriptable : ScriptableObject
 {
 	public List<UIWidget> widgets;

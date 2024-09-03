@@ -448,7 +448,7 @@ GameObject:
   - component: {fileID: 4946766634050498235}
   - component: {fileID: 5239438457705115360}
   m_Layer: 5
-  m_Name: UITabs Vertical
+  m_Name: UITabs_Vertical
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

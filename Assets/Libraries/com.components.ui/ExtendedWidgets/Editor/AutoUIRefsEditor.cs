@@ -71,6 +71,7 @@ public class AutoUIRefsEditor : Editor
 	{
 		foreach (Component component in components)
 		{
+			sb.AppendLine($"    [AutoRef(AutoRefTargetType.Children)]");
 			sb.AppendLine($"    public {componentType} {component.gameObject.name};");
 		}
 	}
@@ -79,6 +80,7 @@ public class AutoUIRefsEditor : Editor
 	{
 		foreach (TextMeshProUGUI component in components)
 		{
+			sb.AppendLine($"    [AutoRef(AutoRefTargetType.Children)]");
 			sb.AppendLine($"    public {componentType} {component.gameObject.name};");
 		}
 	}

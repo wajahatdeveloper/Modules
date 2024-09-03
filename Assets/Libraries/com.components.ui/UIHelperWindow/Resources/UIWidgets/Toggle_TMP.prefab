@@ -221,7 +221,7 @@ GameObject:
   - component: {fileID: 8204883530306130645}
   - component: {fileID: 4734085590190730628}
   m_Layer: 5
-  m_Name: Toggle (TMP)
+  m_Name: Toggle_TMP
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

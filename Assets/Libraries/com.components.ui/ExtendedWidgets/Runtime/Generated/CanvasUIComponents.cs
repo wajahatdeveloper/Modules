@@ -5,5 +5,6 @@ using UnityEngine.UI;
 
 public class CanvasUIComponents : MonoBehaviour
 {
-    public ButtonX ButtonX;
+    [AutoRef(AutoRefTargetType.Children)]
+    public Button Button_TMP;
 }

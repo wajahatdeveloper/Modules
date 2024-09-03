@@ -93,7 +93,7 @@ GameObject:
   - component: {fileID: 3856838172939991295}
   - component: {fileID: 5427300221410866202}
   m_Layer: 0
-  m_Name: InputField (Legacy)
+  m_Name: InputField_Legacy
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
