@@ -430,9 +430,13 @@ PrefabInstance:
       value: Button_TMP
       objectReference: {fileID: 0}
     - target: {fileID: 2197867228980236396, guid: 8ecf91cfbfa560148a6892454e56696c, type: 3}
+      propertyPath: m_Type
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2197867228980236396, guid: 8ecf91cfbfa560148a6892454e56696c, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 21300000, guid: 10645e95a9c6dac4c994eff825984384, type: 3}
+      objectReference: {fileID: 0}
     - target: {fileID: 5881190197602027852, guid: 8ecf91cfbfa560148a6892454e56696c, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -513,6 +517,50 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6643283893779400893, guid: 8ecf91cfbfa560148a6892454e56696c, type: 3}
+      propertyPath: m_text
+      value: Button
+      objectReference: {fileID: 0}
+    - target: {fileID: 6643283893779400893, guid: 8ecf91cfbfa560148a6892454e56696c, type: 3}
+      propertyPath: m_fontSize
+      value: 179.96
+      objectReference: {fileID: 0}
+    - target: {fileID: 6643283893779400893, guid: 8ecf91cfbfa560148a6892454e56696c, type: 3}
+      propertyPath: m_fontColor.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6643283893779400893, guid: 8ecf91cfbfa560148a6892454e56696c, type: 3}
+      propertyPath: m_fontColor.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6643283893779400893, guid: 8ecf91cfbfa560148a6892454e56696c, type: 3}
+      propertyPath: m_fontColor.r
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6643283893779400893, guid: 8ecf91cfbfa560148a6892454e56696c, type: 3}
+      propertyPath: m_fontSizeBase
+      value: 179.96
+      objectReference: {fileID: 0}
+    - target: {fileID: 6643283893779400893, guid: 8ecf91cfbfa560148a6892454e56696c, type: 3}
+      propertyPath: m_isOrthographic
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6643283893779400893, guid: 8ecf91cfbfa560148a6892454e56696c, type: 3}
+      propertyPath: m_enableAutoSizing
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6643283893779400893, guid: 8ecf91cfbfa560148a6892454e56696c, type: 3}
+      propertyPath: m_fontColor32.rgba
+      value: 4278190080
+      objectReference: {fileID: 0}
+    - target: {fileID: 6643283893779400893, guid: 8ecf91cfbfa560148a6892454e56696c, type: 3}
+      propertyPath: m_VerticalAlignment
+      value: 512
+      objectReference: {fileID: 0}
+    - target: {fileID: 6643283893779400893, guid: 8ecf91cfbfa560148a6892454e56696c, type: 3}
+      propertyPath: m_HorizontalAlignment
+      value: 2
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -555,7 +603,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   imageSprite: {fileID: 21300000, guid: 4c8c2181307afa7468274ba3e0d16e9c, type: 3}
-  font: {fileID: 0}
+  font: {fileID: 12800000, guid: 5abfb0a229c98b3499cffa6c59c2ffb4, type: 3}
   TMPFont: {fileID: 11400000, guid: 95bbc44b9c1f3c84182be4fd77cf6ca8, type: 2}
 --- !u!1001 &1608007755
 PrefabInstance:

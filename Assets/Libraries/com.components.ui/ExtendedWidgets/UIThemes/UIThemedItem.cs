@@ -31,29 +31,7 @@ public class UIThemedItem : MonoBehaviour
 	[ContextMenu(nameof(_internal_inspector_init))]
 	private void _internal_inspector_init()
 	{
-		uiTheme = FindComponentInParentHierarchy<UITheme>();
-		foreach (ThemeItem item in uiTheme.themeData.themeItems)
-		{
-			if (GetComponent(item.itemType) != null)
-			{
-				themeItem = item;
-
-				if (item.itemType == typeof(Button) || item.itemType == typeof(ButtonX))
-				{
-					image = GetComponent<Image>();
-					text = GetComponentInChildren<Text>();
-					textMesh = GetComponentInChildren<TextMeshProUGUI>();
-					break;
-				}
-
-				// Generic
-				image = GetComponent<Image>();
-				text = GetComponent<Text>();
-				textMesh = GetComponent<TextMeshProUGUI>();
-
-				break;
-			}
-		}
+		Apply();
 	}
 
 	private bool HasImage() => image != null;
@@ -62,16 +40,19 @@ public class UIThemedItem : MonoBehaviour
 
 	private void SetImageSprite()
 	{
+		if (imageSprite == null) { return; }
 		image.sprite = imageSprite;
 	}
 
 	private void SetFont()
 	{
+		if (font == null) { return; }
 		text.font = font;
 	}
 
 	private void SetTMPFont()
 	{
+		if (TMPFont == null) { return; }
 		textMesh.font = TMPFont;
 	}
 
@@ -107,5 +88,62 @@ public class UIThemedItem : MonoBehaviour
 
 		// No component found in the hierarchy
 		return null;
+	}
+
+	private void SetDefaultValues()
+	{
+		if (imageSprite == null)
+		{
+			imageSprite = themeItem.spriteAssets.FirstOrDefault();
+			SetImageSprite();
+		}
+
+		if (font == null)
+		{
+			font = themeItem.fonts.FirstOrDefault();
+			SetFont();
+		}
+
+		if (TMPFont == null)
+		{
+			TMPFont = themeItem.tmpFontAssets.FirstOrDefault();
+			SetTMPFont();
+		}
+	}
+
+	public void Apply()
+	{
+		if (uiTheme == null)
+		{
+			uiTheme = FindComponentInParentHierarchy<UITheme>();
+		}
+
+		foreach (ThemeItem item in uiTheme.themeData.themeItems)
+		{
+			if (GetComponent(item.itemType) != null)
+			{
+				themeItem = item;
+
+				if (item.itemType == typeof(Button) || item.itemType == typeof(ButtonX))
+				{
+					image = GetComponent<Image>();
+					text = GetComponentInChildren<Text>();
+					textMesh = GetComponentInChildren<TextMeshProUGUI>();
+
+					SetDefaultValues();
+
+					break;
+				}
+
+				// Generic
+				image = GetComponent<Image>();
+				text = GetComponent<Text>();
+				textMesh = GetComponent<TextMeshProUGUI>();
+
+				SetDefaultValues();
+
+				break;
+			}
+		}
 	}
 }

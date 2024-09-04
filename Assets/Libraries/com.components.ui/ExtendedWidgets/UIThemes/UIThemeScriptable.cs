@@ -9,12 +9,14 @@ using UnityEngine.TextCore.Text;
 [CreateAssetMenu(menuName = "UI/ThemeData")]
 public class UIThemeScriptable : ScriptableObject
 {
-	public List<ThemeItem> themeItems = new();
+	[SerializeField] public List<ThemeItem> themeItems = new();
 }
 
 [Serializable]
 public class ThemeItem
 {
+	[SerializeField]
+	[HideInInspector]
 	private string itemTypeName;
 
 	[ShowInInspector]

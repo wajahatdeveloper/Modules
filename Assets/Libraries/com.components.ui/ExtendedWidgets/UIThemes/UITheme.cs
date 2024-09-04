@@ -16,48 +16,14 @@ public class UITheme : MonoBehaviour
 	public void ApplyTheme()
 	{
 		autoUIRefs = GetComponent<AutoUIRefs>();
-		IterateThroughChildren(gameObject);
-
-		// Find and Apply all Theme Overrides
-	}
-
-	// Public method to start the recursive iteration
-	public void IterateThroughChildren(GameObject root)
-	{
-		if (root != null)
+		foreach (Button button in autoUIRefs.buttons)
 		{
-			IterateChildrenRecursive(root.transform);
-		}
-		else
-		{
-			Debug.LogWarning("Root GameObject is null.");
-		}
-	}
-
-	// Recursive function to iterate through all children
-	private void IterateChildrenRecursive(Transform parent)
-	{
-		foreach (Transform child in parent)
-		{
-			// Perform operations with the child GameObject
-			Debug.Log("Child GameObject: " + child.name);
-
-			// Apply Theme to components
-			ApplyTheme_Buttons(autoUIRefs.buttons);
-
-			// If the child has its own children, recurse into them
-			if (child.childCount > 0)
+			var themedItem = button.GetComponent<UIThemedItem>();
+			if (themedItem == null)
 			{
-				IterateChildrenRecursive(child);
+				themedItem = button.gameObject.AddComponent<UIThemedItem>();
+				themedItem.Apply();
 			}
-		}
-	}
-
-	private void ApplyTheme_Buttons(List<Button> buttons)
-	{
-		foreach (Button button in buttons)
-		{
-
 		}
 	}
 }
