@@ -67,35 +67,50 @@ namespace UGUITheme
 
 		private void SetImageSprite()
 		{
+			#if UNITY_EDITOR
 			Undo.RecordObject(image, "Theme:ChangeSprite");
 			PrefabUtility.RecordPrefabInstancePropertyModifications(image);
+			#endif
 			{
-				imageSprite = uiTheme.GetSprite(imageTag);
+				imageSprite = uiTheme.GetSprite(imageTag, out Color colorTint, out Image.Type imageType, out float pixelPerUnit);
 				image.sprite = imageSprite;
+				image.color = colorTint;
+				image.type = imageType;
+				image.pixelsPerUnitMultiplier = pixelPerUnit;
 			}
+			#if UNITY_EDITOR
 			EditorUtility.SetDirty(image);
+			#endif
 		}
 
 		private void SetFont()
 		{
-			Undo.RecordObject(image, "Theme:ChangeFont");
-			PrefabUtility.RecordPrefabInstancePropertyModifications(image);
+			#if UNITY_EDITOR
+			Undo.RecordObject(text, "Theme:ChangeFont");
+			PrefabUtility.RecordPrefabInstancePropertyModifications(text);
+			#endif
 			{
 				font = uiTheme.GetFont(fontTag);
 				text.font = font;
 			}
-			EditorUtility.SetDirty(image);
+			#if UNITY_EDITOR
+			EditorUtility.SetDirty(text);
+			#endif
 		}
 
 		private void SetTMPFont()
 		{
-			Undo.RecordObject(image, "Theme:ChangeTmpFont");
-			PrefabUtility.RecordPrefabInstancePropertyModifications(image);
+			#if UNITY_EDITOR
+			Undo.RecordObject(textMesh, "Theme:ChangeTmpFont");
+			PrefabUtility.RecordPrefabInstancePropertyModifications(textMesh);
+			#endif
 			{
 				tmpFont = uiTheme.GetTmpFont(tmpFontTag);
 				textMesh.font = tmpFont;
 			}
-			EditorUtility.SetDirty(image);
+			#if UNITY_EDITOR
+			EditorUtility.SetDirty(textMesh);
+			#endif
 		}
 
 		private List<string> GetSpriteTags()

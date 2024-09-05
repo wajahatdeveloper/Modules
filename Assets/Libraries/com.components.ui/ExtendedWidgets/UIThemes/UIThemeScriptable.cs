@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace UGUITheme
 {
@@ -12,13 +13,19 @@ namespace UGUITheme
 		[SerializeField]
 		public UIThemeTagsScriptable themeTagsScriptable;
 
+		[Space]
+
 		[SerializeField]
 		[ListDrawerSettings(CustomAddFunction = nameof(AddSpriteItem))]
 		public List<ThemeTaggedSpriteAsset> spriteAssets = new();
 
+		[Space]
+
 		[SerializeField]
 		[ListDrawerSettings(CustomAddFunction = nameof(AddFontItem))]
 		public List<ThemeTaggedFontAsset> fontAssets = new();
+
+		[Space]
 
 		[SerializeField]
 		[ListDrawerSettings(CustomAddFunction = nameof(AddTmpFontItem))]
@@ -64,6 +71,17 @@ namespace UGUITheme
 		[HideLabel]
 		[AssetSelector]
 		public Sprite spriteAsset;
+
+		[SerializeField]
+		[FoldoutGroup("Sprite Settings")]
+		public Color colorTint = Color.white;
+
+		[SerializeField] [FoldoutGroup("Sprite Settings")]
+		public Image.Type imageType = Image.Type.Simple;
+
+		[ShowIf(nameof(imageType),Value = Image.Type.Sliced)]
+		[SerializeField] [FoldoutGroup("Sprite Settings")]
+		public float pixelPerUnit = 0;
 
 		[NonSerialized]
 		public UIThemeTagsScriptable themeTagsScriptable;
