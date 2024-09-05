@@ -7,143 +7,156 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UIThemedItem : MonoBehaviour
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
+
+namespace UGUITheme
 {
-	[ShowIf(nameof(HasImage))]
-	[ValueDropdown(nameof(GetSprites)), OnValueChanged(nameof(SetImageSprite))]
-	public Sprite imageSprite;
-
-	[ShowIf(nameof(HasText))]
-	[ValueDropdown(nameof(GetFonts)), OnValueChanged(nameof(SetFont))]
-	public Font font;
-
-	[ShowIf(nameof(HasTextMesh))]
-	[ValueDropdown(nameof(GetTMPFonts)), OnValueChanged(nameof(SetTMPFont))]
-	public TMP_FontAsset TMPFont;
-
-	private UITheme uiTheme;
-	private ThemeItem themeItem;
-	private Image image;
-	private Text text;
-	private TextMeshProUGUI textMesh;
-
-	[OnInspectorInit]
-	[ContextMenu(nameof(_internal_inspector_init))]
-	private void _internal_inspector_init()
+	public class UIThemedItem : MonoBehaviour
 	{
-		Apply();
-	}
+		[ShowIf(nameof(HasImage))] [ValueDropdown(nameof(GetSpriteTags))] [OnValueChanged(nameof(SetImageSprite))]
+		public string imageTag;
 
-	private bool HasImage() => image != null;
-	private bool HasText() => text != null;
-	private bool HasTextMesh() => textMesh != null;
+		[HideInInspector] public Sprite imageSprite;
 
-	private void SetImageSprite()
-	{
-		if (imageSprite == null) { return; }
-		image.sprite = imageSprite;
-	}
+		[ShowIf(nameof(HasText))] [ValueDropdown(nameof(GetFontTags))] [OnValueChanged(nameof(SetFont))]
+		public string fontTag;
 
-	private void SetFont()
-	{
-		if (font == null) { return; }
-		text.font = font;
-	}
+		[HideInInspector] public Font font;
 
-	private void SetTMPFont()
-	{
-		if (TMPFont == null) { return; }
-		textMesh.font = TMPFont;
-	}
+		[ShowIf(nameof(HasTextMesh))] [ValueDropdown(nameof(GetTMPFontTags))] [OnValueChanged(nameof(SetTMPFont))]
+		public string tmpFontTag;
 
-	private List<Sprite> GetSprites() => themeItem.spriteAssets;
-	private List<Font> GetFonts() => themeItem.fonts;
-	private List<TMP_FontAsset> GetTMPFonts() => themeItem.tmpFontAssets;
+		[HideInInspector] public TMP_FontAsset tmpFont;
 
-	private T FindComponentInParentHierarchy<T>() where T : Component
-	{
-		if (gameObject == null)
+		private UITheme uiTheme;
+
+		private Image image;
+		private Text text;
+		private TextMeshProUGUI textMesh;
+
+		[OnInspectorInit]
+		[ContextMenu(nameof(_internal_inspector_init))]
+		private void _internal_inspector_init()
 		{
-			return null;
+			if (uiTheme == null)
+			{
+				uiTheme = FindComponentInParentHierarchy<UITheme>();
+			}
+
+			image = GetComponent<Image>();
+			text = GetComponent<Text>();
+			textMesh = GetComponent<TextMeshProUGUI>();
 		}
 
-		// Check the current GameObject first
-		T component = gameObject.GetComponent<T>();
-		if (component != null)
+		private bool HasImage()
 		{
-			return component;
+			return image != null;
 		}
 
-		// Traverse up the hierarchy and check each parent
-		Transform parent = gameObject.transform.parent;
-		while (parent != null)
+		private bool HasText()
 		{
-			component = parent.GetComponent<T>();
+			return text != null;
+		}
+
+		private bool HasTextMesh()
+		{
+			return textMesh != null;
+		}
+
+		private void SetImageSprite()
+		{
+			Undo.RecordObject(image, "Theme:ChangeSprite");
+			PrefabUtility.RecordPrefabInstancePropertyModifications(image);
+			{
+				imageSprite = uiTheme.GetSprite(imageTag);
+				image.sprite = imageSprite;
+			}
+			EditorUtility.SetDirty(image);
+		}
+
+		private void SetFont()
+		{
+			Undo.RecordObject(image, "Theme:ChangeFont");
+			PrefabUtility.RecordPrefabInstancePropertyModifications(image);
+			{
+				font = uiTheme.GetFont(fontTag);
+				text.font = font;
+			}
+			EditorUtility.SetDirty(image);
+		}
+
+		private void SetTMPFont()
+		{
+			Undo.RecordObject(image, "Theme:ChangeTmpFont");
+			PrefabUtility.RecordPrefabInstancePropertyModifications(image);
+			{
+				tmpFont = uiTheme.GetTmpFont(tmpFontTag);
+				textMesh.font = tmpFont;
+			}
+			EditorUtility.SetDirty(image);
+		}
+
+		private List<string> GetSpriteTags()
+		{
+			return uiTheme.GetSprites().Select(x => x.Item1).ToList();
+		}
+
+		private List<string> GetFontTags()
+		{
+			return uiTheme.GetFonts().Select(x => x.Item1).ToList();
+		}
+
+		private List<string> GetTMPFontTags()
+		{
+			return uiTheme.GetTmpFonts().Select(x => x.Item1).ToList();
+		}
+
+		private List<Sprite> GetSprites()
+		{
+			return uiTheme.GetSprites().Select(x => x.Item2).ToList();
+		}
+
+		private List<Font> GetFonts()
+		{
+			return uiTheme.GetFonts().Select(x => x.Item2).ToList();
+		}
+
+		private List<TMP_FontAsset> GetTMPFonts()
+		{
+			return uiTheme.GetTmpFonts().Select(x => x.Item2).ToList();
+		}
+
+		private T FindComponentInParentHierarchy<T>() where T : Component
+		{
+			if (gameObject == null)
+			{
+				return null;
+			}
+
+			// Check the current GameObject first
+			var component = gameObject.GetComponent<T>();
 			if (component != null)
 			{
 				return component;
 			}
-			parent = parent.parent;
-		}
 
-		// No component found in the hierarchy
-		return null;
-	}
-
-	private void SetDefaultValues()
-	{
-		if (imageSprite == null)
-		{
-			imageSprite = themeItem.spriteAssets.FirstOrDefault();
-			SetImageSprite();
-		}
-
-		if (font == null)
-		{
-			font = themeItem.fonts.FirstOrDefault();
-			SetFont();
-		}
-
-		if (TMPFont == null)
-		{
-			TMPFont = themeItem.tmpFontAssets.FirstOrDefault();
-			SetTMPFont();
-		}
-	}
-
-	public void Apply()
-	{
-		if (uiTheme == null)
-		{
-			uiTheme = FindComponentInParentHierarchy<UITheme>();
-		}
-
-		foreach (ThemeItem item in uiTheme.themeData.themeItems)
-		{
-			if (GetComponent(item.itemType) != null)
+			// Traverse up the hierarchy and check each parent
+			var parent = gameObject.transform.parent;
+			while (parent != null)
 			{
-				themeItem = item;
-
-				if (item.itemType == typeof(Button) || item.itemType == typeof(ButtonX))
+				component = parent.GetComponent<T>();
+				if (component != null)
 				{
-					image = GetComponent<Image>();
-					text = GetComponentInChildren<Text>();
-					textMesh = GetComponentInChildren<TextMeshProUGUI>();
-
-					SetDefaultValues();
-
-					break;
+					return component;
 				}
 
-				// Generic
-				image = GetComponent<Image>();
-				text = GetComponent<Text>();
-				textMesh = GetComponent<TextMeshProUGUI>();
-
-				SetDefaultValues();
-
-				break;
+				parent = parent.parent;
 			}
+
+			// No component found in the hierarchy
+			return null;
 		}
 	}
 }
